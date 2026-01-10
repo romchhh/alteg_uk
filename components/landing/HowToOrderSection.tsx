@@ -1,0 +1,79 @@
+import React from 'react';
+import { Button } from '@/components/shared/Button';
+import Link from 'next/link';
+
+const steps = [
+  {
+    number: '1',
+    title: 'Calculate on Calculator',
+    description: 'Use our interactive calculator to select profiles, configure dimensions, and get instant pricing.',
+  },
+  {
+    number: '2',
+    title: 'Place Order Online',
+    description: 'Complete your order online or send a wholesale inquiry for volumes over 500kg. Get a quote within 24 hours.',
+  },
+  {
+    number: '3',
+    title: 'Receive Your Order',
+    description: 'Get your order delivered to any UK location or collect from our warehouse. Fast and reliable logistics.',
+  },
+];
+
+export const HowToOrderSection: React.FC = () => {
+  return (
+    <section id="how-to-order" className="py-12 sm:py-16 md:py-20 lg:py-32 bg-gradient-to-b from-white to-[#E9EDF4]">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-10 sm:mb-16">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#050544] mb-4 sm:mb-5 leading-tight tracking-tight">
+            How to Order in 3 Steps
+          </h2>
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed px-2">
+            Simple process, professional service. Get your aluminium profiles in three easy steps.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 mb-10 sm:mb-16 max-w-6xl mx-auto">
+          {steps.map((step, index) => (
+            <div 
+              key={index}
+              className="bg-white rounded-xl p-8 sm:p-10 border-2 border-gray-100 hover:border-[#445DFE] transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 relative group"
+            >
+              {/* Number Badge - Larger and More Prominent */}
+              <div className="absolute -top-6 -left-6 z-10">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-[#050544] to-[#445DFE] text-white rounded-full flex items-center justify-center font-bold text-3xl sm:text-4xl shadow-2xl group-hover:scale-110 transition-transform duration-300">
+                  {step.number}
+                </div>
+              </div>
+              
+              {/* Content */}
+              <div className="pt-4 sm:pt-6">
+                <h3 className="text-2xl sm:text-3xl font-bold text-[#050544] uppercase tracking-wide leading-tight mb-5 sm:mb-6">
+                  {step.title}
+                </h3>
+                <div className="text-gray-600 text-lg sm:text-xl leading-relaxed">
+                  <p>{step.description}</p>
+                </div>
+              </div>
+              
+              {/* Decorative line */}
+              <div className="mt-6 sm:mt-8 h-1 w-20 bg-gradient-to-r from-[#445DFE] to-transparent rounded-full"></div>
+            </div>
+          ))}
+        </div>
+
+        <div className="text-center">
+          <Link href="/#calculator">
+            <Button 
+              variant="primary" 
+              size="lg"
+              className="!bg-[#050544] hover:!bg-[#445DFE] text-white px-8 py-4 text-base md:text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl rounded-none"
+            >
+              Start Your Order
+            </Button>
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+};
