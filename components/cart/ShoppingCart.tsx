@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useCartStore } from '@/store/cart';
 import { Modal } from '@/components/shared/Modal';
 import { Button } from '@/components/shared/Button';
@@ -8,6 +9,7 @@ import { formatCurrency, formatWeight } from '@/lib/utils/formatters';
 
 export const ShoppingCart: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
   const { items, removeItem, updateItem, clearCart, getTotal, getTotalWeight, getItemCount } =
     useCartStore();
 
@@ -16,8 +18,8 @@ export const ShoppingCart: React.FC = () => {
   const totalWeight = getTotalWeight();
 
   const handleCheckout = () => {
-    // Navigate to checkout page or open checkout form
-    window.location.href = '/checkout';
+    setIsOpen(false);
+    router.push('/checkout');
   };
 
   return (

@@ -48,7 +48,14 @@ export const wholesaleFormSchema = z.object({
   message: z.string().optional(),
 });
 
+export const contactFormSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  phone: z.string().min(10, 'Phone number must be at least 10 digits'),
+  interest: z.string().min(3, 'Please describe what interests you'),
+});
+
 export type CustomerInfoFormData = z.infer<typeof customerInfoSchema>;
 export type QuoteRequestFormData = z.infer<typeof quoteRequestSchema>;
 export type OrderFormData = z.infer<typeof orderSchema>;
 export type WholesaleFormData = z.infer<typeof wholesaleFormSchema>;
+export type ContactFormData = z.infer<typeof contactFormSchema>;

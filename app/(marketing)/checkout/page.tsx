@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useCart } from '@/hooks/useCart';
 import { OrderForm } from '@/components/forms/OrderForm';
 import { Modal } from '@/components/shared/Modal';
@@ -9,6 +10,7 @@ import { Button } from '@/components/shared/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shared/Card';
 import { formatCurrency, formatWeight } from '@/lib/utils/calculations';
 import { Icon } from '@/components/shared/Icon';
+import { PRODUCT_CATEGORIES } from '@/lib/constants/catalog';
 
 export default function CheckoutPage() {
   const { items, total, totalWeight, itemCount } = useCart();
@@ -60,16 +62,22 @@ export default function CheckoutPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {items.map((item) => (
-                  <div key={item.id} className="flex items-start gap-4 border-b border-gray-200 pb-4">
-                    {/* Product Image */}
-                    <div className="relative w-20 h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
-                      <img
-                        src={item.product.image || 'https://images.unsplash.com/photo-1565008576449-4f7a58cf9f48?w=200&q=80'}
-                        alt={item.product.nameEn}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+                {items.map((item) => {
+                  const categoryInfo = PRODUCT_CATEGORIES[item.product.category];
+                  const productImage = item.product.image || categoryInfo.image;
+                  
+                  return (
+                    <div key={item.id} className="flex items-start gap-4 border-b border-gray-200 pb-4">
+                      {/* Product Image */}
+                      <div className="relative w-20 h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
+                        <Image
+                          src={productImage}
+                          alt={item.product.nameEn}
+                          fill
+                          className="object-cover"
+                          sizes="80px"
+                        />
+                      </div>
                     
                     {/* Product Details */}
                     <div className="flex-1">
@@ -91,7 +99,8 @@ export default function CheckoutPage() {
                       <div className="text-sm text-gray-900">{formatWeight(item.calculatedWeight)}</div>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
                 <div className="pt-4 border-t border-gray-200">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-gray-900">Subtotal:</span>

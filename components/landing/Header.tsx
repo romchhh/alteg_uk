@@ -59,9 +59,9 @@ export const Header: React.FC = () => {
             <a href="#faq" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
               FAQ
             </a>
-            <a href="#contact" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
+            <Link href="/contact" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
               Contact
-            </a>
+            </Link>
           </nav>
 
           {/* Right side - CTA & Burger Menu */}
@@ -141,7 +141,7 @@ export const Header: React.FC = () => {
                   FAQ
                 </Link>
                 <Link 
-                  href="#contact" 
+                  href="/contact" 
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full text-center text-white hover:text-[#B7D2FF] font-bold transition-colors text-2xl md:text-3xl uppercase tracking-wide py-4"
                 >

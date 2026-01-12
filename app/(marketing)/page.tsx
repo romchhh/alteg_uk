@@ -2,7 +2,7 @@ import React from 'react';
 import { HeroSection } from '@/components/landing/HeroSection';
 import { FeaturesSection } from '@/components/landing/FeaturesSection';
 import { DescriptionSection } from '@/components/landing/DescriptionSection';
-import { CalculatorPlaceholder } from '@/components/landing/CalculatorPlaceholder';
+import { OrderCalculator } from '@/components/catalog/OrderCalculator';
 import { CatalogSection } from '@/components/catalog/CatalogSection';
 import { TrustSection } from '@/components/landing/TrustSection';
 import { PromoBanners } from '@/components/landing/PromoBanners';
@@ -23,8 +23,8 @@ export default function HomePage() {
       {/* Block 2.1: Description Section (About ALTEG) */}
       <DescriptionSection />
       
-      {/* Block 2.2: Calculator Placeholder */}
-      <CalculatorPlaceholder />
+      {/* Block 2.2: Interactive Calculator and Order Builder */}
+      <OrderCalculator />
       
       {/* Block 2.3: Product Catalog */}
       <CatalogSection />

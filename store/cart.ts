@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { CartItem } from '@/lib/types/order';
 import { Product } from '@/lib/types/product';
 import { calculateOrder, calculateCartTotal } from '@/lib/utils/calculations';
@@ -23,10 +24,12 @@ function generateCartItemId(product: Product, length: number, freeCutting: boole
   return parts.join('-');
 }
 
-export const useCartStore = create<CartStore>((set, get) => ({
-  items: [],
-  
-  addItem: (product, length, quantity, freeCutting = false, additionalProcessing) => {
+export const useCartStore = create<CartStore>()(
+  persist(
+    (set, get) => ({
+      items: [],
+      
+      addItem: (product, length, quantity, freeCutting = false, additionalProcessing) => {
     const id = generateCartItemId(product, length, freeCutting, additionalProcessing);
     const existingItemIndex = get().items.findIndex((item) => item.id === id);
     
@@ -106,7 +109,13 @@ export const useCartStore = create<CartStore>((set, get) => ({
     return get().items.reduce((sum, item) => sum + item.calculatedWeight, 0);
   },
   
-  getItemCount: () => {
-    return get().items.reduce((sum, item) => sum + item.quantity, 0);
-  },
-}));
+      getItemCount: () => {
+        return get().items.reduce((sum, item) => sum + item.quantity, 0);
+      },
+    }),
+    {
+      name: 'alteg-cart-storage',
+      partialize: (state) => ({ items: state.items }),
+    }
+  )
+);

@@ -31,14 +31,14 @@ export const CatalogSection: React.FC = () => {
   };
 
   return (
-    <section id="catalog" className="py-12 sm:py-16 md:py-20 lg:py-32 bg-white">
+    <section id="catalog" className="pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-12 sm:pb-16 md:pb-20 lg:pb-24 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="max-w-4xl mx-auto text-center mb-8 sm:mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#050544] mb-3 sm:mb-4 leading-tight tracking-tight px-2">
+        <div className="max-w-4xl mx-auto text-center mb-6 sm:mb-8">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#050544] mb-2 sm:mb-3 leading-tight tracking-tight px-2">
             Aluminium Products Directly from the ALTEG Factory
           </h2>
-          <p className="text-base sm:text-lg text-gray-600 mb-8 sm:mb-12 max-w-2xl mx-auto leading-relaxed px-2">
+          <p className="text-base sm:text-lg text-gray-600 mb-4 max-w-2xl mx-auto leading-relaxed px-2">
             Standard aluminium profiles in stock. Cutting to size. Retail and wholesale supply across the UK.
           </p>
 

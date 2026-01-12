@@ -2,7 +2,7 @@ import React from 'react';
 
 export const DescriptionSection: React.FC = () => {
   return (
-    <section id="about" className="bg-white py-12 sm:py-16 md:py-20 lg:py-32">
+    <section id="about" className="bg-white pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-12 sm:pb-16 md:pb-20 lg:pb-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-12 items-start">
           {/* Left Column - Main Heading */}

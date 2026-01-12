@@ -52,7 +52,7 @@ export const FAQSection: React.FC = () => {
   };
 
   return (
-    <section id="faq" className="py-12 sm:py-16 lg:py-24 bg-black">
+    <section id="faq" className="pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-12 sm:pb-16 md:pb-20 lg:pb-24 bg-black">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 sm:mb-12">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4 leading-tight tracking-tight">
