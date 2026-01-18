@@ -6,11 +6,12 @@ import { PRODUCT_CATEGORIES, CATALOG_PRODUCTS } from '@/lib/constants/catalog';
 import { ProductCategory } from '@/lib/types/product';
 import { Button } from '@/components/shared/Button';
 
-const PRODUCTS_PER_PAGE = 16;
+const INITIAL_PRODUCTS = 20; // 5 rows on desktop (4 columns x 5 rows = 20 products)
+const PRODUCTS_PER_PAGE = 20; // Load 20 more products each time (5 more rows)
 
 export const CatalogSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | 'all'>('all');
-  const [displayCount, setDisplayCount] = useState(PRODUCTS_PER_PAGE);
+  const [displayCount, setDisplayCount] = useState(INITIAL_PRODUCTS);
 
   const filteredProducts =
     selectedCategory === 'all'
@@ -23,7 +24,7 @@ export const CatalogSection: React.FC = () => {
 
   // Reset display count when category changes
   useEffect(() => {
-    setDisplayCount(PRODUCTS_PER_PAGE);
+    setDisplayCount(INITIAL_PRODUCTS);
   }, [selectedCategory]);
 
   const handleShowMore = () => {

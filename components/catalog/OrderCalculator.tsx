@@ -41,6 +41,7 @@ export const OrderCalculator: React.FC = () => {
   
   // Step 3: Parameters
   const [length, setLength] = useState<number>(1);
+  const [lengthInput, setLengthInput] = useState<string>('1');
   const [quantity, setQuantity] = useState<number>(1);
   const [freeCutting, setFreeCutting] = useState<boolean>(false);
   const [additionalProcessing, setAdditionalProcessing] = useState<boolean>(false);
@@ -77,6 +78,7 @@ export const OrderCalculator: React.FC = () => {
     setSelectedCategoryKey(categoryKey);
     setSelectedProduct(null);
     setLength(1);
+    setLengthInput('1');
     setQuantity(1);
     setFreeCutting(false);
     setAdditionalProcessing(false);
@@ -87,8 +89,31 @@ export const OrderCalculator: React.FC = () => {
     const product = availableProducts.find((p) => p.id === productId);
     if (product) {
       setSelectedProduct(product);
-      setLength(product.standardLengths[0] || 1);
+      const defaultLength = product.standardLengths[0] || 1;
+      setLength(defaultLength);
+      setLengthInput(defaultLength.toString());
       setQuantity(1);
+    }
+  };
+
+  // Handle length input change
+  const handleLengthInputChange = (value: string) => {
+    setLengthInput(value);
+    const numValue = parseFloat(value);
+    if (!isNaN(numValue) && numValue > 0) {
+      setLength(numValue);
+    }
+  };
+
+  // Handle length input blur - validate and set minimum
+  const handleLengthInputBlur = () => {
+    const numValue = parseFloat(lengthInput);
+    if (isNaN(numValue) || numValue <= 0) {
+      setLengthInput('1');
+      setLength(1);
+    } else {
+      setLengthInput(numValue.toString());
+      setLength(numValue);
     }
   };
 
@@ -110,6 +135,7 @@ export const OrderCalculator: React.FC = () => {
     setSelectedCategoryKey(null);
     setSelectedProduct(null);
     setLength(1);
+    setLengthInput('1');
     setQuantity(1);
     setFreeCutting(false);
     setAdditionalProcessing(false);
@@ -268,7 +294,10 @@ export const OrderCalculator: React.FC = () => {
                         {selectedProduct.standardLengths.map((stdLength) => (
                           <button
                             key={stdLength}
-                            onClick={() => setLength(stdLength)}
+                            onClick={() => {
+                              setLength(stdLength);
+                              setLengthInput(stdLength.toString());
+                            }}
                             className={`px-4 py-2 border-2 rounded transition-colors ${
                               length === stdLength
                                 ? 'bg-[#445DFE] text-white border-[#445DFE]'
@@ -283,8 +312,9 @@ export const OrderCalculator: React.FC = () => {
                         type="number"
                         min="0.1"
                         step="0.1"
-                        value={length}
-                        onChange={(e) => setLength(Math.max(0.1, parseFloat(e.target.value) || 0.1))}
+                        value={lengthInput}
+                        onChange={(e) => handleLengthInputChange(e.target.value)}
+                        onBlur={handleLengthInputBlur}
                         className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#445DFE] text-[#050544]"
                         placeholder="Or enter custom length"
                       />

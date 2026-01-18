@@ -15,6 +15,7 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [isSuccessAlertOpen, setIsSuccessAlertOpen] = useState(false);
   const [selectedLength, setSelectedLength] = useState(product.standardLengths[0]);
   const [quantity, setQuantity] = useState(1);
@@ -64,63 +65,55 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
           )}
         </div>
 
-        {/* Product Info */}
+        {/* Product Info - Compact View */}
         <div className="p-4 flex flex-col flex-grow">
-          <h3 className="text-lg font-bold text-[#050544] mb-2">{product.nameEn}</h3>
+          <h3 className="text-lg font-bold text-[#050544] mb-1">{product.nameEn}</h3>
           <p className="text-sm text-gray-600 mb-2">{product.dimensions}</p>
           
-          {/* Brief Description */}
-          <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-            {product.descriptionEn || categoryInfo.descriptionEn}
-          </p>
-
-          {/* Specifications */}
-          <div className="mb-3">
-            <p className="text-xs text-gray-500 mb-1">
-              <strong>Material:</strong> {product.material}
-            </p>
-            <p className="text-xs text-gray-500 mb-1">
-              <strong>Weight:</strong> {product.weightPerMeter} kg/m
-            </p>
-            <p className="text-xs text-gray-500">
-              <strong>Lengths:</strong> {product.standardLengths.join(', ')}m
-            </p>
-          </div>
-
-          {/* Applications */}
-          {categoryInfo.applicationsEn && categoryInfo.applicationsEn.length > 0 && (
-            <div className="mb-4">
-              <p className="text-xs font-semibold text-gray-700 mb-1">Applications:</p>
-              <div className="flex flex-wrap gap-1">
-                {categoryInfo.applicationsEn.slice(0, 3).map((app, index) => (
-                  <span
-                    key={index}
-                    className="text-xs bg-[#E9EDF4] text-[#050544] px-2 py-1 rounded"
-                  >
-                    {app}
-                  </span>
-                ))}
-              </div>
-            </div>
+          {/* Stock Status */}
+          {product.inStock && (
+            <p className="text-xs text-green-600 font-semibold mb-2">In Stock</p>
           )}
 
-          {/* Price */}
-          <div className="mb-4">
+          {/* Material - First Row */}
+          <p className="text-xs text-gray-500 mb-1">
+            <strong>Material:</strong> {product.material}
+          </p>
+
+          {/* Weight - Second Row */}
+          <p className="text-xs text-gray-500 mb-1">
+            <strong>Weight:</strong> {product.weightPerMeter} kg/m
+          </p>
+
+          {/* Lengths - Third Row */}
+          <p className="text-xs text-gray-500 mb-1">
+            <strong>Lengths:</strong> {product.standardLengths.join(', ')}m
+          </p>
+
+          {/* Price - Fourth Row */}
+          <div className="mb-2">
             <p className="text-sm text-gray-600">
               From{' '}
-              <span className="text-lg font-bold text-[#445DFE]">
+              <span className="text-base font-bold text-[#445DFE]">
                 £{product.pricePerMeter?.toFixed(2) || product.pricePerKg?.toFixed(2)}
               </span>
               {product.pricePerMeter ? '/m' : '/kg'}
             </p>
           </div>
 
-          {/* CTA Button */}
-          <div className="mt-auto">
+          {/* Buttons - Fifth Row */}
+          <div className="mt-auto flex gap-2">
+            <Button
+              onClick={() => setIsDetailModalOpen(true)}
+              variant="outline"
+              className="flex-1 border-[#445DFE] text-[#445DFE] hover:bg-[#445DFE] hover:text-white py-2 px-3 text-xs sm:text-sm transition-colors duration-300"
+            >
+              Learn More
+            </Button>
             <Button
               onClick={() => setIsModalOpen(true)}
               variant="primary"
-              className="w-full bg-[#445DFE] hover:bg-[#050544] text-white py-2 px-4 transition-colors duration-300"
+              className="flex-1 bg-[#445DFE] hover:bg-[#050544] text-white py-2 px-3 text-xs sm:text-sm transition-colors duration-300"
             >
               Add to Cart
             </Button>
@@ -212,6 +205,92 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
                 Add to Cart
               </Button>
             </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Detail Modal - Full Product Information */}
+      <Modal isOpen={isDetailModalOpen} onClose={() => setIsDetailModalOpen(false)}>
+        <div className="p-6 max-w-2xl max-h-[90vh] overflow-y-auto">
+          <h2 className="text-2xl font-bold text-[#050544] mb-4">{product.nameEn}</h2>
+          <p className="text-gray-900 mb-4 font-semibold">{product.dimensions}</p>
+          
+          {/* Full Description */}
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold text-[#050544] mb-2">Description</h3>
+            <p className="text-gray-700">
+              {product.descriptionEn || categoryInfo.descriptionEn}
+            </p>
+          </div>
+
+          {/* Full Specifications */}
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold text-[#050544] mb-2">Specifications</h3>
+            <div className="space-y-2">
+              <p className="text-sm text-gray-700">
+                <strong>Material:</strong> {product.material}
+              </p>
+              <p className="text-sm text-gray-700">
+                <strong>Weight:</strong> {product.weightPerMeter} kg/m
+              </p>
+              <p className="text-sm text-gray-700">
+                <strong>Standard Lengths:</strong> {product.standardLengths.join(', ')}m
+              </p>
+              {product.finish && (
+                <p className="text-sm text-gray-700">
+                  <strong>Finish:</strong> {product.finish}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Full Applications */}
+          {categoryInfo.applicationsEn && categoryInfo.applicationsEn.length > 0 && (
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold text-[#050544] mb-2">Applications</h3>
+              <div className="flex flex-wrap gap-2">
+                {categoryInfo.applicationsEn.map((app, index) => (
+                  <span
+                    key={index}
+                    className="text-sm bg-[#E9EDF4] text-[#050544] px-3 py-1 rounded"
+                  >
+                    {app}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Price */}
+          <div className="mb-6 p-4 bg-[#E9EDF4] rounded-lg">
+            <p className="text-lg text-gray-700 mb-1">
+              Price:
+            </p>
+            <p className="text-2xl font-bold text-[#445DFE]">
+              £{product.pricePerMeter?.toFixed(2) || product.pricePerKg?.toFixed(2)}
+              {product.pricePerMeter ? '/m' : '/kg'}
+            </p>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-3">
+            <Button
+              onClick={() => setIsDetailModalOpen(false)}
+              variant="outline"
+              className="flex-1 border-gray-300 text-gray-900 hover:bg-gray-100"
+            >
+              Close
+            </Button>
+            <Button
+              onClick={() => {
+                setIsDetailModalOpen(false);
+                setIsModalOpen(true);
+              }}
+              variant="primary"
+              className="flex-1 bg-[#445DFE] hover:bg-[#050544] text-white"
+            >
+              Add to Cart
+            </Button>
           </div>
         </div>
       </Modal>

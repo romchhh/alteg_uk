@@ -24,6 +24,12 @@ const CartIcon: React.FC<{ className?: string }> = ({ className = '' }) => (
   </svg>
 );
 
+const PhoneIcon: React.FC<{ className?: string }> = ({ className = '' }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+  </svg>
+);
+
 export const Header: React.FC = () => {
   const { itemCount } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -66,6 +72,11 @@ export const Header: React.FC = () => {
 
           {/* Right side - CTA & Burger Menu */}
           <div className="flex items-center gap-4">
+            {/* Desktop Phone */}
+            <a href="tel:+44000000000" className="hidden lg:block text-[#050544] hover:text-[#445DFE] transition-colors p-2">
+              <PhoneIcon className="w-7 h-7" />
+            </a>
+
             {/* Desktop Cart */}
             <Link href="/checkout" className="hidden lg:block relative text-[#050544] hover:text-[#445DFE] transition-colors p-2">
               <CartIcon className="w-7 h-7" />
@@ -83,8 +94,12 @@ export const Header: React.FC = () => {
               </button>
             </Link>
 
-            {/* Mobile Cart & Burger Menu */}
+            {/* Mobile Phone, Cart & Burger Menu */}
             <div className="flex items-center gap-3 lg:hidden">
+              <a href="tel:+44000000000" className="text-[#050544] hover:text-[#445DFE] transition-colors p-2">
+                <PhoneIcon className="w-7 h-7" />
+              </a>
+
               <Link href="/checkout" className="relative text-[#050544] hover:text-[#445DFE] transition-colors p-2">
                 <CartIcon className="w-7 h-7" />
                 {itemCount > 0 && (
@@ -147,6 +162,14 @@ export const Header: React.FC = () => {
                 >
                   Contact
                 </Link>
+                <a 
+                  href="tel:+44000000000" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center text-white hover:text-[#B7D2FF] font-bold transition-colors text-xl md:text-2xl py-4 flex items-center justify-center gap-2"
+                >
+                  <PhoneIcon className="w-6 h-6 md:w-7 md:h-7" />
+                  <span>+44 00 000 00 00</span>
+                </a>
               </nav>
 
               {/* CTA Buttons */}

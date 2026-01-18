@@ -4,6 +4,7 @@ import { FeaturesSection } from '@/components/landing/FeaturesSection';
 import { DescriptionSection } from '@/components/landing/DescriptionSection';
 import { OrderCalculator } from '@/components/catalog/OrderCalculator';
 import { CatalogSection } from '@/components/catalog/CatalogSection';
+import { FactoryGallery } from '@/components/landing/FactoryGallery';
 import { TrustSection } from '@/components/landing/TrustSection';
 import { PromoBanners } from '@/components/landing/PromoBanners';
 import { HowToOrderSection } from '@/components/landing/HowToOrderSection';
@@ -28,6 +29,9 @@ export default function HomePage() {
       
       {/* Block 2.3: Product Catalog */}
       <CatalogSection />
+      
+      {/* Block 2.4: Factory Gallery */}
+      <FactoryGallery />
       
       {/* Block 3: Trust, Production & Logistics */}
       <TrustSection />
