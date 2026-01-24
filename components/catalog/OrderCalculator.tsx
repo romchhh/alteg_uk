@@ -96,9 +96,17 @@ export const OrderCalculator: React.FC = () => {
     }
   };
 
-  // Handle length input change
+  // Handle length input change - allow any input, update length only if valid
   const handleLengthInputChange = (value: string) => {
+    // Allow empty string for easier editing
     setLengthInput(value);
+    
+    // Only update length if value is a valid positive number
+    if (value === '' || value === '-') {
+      // Allow empty or minus sign for editing
+      return;
+    }
+    
     const numValue = parseFloat(value);
     if (!isNaN(numValue) && numValue > 0) {
       setLength(numValue);
@@ -108,10 +116,13 @@ export const OrderCalculator: React.FC = () => {
   // Handle length input blur - validate and set minimum
   const handleLengthInputBlur = () => {
     const numValue = parseFloat(lengthInput);
-    if (isNaN(numValue) || numValue <= 0) {
-      setLengthInput('1');
-      setLength(1);
+    if (isNaN(numValue) || numValue <= 0 || lengthInput === '' || lengthInput === '-') {
+      // Reset to default if invalid
+      const defaultLength = selectedProduct?.standardLengths[0] || 1;
+      setLengthInput(defaultLength.toString());
+      setLength(defaultLength);
     } else {
+      // Normalize the display value
       setLengthInput(numValue.toString());
       setLength(numValue);
     }

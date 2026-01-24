@@ -57,15 +57,15 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black bg-opacity-50 overflow-y-auto"
       onClick={closeOnOverlayClick && onClose ? onClose : undefined}
     >
       <div
-        className={`bg-white rounded-lg shadow-xl ${sizeClasses[size]} w-full max-h-[90vh] overflow-y-auto`}
+        className={`bg-white rounded-lg shadow-xl ${sizeClasses[size]} w-full my-auto max-h-[95vh] sm:max-h-[90vh] flex flex-col`}
         onClick={(e) => e.stopPropagation()}
       >
         {(title || onClose) && (
-          <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between p-4 border-b border-gray-200 flex-shrink-0">
             {title && <h2 className="text-xl font-semibold text-gray-900">{title}</h2>}
             {onClose && (
               <button
@@ -88,8 +88,8 @@ export const Modal: React.FC<ModalProps> = ({
             )}
           </div>
         )}
-        <div className="p-4">{children}</div>
-        {footer && <div className="p-4 border-t border-gray-200">{footer}</div>}
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1">{children}</div>
+        {footer && <div className="p-4 border-t border-gray-200 flex-shrink-0">{footer}</div>}
       </div>
     </div>
   );

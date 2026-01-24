@@ -210,34 +210,34 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
       </Modal>
 
       {/* Detail Modal - Full Product Information */}
-      <Modal isOpen={isDetailModalOpen} onClose={() => setIsDetailModalOpen(false)}>
-        <div className="p-6 max-w-2xl max-h-[90vh] overflow-y-auto">
-          <h2 className="text-2xl font-bold text-[#050544] mb-4">{product.nameEn}</h2>
-          <p className="text-gray-900 mb-4 font-semibold">{product.dimensions}</p>
+      <Modal isOpen={isDetailModalOpen} onClose={() => setIsDetailModalOpen(false)} size="lg">
+        <div className="space-y-4 sm:space-y-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-[#050544]">{product.nameEn}</h2>
+          <p className="text-base sm:text-lg text-gray-900 font-semibold">{product.dimensions}</p>
           
           {/* Full Description */}
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-[#050544] mb-2">Description</h3>
-            <p className="text-gray-700">
+          <div>
+            <h3 className="text-base sm:text-lg font-semibold text-[#050544] mb-2">Description</h3>
+            <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
               {product.descriptionEn || categoryInfo.descriptionEn}
             </p>
           </div>
 
           {/* Full Specifications */}
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-[#050544] mb-2">Specifications</h3>
+          <div>
+            <h3 className="text-base sm:text-lg font-semibold text-[#050544] mb-2">Specifications</h3>
             <div className="space-y-2">
-              <p className="text-sm text-gray-700">
+              <p className="text-sm sm:text-base text-gray-700">
                 <strong>Material:</strong> {product.material}
               </p>
-              <p className="text-sm text-gray-700">
+              <p className="text-sm sm:text-base text-gray-700">
                 <strong>Weight:</strong> {product.weightPerMeter} kg/m
               </p>
-              <p className="text-sm text-gray-700">
+              <p className="text-sm sm:text-base text-gray-700">
                 <strong>Standard Lengths:</strong> {product.standardLengths.join(', ')}m
               </p>
               {product.finish && (
-                <p className="text-sm text-gray-700">
+                <p className="text-sm sm:text-base text-gray-700">
                   <strong>Finish:</strong> {product.finish}
                 </p>
               )}
@@ -246,13 +246,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
 
           {/* Full Applications */}
           {categoryInfo.applicationsEn && categoryInfo.applicationsEn.length > 0 && (
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold text-[#050544] mb-2">Applications</h3>
+            <div>
+              <h3 className="text-base sm:text-lg font-semibold text-[#050544] mb-2">Applications</h3>
               <div className="flex flex-wrap gap-2">
                 {categoryInfo.applicationsEn.map((app, index) => (
                   <span
                     key={index}
-                    className="text-sm bg-[#E9EDF4] text-[#050544] px-3 py-1 rounded"
+                    className="text-xs sm:text-sm bg-[#E9EDF4] text-[#050544] px-2 sm:px-3 py-1 rounded"
                   >
                     {app}
                   </span>
@@ -262,18 +262,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
           )}
 
           {/* Price */}
-          <div className="mb-6 p-4 bg-[#E9EDF4] rounded-lg">
-            <p className="text-lg text-gray-700 mb-1">
+          <div className="p-4 bg-[#E9EDF4] rounded-lg">
+            <p className="text-base sm:text-lg text-gray-700 mb-1">
               Price:
             </p>
-            <p className="text-2xl font-bold text-[#445DFE]">
+            <p className="text-xl sm:text-2xl font-bold text-[#445DFE]">
               £{product.pricePerMeter?.toFixed(2) || product.pricePerKg?.toFixed(2)}
               {product.pricePerMeter ? '/m' : '/kg'}
             </p>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3 pt-2">
             <Button
               onClick={() => setIsDetailModalOpen(false)}
               variant="outline"
