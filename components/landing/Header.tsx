@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/hooks/useCart';
 import { Button } from '@/components/shared/Button';
 import { siteConfig } from '@/config/site';
+import { lockBodyScroll, unlockBodyScroll } from '@/lib/utils/bodyScrollLock';
 
 const MenuIcon: React.FC<{ className?: string }> = ({ className = '' }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,13 +36,22 @@ export const Header: React.FC = () => {
   const { itemCount } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      lockBodyScroll();
+    } else {
+      unlockBodyScroll();
+    }
+    return () => unlockBodyScroll();
+  }, [mobileMenuOpen]);
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo - Responsive size */}
-          <Link href="/" className="flex items-center -ml-1 sm:-ml-2 md:-ml-3">
-            <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 flex-shrink-0 -my-3 sm:-my-4 md:-my-5">
+          {/* Logo - Responsive size: larger and more to the right on mobile */}
+          <Link href="/" className="flex items-center ml-2 sm:-ml-5 md:-ml-6">
+            <div className="relative w-32 h-32 sm:w-28 sm:h-28 md:w-36 md:h-36 flex-shrink-0 -my-4 sm:-my-4 md:-my-5">
               <Image
                 src="/alteg-logo.png"
                 alt="ALTEG Logo"
@@ -52,22 +62,25 @@ export const Header: React.FC = () => {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - section links go to home so they work from any page */}
           <nav className="hidden lg:flex items-center gap-8">
-            <a href="#catalog" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
+            <a href="/#catalog" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
               Products
             </a>
-            <a href="#advantages" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
+            <a href="/#advantages" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
               Advantages
             </a>
-            <a href="#how-to-order" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
+            <a href="/#how-to-order" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
               How to Order
             </a>
-            <a href="#faq" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
+            <a href="/#faq" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
               FAQ
             </a>
             <Link href="/contact" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
               Contact
+            </Link>
+            <Link href="/wholesale" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
+              Wholesale
             </Link>
           </nav>
 
@@ -89,7 +102,7 @@ export const Header: React.FC = () => {
             </Link>
 
             {/* Desktop CTA Button */}
-            <Link href="#catalog" className="hidden lg:block">
+            <Link href="/#catalog" className="hidden lg:block">
               <button className="px-6 py-2.5 bg-black hover:bg-[#050544] text-white font-bold transition-all duration-300 text-sm rounded-none uppercase tracking-wide">
                 MAKE AN ENQUIRY
               </button>
@@ -127,46 +140,53 @@ export const Header: React.FC = () => {
           <div className="lg:hidden fixed inset-0 top-16 md:top-20 bg-[#050544] z-50 overflow-y-auto">
             <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] md:min-h-[calc(100vh-5rem)] px-4 py-12 relative">
               {/* Menu Items */}
-              <nav className="flex flex-col items-center gap-8 w-full max-w-md">
+              <nav className="flex flex-col items-center gap-3 w-full max-w-md">
                 <Link 
-                  href="#catalog" 
+                  href="/#catalog" 
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center text-white hover:text-[#B7D2FF] font-bold transition-colors text-2xl md:text-3xl uppercase tracking-wide py-4"
+                  className="w-full text-center text-white hover:text-[#B7D2FF] font-semibold transition-colors text-base md:text-lg uppercase tracking-wide py-2"
                 >
                   Products
                 </Link>
                 <Link 
-                  href="#trust" 
+                  href="/#trust" 
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center text-white hover:text-[#B7D2FF] font-bold transition-colors text-2xl md:text-3xl uppercase tracking-wide py-4"
+                  className="w-full text-center text-white hover:text-[#B7D2FF] font-semibold transition-colors text-base md:text-lg uppercase tracking-wide py-2"
                 >
                   Advantages
                 </Link>
                 <Link 
-                  href="#how-to-order" 
+                  href="/#how-to-order" 
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center text-white hover:text-[#B7D2FF] font-bold transition-colors text-2xl md:text-3xl uppercase tracking-wide py-4"
+                  className="w-full text-center text-white hover:text-[#B7D2FF] font-semibold transition-colors text-base md:text-lg uppercase tracking-wide py-2"
                 >
                   How to Order
                 </Link>
                 <Link 
-                  href="#faq" 
+                  href="/#faq" 
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center text-white hover:text-[#B7D2FF] font-bold transition-colors text-2xl md:text-3xl uppercase tracking-wide py-4"
+                  className="w-full text-center text-white hover:text-[#B7D2FF] font-semibold transition-colors text-base md:text-lg uppercase tracking-wide py-2"
                 >
                   FAQ
                 </Link>
                 <Link 
                   href="/contact" 
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center text-white hover:text-[#B7D2FF] font-bold transition-colors text-2xl md:text-3xl uppercase tracking-wide py-4"
+                  className="w-full text-center text-white hover:text-[#B7D2FF] font-semibold transition-colors text-base md:text-lg uppercase tracking-wide py-2"
                 >
                   Contact
+                </Link>
+                <Link 
+                  href="/wholesale" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center text-white hover:text-[#B7D2FF] font-semibold transition-colors text-base md:text-lg uppercase tracking-wide py-2"
+                >
+                  Wholesale
                 </Link>
                 <a 
                   href={`tel:${siteConfig.links.phone}`} 
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center text-white hover:text-[#B7D2FF] font-bold transition-colors text-xl md:text-2xl py-4 flex items-center justify-center gap-2"
+                  className="w-full text-center text-white hover:text-[#B7D2FF] font-semibold transition-colors text-sm md:text-base py-2 flex items-center justify-center gap-2"
                 >
                   <PhoneIcon className="w-6 h-6 md:w-7 md:h-7" />
                   <span>{siteConfig.links.phoneDisplay || siteConfig.links.phone}</span>
@@ -176,7 +196,7 @@ export const Header: React.FC = () => {
               {/* CTA Buttons */}
               <div className="w-full max-w-xs mt-12 space-y-4 pt-8 border-t border-white/20">
                 <Button 
-                  href="#catalog" 
+                  href="/#catalog" 
                   variant="primary" 
                   fullWidth 
                   className="bg-white !text-black hover:bg-gray-100 border-none rounded-none py-4 text-base font-bold uppercase"

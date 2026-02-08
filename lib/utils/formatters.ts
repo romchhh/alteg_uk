@@ -1,6 +1,8 @@
+const UK_TIMEZONE = 'Europe/London';
+
 export function formatDate(date: Date | string, format: 'short' | 'long' = 'short'): string {
   const d = typeof date === 'string' ? new Date(date) : date;
-  
+
   if (format === 'long') {
     return new Intl.DateTimeFormat('en-GB', {
       day: 'numeric',
@@ -8,13 +10,28 @@ export function formatDate(date: Date | string, format: 'short' | 'long' = 'shor
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
+      timeZone: UK_TIMEZONE,
     }).format(d);
   }
-  
+
   return new Intl.DateTimeFormat('en-GB', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
+    timeZone: UK_TIMEZONE,
+  }).format(d);
+}
+
+/** Format date and time in UK timezone (e.g. "08 Feb 2026, 22:45") */
+export function formatDateTimeUK(date: Date | string): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: UK_TIMEZONE,
   }).format(d);
 }
 

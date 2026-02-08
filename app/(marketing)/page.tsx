@@ -1,4 +1,5 @@
 import React from 'react';
+import { getHomepageSettings } from '@/lib/data/homepage';
 import { HeroSection } from '@/components/landing/HeroSection';
 import { FeaturesSection } from '@/components/landing/FeaturesSection';
 import { DescriptionSection } from '@/components/landing/DescriptionSection';
@@ -10,13 +11,18 @@ import { PromoBanners } from '@/components/landing/PromoBanners';
 import { HowToOrderSection } from '@/components/landing/HowToOrderSection';
 import { FAQSection } from '@/components/landing/FAQSection';
 import { CustomerSegments } from '@/components/landing/CustomerSegments';
+import { MapSection } from '@/components/landing/MapSection';
 import { ShoppingCart } from '@/components/cart/ShoppingCart';
 
-export default function HomePage() {
+export default async function HomePage() {
+  const homepageSettings = await getHomepageSettings();
   return (
     <main className="min-h-screen">
       {/* Block 1: Hero Banner */}
-      <HeroSection />
+      <HeroSection
+        heroTitle={homepageSettings.heroTitle}
+        heroSubtitle={homepageSettings.heroSubtitle}
+      />
       
       {/* Block 2: Features (Dark section with 4 features) */}
       <FeaturesSection />
@@ -47,6 +53,9 @@ export default function HomePage() {
       
       {/* Block 7: Customer Segments */}
       <CustomerSegments />
+
+      {/* Block 8: Find Us on the Map (above footer) */}
+      <MapSection />
 
       {/* Shopping Cart */}
       <ShoppingCart />

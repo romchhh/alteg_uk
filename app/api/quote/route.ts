@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { submitQuoteRequest } from '@/lib/services/orders';
+import { sendTelegramMessage } from '@/lib/services/telegram';
 import { QuoteRequest } from '@/lib/types/order';
 import { quoteRequestSchema } from '@/lib/utils/validators';
 
@@ -25,6 +26,18 @@ export async function POST(request: NextRequest) {
     const result = await submitQuoteRequest(quoteData);
 
     if (result.success) {
+      const q = quoteData;
+      const lines = [
+        '<b>📋 Запит на розрахунок (quote)</b>',
+        `Клієнт: ${q.customer.name}`,
+        `Телефон: ${q.customer.phone}`,
+        `Email: ${q.customer.email}`,
+        `Вага: ${q.totalWeight} kg`,
+        q.estimatedTotal != null ? `Орієнтовна сума: £${q.estimatedTotal.toFixed(2)}` : '',
+        q.notes ? `Примітка: ${q.notes}` : '',
+      ].filter(Boolean);
+      sendTelegramMessage(lines.join('\n')).catch(() => {});
+
       return NextResponse.json(
         { 
           success: true, 

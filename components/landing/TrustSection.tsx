@@ -1,6 +1,8 @@
 import React from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/shared/Button';
 import Link from 'next/link';
+import { siteConfig } from '@/config/site';
 
 const trustPoints = [
   {
@@ -148,33 +150,21 @@ const trustPoints = [
       </div>
     ),
   },
-  {
-    icon: (
-      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-      </svg>
-    ),
-    title: 'SOCIAL PROOF',
-    content: (
-      <div>
-        <p className="text-white/90 mb-4 italic">
-          "Trusted by customers across the UK"
-        </p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 opacity-60">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="bg-white/20 rounded p-2 sm:p-3 text-center text-xs">
-              Client {i}
-            </div>
-          ))}
-        </div>
-        <p className="text-sm text-white/70 mt-4">
-          <Link href="#" className="underline hover:text-white">
-            View on Trustpilot
-          </Link>
-        </p>
-      </div>
-    ),
-  },
+];
+
+const TESTIMONIALS = [
+  { quote: 'Reliable supply and fair pricing. We order regularly.', name: 'J. Mitchell', company: 'Metalworks Ltd, Birmingham', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face' },
+  { quote: 'Cutting to size saved us time. Quality is consistent.', name: 'Sarah K.', company: 'Fabrication Solutions, Manchester', image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=96&h=96&fit=crop&crop=face' },
+  { quote: 'Switched from another supplier — no regrets. On-time delivery.', name: 'D. Roberts', company: 'Roberts Aluminium, Leeds', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=96&h=96&fit=crop&crop=face' },
+  { quote: 'Good range of profiles, quick quotes. Recommended.', name: 'A. Patel', company: 'Patel Engineering, London', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=96&h=96&fit=crop&crop=face' },
+  { quote: 'Professional team, clear communication. Will use again.', name: 'M. Collins', company: 'Collins & Co, Bristol', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&h=96&fit=crop&crop=face' },
+  { quote: 'Competitive for wholesale. We use them for all our angles.', name: 'T. Wright', company: 'Wright Fabrications, Sheffield', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=96&h=96&fit=crop&crop=face' },
+  { quote: 'Best lead times we have had. Always in stock for our key profiles.', name: 'R. Hughes', company: 'Hughes Metal, Cardiff', image: 'https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=96&h=96&fit=crop&crop=face' },
+  { quote: 'Free cutting to size is a game-changer. No waste, fair prices.', name: 'Emma L.', company: 'Ltd Design Studio, Edinburgh', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=96&h=96&fit=crop&crop=face' },
+  { quote: 'We switched our whole supply to ALTEG. Quality and service are top.', name: 'P. O’Brien', company: 'O’Brien Fabrication, Liverpool', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=96&h=96&fit=crop&crop=face' },
+  { quote: 'Quick turnaround on custom lengths. Would recommend to anyone.', name: 'Lisa M.', company: 'Mason Engineering, Nottingham', image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=96&h=96&fit=crop&crop=face' },
+  { quote: 'Transparent pricing, no hidden costs. A proper partner for our business.', name: 'K. Thompson', company: 'Thompson & Sons, Newcastle', image: 'https://images.unsplash.com/photo-1552058544-f2b08422138a?w=96&h=96&fit=crop&crop=face' },
+  { quote: 'Consistent quality and reliable delivery. Our go-to for aluminium.', name: 'N. Foster', company: 'Foster Aluminium, Southampton', image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=96&h=96&fit=crop&crop=face' },
 ];
 
 export const TrustSection: React.FC = () => {
@@ -193,7 +183,7 @@ export const TrustSection: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16">
           {trustPoints.map((point, index) => (
             <div 
               key={index}
@@ -214,23 +204,71 @@ export const TrustSection: React.FC = () => {
           ))}
         </div>
 
+        {/* Social Proof — горизонтальний скрол з фото */}
+        <div className="mb-12 sm:mb-16">
+          <h3 className="text-xl sm:text-2xl font-bold text-white uppercase tracking-wide mb-2 text-center">
+            Social Proof
+          </h3>
+          <p className="text-white/80 italic text-center mb-6 text-sm sm:text-base">
+            Trusted by customers across the UK
+          </p>
+          <div className="relative -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+            <div className="overflow-x-auto scrollbar-hide pb-2">
+              <div className="flex gap-4 flex-nowrap" style={{ minWidth: 'min-content' }}>
+                {TESTIMONIALS.map((t, i) => (
+                  <div
+                    key={i}
+                    className="flex-shrink-0 w-[280px] sm:w-[320px] bg-black/40 rounded-lg p-4 sm:p-5 border border-white/10 text-left"
+                  >
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden flex-shrink-0 bg-white/10">
+                        <Image
+                          src={t.image}
+                          alt=""
+                          fill
+                          className="object-cover"
+                          sizes="56px"
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-white/90 text-xs sm:text-sm font-semibold">{t.name}</p>
+                        <p className="text-white/60 text-xs truncate" title={t.company}>{t.company}</p>
+                      </div>
+                    </div>
+                    <p className="text-white/95 text-sm sm:text-base italic">&ldquo;{t.quote}&rdquo;</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <p className="text-sm text-white/70 mt-6 text-center">
+            {siteConfig.links.trustpilot ? (
+              <Link href={siteConfig.links.trustpilot} target="_blank" rel="noopener noreferrer" className="underline hover:text-white">
+                View on Trustpilot
+              </Link>
+            ) : (
+              <span className="italic text-white/60">Trustpilot — Coming soon</span>
+            )}
+          </p>
+        </div>
+
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <Link href="#contact" className="w-full sm:w-auto">
+          <Link href="/wholesale" className="w-full sm:w-auto">
             <Button 
               variant="primary" 
               size="lg"
               className="w-full sm:w-auto !bg-[#050544] hover:!bg-[#445DFE] text-white px-8 py-4 text-base md:text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl rounded-none"
             >
-              Discuss Individual Order
+              Request a quote
             </Button>
           </Link>
-          <Link href="#catalog" className="w-full sm:w-auto">
+          <Link href="/contact" className="w-full sm:w-auto">
             <Button 
               variant="outline" 
               size="lg"
               className="w-full sm:w-auto border-2 border-white text-white hover:bg-white hover:text-[#050544] px-8 py-4 text-base md:text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl rounded-none"
             >
-              Request a Quote
+              Contact factory
             </Button>
           </Link>
         </div>

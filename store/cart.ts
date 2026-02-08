@@ -12,6 +12,9 @@ interface CartStore {
   updateItem: (id: string, updates: Partial<Pick<CartItem, 'length' | 'quantity' | 'freeCutting' | 'additionalProcessing'>>) => void;
   clearCart: () => void;
   getTotal: () => number;
+  getSubtotal: () => number;
+  getDiscountAmount: () => number;
+  getDiscountPercent: () => number;
   getTotalWeight: () => number;
   getItemCount: () => number;
 }
@@ -104,7 +107,31 @@ export const useCartStore = create<CartStore>()(
     const result = calculateCartTotal(items, isWholesaleOrder(totalWeight));
     return result.total;
   },
-  
+
+  getSubtotal: () => {
+    const items = get().items;
+    if (items.length === 0) return 0;
+    const totalWeight = items.reduce((sum, item) => sum + item.calculatedWeight, 0);
+    const result = calculateCartTotal(items, isWholesaleOrder(totalWeight));
+    return result.subtotal;
+  },
+
+  getDiscountAmount: () => {
+    const items = get().items;
+    if (items.length === 0) return 0;
+    const totalWeight = items.reduce((sum, item) => sum + item.calculatedWeight, 0);
+    const result = calculateCartTotal(items, isWholesaleOrder(totalWeight));
+    return result.discountAmount;
+  },
+
+  getDiscountPercent: () => {
+    const items = get().items;
+    if (items.length === 0) return 0;
+    const totalWeight = items.reduce((sum, item) => sum + item.calculatedWeight, 0);
+    const result = calculateCartTotal(items, isWholesaleOrder(totalWeight));
+    return result.discount * 100;
+  },
+
   getTotalWeight: () => {
     return get().items.reduce((sum, item) => sum + item.calculatedWeight, 0);
   },

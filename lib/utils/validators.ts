@@ -46,12 +46,44 @@ export const wholesaleFormSchema = z.object({
   annualVolume: z.string().optional(),
   productInterests: z.array(z.string()).optional(),
   message: z.string().optional(),
+  attachmentUrl: z.string().optional(),
 });
 
 export const contactFormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   phone: z.string().min(10, 'Phone number must be at least 10 digits'),
-  interest: z.string().min(3, 'Please describe what interests you'),
+  interest: z.string().optional().default('').refine((s) => !s || s.length >= 3, 'At least 3 characters if provided'),
+});
+
+export const adminProductSchema = z.object({
+  nameEn: z.string().min(1, "Name is required"),
+  dimensions: z.string().min(1, "Dimensions are required"),
+  pricePerKg: z.union([z.string(), z.number()]).optional(),
+  weightPerMeter: z.union([z.string(), z.number()]).optional(),
+  standardLengths: z.string().min(1, "At least one length required"),
+}).refine(
+  (data) => {
+    const lengths = String(data.standardLengths).split(",").map((s) => parseFloat(s.trim())).filter((n) => !isNaN(n));
+    return lengths.length > 0;
+  },
+  { message: "Enter at least one valid length (e.g. 1, 3, 6)", path: ["standardLengths"] }
+).refine(
+  (data) => {
+    const v = data.pricePerKg != null && data.pricePerKg !== "" ? parseFloat(String(data.pricePerKg)) : NaN;
+    return isNaN(v) || v >= 0;
+  },
+  { message: "Price per kg must be ≥ 0", path: ["pricePerKg"] }
+).refine(
+  (data) => {
+    const v = data.weightPerMeter != null && data.weightPerMeter !== "" ? parseFloat(String(data.weightPerMeter)) : NaN;
+    return isNaN(v) || v > 0;
+  },
+  { message: "Weight per m must be > 0", path: ["weightPerMeter"] }
+);
+
+export const adminCategorySchema = z.object({
+  id: z.string().min(1, "ID is required").regex(/^[a-z0-9_]+$/, "ID: lowercase letters, numbers, underscores only"),
+  nameEn: z.string().min(1, "Name (EN) is required"),
 });
 
 export type CustomerInfoFormData = z.infer<typeof customerInfoSchema>;

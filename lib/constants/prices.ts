@@ -7,6 +7,13 @@ export const WHOLESALE_DISCOUNT_TIERS = [
   { minWeight: 5000, maxWeight: Infinity, discount: 0.20 }, // 20%
 ] as const;
 
+// Length discount: from 6m 3%, from 18m 5% (by total length per line: length * quantity)
+export const LENGTH_DISCOUNT_TIERS = [
+  { minLength: 0, maxLength: 5.99, discount: 0 },
+  { minLength: 6, maxLength: 17.99, discount: 0.03 }, // 3%
+  { minLength: 18, maxLength: Infinity, discount: 0.05 }, // 5%
+] as const;
+
 export const FREE_DELIVERY_THRESHOLD = 30; // £30
 
 export const BASE_DELIVERY_RATE = 15; // £15
@@ -14,6 +21,13 @@ export const BASE_DELIVERY_RATE = 15; // £15
 export function getWholesaleDiscount(totalWeight: number): number {
   const tier = WHOLESALE_DISCOUNT_TIERS.find(
     (t) => totalWeight >= t.minWeight && totalWeight <= t.maxWeight
+  );
+  return tier?.discount ?? 0;
+}
+
+export function getLengthDiscount(totalLengthMeters: number): number {
+  const tier = LENGTH_DISCOUNT_TIERS.find(
+    (t) => totalLengthMeters >= t.minLength && totalLengthMeters <= t.maxLength
   );
   return tier?.discount ?? 0;
 }

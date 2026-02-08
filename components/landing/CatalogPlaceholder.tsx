@@ -15,26 +15,26 @@ export const CatalogPlaceholder: React.FC = () => {
 
           {/* Advantages */}
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-12">
-            <div className="bg-[#E9EDF4] rounded-lg p-3 sm:p-4">
+            <div className="bg-transparent border border-black rounded-lg p-3 sm:p-4">
               <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">£30+</div>
               <div className="text-xs sm:text-sm text-gray-700 leading-tight">Free UK Delivery</div>
             </div>
-            <div className="bg-[#E9EDF4] rounded-lg p-3 sm:p-4">
+            <div className="bg-transparent border border-black rounded-lg p-3 sm:p-4">
               <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">Direct</div>
               <div className="text-xs sm:text-sm text-gray-700 leading-tight">Factory Prices</div>
             </div>
-            <div className="bg-[#E9EDF4] rounded-lg p-3 sm:p-4">
+            <div className="bg-transparent border border-black rounded-lg p-3 sm:p-4">
               <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">Free</div>
               <div className="text-xs sm:text-sm text-gray-700 leading-tight">Cutting to Size</div>
             </div>
-            <div className="bg-[#E9EDF4] rounded-lg p-3 sm:p-4">
+            <div className="bg-transparent border border-black rounded-lg p-3 sm:p-4">
               <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">Custom</div>
               <div className="text-xs sm:text-sm text-gray-700 leading-tight">Processing Available</div>
             </div>
           </div>
 
           {/* Placeholder */}
-          <div className="bg-gradient-to-br from-[#E9EDF4] to-gray-100 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-12 lg:p-16 border-2 border-dashed border-[#445DFE]">
+          <div className="bg-transparent rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-12 lg:p-16 border-2 border-black">
             <div className="mb-4 sm:mb-6">
               <svg 
                 className="w-16 h-16 sm:w-20 sm:h-20 mx-auto text-[#445DFE]" 

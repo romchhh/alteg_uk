@@ -1,36 +1,24 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Product, ProductCategory } from '@/lib/types/product';
 import { CATALOG_PRODUCTS, PRODUCT_CATEGORIES } from '@/lib/constants/catalog';
 import { useCartStore } from '@/store/cart';
-import { calculateOrder } from '@/lib/utils/calculations';
+import { calculateOrder, getPricePerMeter } from '@/lib/utils/calculations';
 import { isWholesaleOrder } from '@/lib/constants/prices';
 import { Button } from '@/components/shared/Button';
 import { Modal } from '@/components/shared/Modal';
 import { SuccessAlert } from '@/components/shared/SuccessAlert';
 
-// Маппінг категорій для калькулятора
-const CALCULATOR_CATEGORIES: Record<string, ProductCategory[]> = {
-  angle: ['angle'],
-  tube_square: ['tube_square'],
-  tube_round: ['tube_round'],
-  round_bar: ['round_bar'],
-  channel: ['channel'],
-  sheet: ['sheet'],
-  other: ['plate', 'i_beam', 't_beam', 't_profile', 'z_profile', 'square_bar', 'threshold', 'tube_rectangular'],
-};
+function getProductImage(product: Product): string {
+  const categoryInfo = product.category ? PRODUCT_CATEGORIES[product.category as ProductCategory] : undefined;
+  return product.image || categoryInfo?.image || '';
+}
 
-const CATEGORY_LABELS: Record<string, { en: string; ua: string }> = {
-  angle: { en: 'Aluminium Angle', ua: 'Уголок' },
-  tube_square: { en: 'Square Tube', ua: 'Труба квадратная' },
-  tube_round: { en: 'Round Tube', ua: 'Труба круглая' },
-  round_bar: { en: 'Round Bar', ua: 'Круг' },
-  channel: { en: 'Channel', ua: 'Швеллер' },
-  sheet: { en: 'Sheet', ua: 'Лист' },
-  other: { en: 'Other Profiles', ua: 'Прочие профили' },
-};
+const MIN_CUSTOM_LENGTH = 0.1;
+const MAX_CUSTOM_LENGTH = 25;
 
 export const OrderCalculator: React.FC = () => {
   // Step 1: Category selection
@@ -43,10 +31,13 @@ export const OrderCalculator: React.FC = () => {
   const [length, setLength] = useState<number>(1);
   const [lengthInput, setLengthInput] = useState<string>('1');
   const [quantity, setQuantity] = useState<number>(1);
+  const [quantityInput, setQuantityInput] = useState<string>('1');
   const [freeCutting, setFreeCutting] = useState<boolean>(false);
   const [additionalProcessing, setAdditionalProcessing] = useState<boolean>(false);
   
   // UI State
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const profileDropdownRef = useRef<HTMLDivElement>(null);
   const [isWholesaleModalOpen, setIsWholesaleModalOpen] = useState(false);
   const [isSuccessAlertOpen, setIsSuccessAlertOpen] = useState(false);
   const [wholesaleFormData, setWholesaleFormData] = useState({
@@ -58,13 +49,73 @@ export const OrderCalculator: React.FC = () => {
   });
 
   const addItem = useCartStore((state) => state.addItem);
+  const [productsFromApi, setProductsFromApi] = useState<Product[] | null>(null);
+  const [categoriesMap, setCategoriesMap] = useState<Record<string, { image?: string; nameEn?: string }>>({});
+  const [categoriesList, setCategoriesList] = useState<string[]>([]);
 
-  // Filter products by selected category
+  useEffect(() => {
+    fetch('/api/categories')
+      .then((res) => res.ok ? res.json() : null)
+      .then((list: { id: string; name: string; nameEn: string; image?: string }[] | null) => {
+        if (!Array.isArray(list)) return;
+        const next: Record<string, { image?: string; nameEn?: string }> = {};
+        list.forEach((c) => {
+          const base = PRODUCT_CATEGORIES[c.id as ProductCategory];
+          next[c.id] = {
+            image: c.image || base?.image || '',
+            nameEn: c.nameEn || base?.nameEn || c.name,
+          };
+        });
+        setCategoriesMap(next);
+        setCategoriesList(list.map((c) => c.id));
+      })
+      .catch(() => {
+        setCategoriesList(Object.keys(PRODUCT_CATEGORIES));
+      });
+  }, []);
+
+  const calculatorCategories = categoriesList.length > 0 ? categoriesList : Object.keys(PRODUCT_CATEGORIES);
+
+  const getCategoryImage = (categoryKey: string): string => {
+    const fromApi = categoriesMap[categoryKey]?.image;
+    if (fromApi) return fromApi;
+    const fromCatalog = (PRODUCT_CATEGORIES as Record<string, { image?: string }>)[categoryKey]?.image;
+    if (fromCatalog) return fromCatalog;
+    return '/production_1.jpg';
+  };
+
+  const getCategoryName = (categoryKey: string): string => {
+    return categoriesMap[categoryKey]?.nameEn ?? (PRODUCT_CATEGORIES as Record<string, { nameEn?: string }>)[categoryKey]?.nameEn ?? categoryKey;
+  };
+
+  useEffect(() => {
+    fetch('/api/products')
+      .then((res) => res.ok ? res.json() : null)
+      .then((data: { products?: Product[] } | null) => {
+        if (data && Array.isArray(data.products)) setProductsFromApi(data.products);
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (profileDropdownRef.current && !profileDropdownRef.current.contains(e.target as Node)) {
+        setProfileDropdownOpen(false);
+      }
+    };
+    if (profileDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [profileDropdownOpen]);
+
+  const productsList = productsFromApi !== null && productsFromApi.length > 0 ? productsFromApi : CATALOG_PRODUCTS;
+
+  // Filter products by selected category (one category = one id, no grouping)
   const availableProducts = useMemo(() => {
     if (!selectedCategoryKey) return [];
-    const categoryTypes = CALCULATOR_CATEGORIES[selectedCategoryKey] || [];
-    return CATALOG_PRODUCTS.filter((p) => categoryTypes.includes(p.category));
-  }, [selectedCategoryKey]);
+    return productsList.filter((p) => p.category === selectedCategoryKey);
+  }, [selectedCategoryKey, productsList]);
 
   // Calculate order details
   const calculation = useMemo(() => {
@@ -80,6 +131,7 @@ export const OrderCalculator: React.FC = () => {
     setLength(1);
     setLengthInput('1');
     setQuantity(1);
+    setQuantityInput('1');
     setFreeCutting(false);
     setAdditionalProcessing(false);
   };
@@ -93,38 +145,55 @@ export const OrderCalculator: React.FC = () => {
       setLength(defaultLength);
       setLengthInput(defaultLength.toString());
       setQuantity(1);
+      setQuantityInput('1');
     }
   };
 
-  // Handle length input change - allow any input, update length only if valid
+  // Handle length input change - allow any input; update length only when in valid range (show red if > 25 or < 0.1)
   const handleLengthInputChange = (value: string) => {
-    // Allow empty string for easier editing
     setLengthInput(value);
-    
-    // Only update length if value is a valid positive number
-    if (value === '' || value === '-') {
-      // Allow empty or minus sign for editing
-      return;
-    }
-    
+    if (value === '' || value === '-') return;
     const numValue = parseFloat(value);
-    if (!isNaN(numValue) && numValue > 0) {
+    if (!isNaN(numValue) && numValue >= MIN_CUSTOM_LENGTH && numValue <= MAX_CUSTOM_LENGTH) {
       setLength(numValue);
     }
   };
 
-  // Handle length input blur - validate and set minimum
+  // Is custom length out of range (show red)
+  const lengthNum = parseFloat(lengthInput);
+  const isLengthInvalid =
+    lengthInput !== '' &&
+    lengthInput !== '-' &&
+    (isNaN(lengthNum) || lengthNum < MIN_CUSTOM_LENGTH || lengthNum > MAX_CUSTOM_LENGTH);
+
+  // Handle length input blur - validate and clamp to min/max
   const handleLengthInputBlur = () => {
     const numValue = parseFloat(lengthInput);
     if (isNaN(numValue) || numValue <= 0 || lengthInput === '' || lengthInput === '-') {
-      // Reset to default if invalid
       const defaultLength = selectedProduct?.standardLengths[0] || 1;
       setLengthInput(defaultLength.toString());
       setLength(defaultLength);
     } else {
-      // Normalize the display value
-      setLengthInput(numValue.toString());
-      setLength(numValue);
+      const clamped = Math.min(MAX_CUSTOM_LENGTH, Math.max(MIN_CUSTOM_LENGTH, numValue));
+      setLengthInput(clamped.toString());
+      setLength(clamped);
+    }
+  };
+
+  const handleQuantityInputChange = (value: string) => {
+    setQuantityInput(value);
+    const num = parseInt(value, 10);
+    if (value !== '' && !isNaN(num) && num >= 1) setQuantity(num);
+  };
+
+  const handleQuantityInputBlur = () => {
+    const num = parseInt(quantityInput, 10);
+    if (quantityInput === '' || isNaN(num) || num < 1) {
+      setQuantity(1);
+      setQuantityInput('1');
+    } else {
+      setQuantity(num);
+      setQuantityInput(num.toString());
     }
   };
 
@@ -148,6 +217,7 @@ export const OrderCalculator: React.FC = () => {
     setLength(1);
     setLengthInput('1');
     setQuantity(1);
+    setQuantityInput('1');
     setFreeCutting(false);
     setAdditionalProcessing(false);
   };
@@ -198,14 +268,6 @@ export const OrderCalculator: React.FC = () => {
     }
   };
 
-  // Handle scroll to contact form
-  const handleScrollToContact = () => {
-    const contactForm = document.getElementById('contact');
-    if (contactForm) {
-      contactForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
   return (
     <>
       <section id="calculator" className="pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-12 sm:pb-16 md:pb-20 lg:pb-24 bg-white">
@@ -229,36 +291,30 @@ export const OrderCalculator: React.FC = () => {
                   Step 1: Select Category
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-                  {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
+                  {calculatorCategories.map((key) => (
                     <button
                       key={key}
                       onClick={() => handleCategorySelect(key)}
-                      className={`relative overflow-hidden px-4 py-3 sm:py-4 border-2 rounded-lg transition-all duration-300 text-sm sm:text-base font-semibold min-h-[80px] sm:min-h-[100px] group ${
+                      className={`relative overflow-hidden w-full aspect-square border-2 rounded-lg transition-all duration-300 text-sm sm:text-base font-semibold group flex items-center justify-center ${
                         selectedCategoryKey === key
                           ? 'border-[#445DFE] shadow-lg scale-105'
                           : 'border-gray-300 hover:border-[#445DFE] hover:shadow-md'
                       }`}
                     >
-                      {/* Background Image */}
+                      {/* Background: from API/categories or PRODUCT_CATEGORIES, fallback /production_1.jpg */}
                       <div className="absolute inset-0 z-0">
                         <Image
-                          src="/production_1.jpg"
-                          alt={`${label.en} background`}
+                          src={getCategoryImage(key)}
+                          alt={`${getCategoryName(key)} background`}
                           fill
-                          className="object-cover opacity-20 group-hover:opacity-30 transition-opacity"
+                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                          quality={92}
+                          className="object-cover"
                         />
-                        <div className={`absolute inset-0 ${
-                          selectedCategoryKey === key 
-                            ? 'bg-[#445DFE]/80' 
-                            : 'bg-white/70 group-hover:bg-white/80'
-                        } transition-colors`} />
+                        <div className="absolute inset-0 bg-black/40" />
                       </div>
-                      
-                      {/* Content */}
-                      <span className={`relative z-10 ${
-                        selectedCategoryKey === key ? 'text-white' : 'text-[#050544]'
-                      }`}>
-                        {label.en}
+                      <span className="relative z-10 text-white font-semibold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] px-2 text-center">
+                        {getCategoryName(key)}
                       </span>
                     </button>
                   ))}
@@ -267,24 +323,88 @@ export const OrderCalculator: React.FC = () => {
 
               {/* Step 2: Product Selection */}
               {selectedCategoryKey && (
-                <div className="mb-8">
+                <div className="mb-8" ref={profileDropdownRef}>
                   <h3 className="text-lg sm:text-xl font-bold text-[#050544] mb-4">
                     Step 2: Select Profile
                   </h3>
-                  <select
-                    value={selectedProduct?.id || ''}
-                    onChange={(e) => handleProductSelect(e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#445DFE] text-[#050544] text-base font-medium"
-                  >
-                    <option value="">-- Select a profile --</option>
-                    {availableProducts.map((product) => (
-                      <option key={product.id} value={product.id}>
-                        {product.nameEn} ({product.dimensions}) - £
-                        {product.pricePerMeter?.toFixed(2) || product.pricePerKg?.toFixed(2)}
-                        {product.pricePerMeter ? '/m' : '/kg'}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setProfileDropdownOpen((v) => !v)}
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#445DFE] text-[#050544] text-base font-medium flex items-center gap-3 text-left bg-white"
+                    >
+                      {selectedProduct ? (
+                        <>
+                          {getProductImage(selectedProduct) ? (
+                            <span className="relative w-10 h-10 shrink-0 rounded overflow-hidden bg-gray-100">
+                              <Image
+                                src={getProductImage(selectedProduct)}
+                                alt=""
+                                fill
+                                className="object-cover"
+                                sizes="40px"
+                              />
+                            </span>
+                          ) : null}
+                          <span className="flex-1 min-w-0 truncate">
+                            {selectedProduct.nameEn} ({selectedProduct.dimensions}) — £
+                            {(getPricePerMeter(selectedProduct) ?? selectedProduct.pricePerKg ?? 0).toFixed(2)}
+                            {getPricePerMeter(selectedProduct) != null ? '/m' : '/kg'}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="text-gray-500">-- Select a profile --</span>
+                      )}
+                      <span className="shrink-0 text-gray-400" aria-hidden>
+                        {profileDropdownOpen ? '▲' : '▼'}
+                      </span>
+                    </button>
+                    {profileDropdownOpen && (
+                      <ul className="absolute z-10 mt-1 w-full max-h-80 overflow-auto border-2 border-gray-200 rounded-lg bg-white shadow-lg py-1">
+                        {availableProducts.map((product) => {
+                          const ppm = getPricePerMeter(product);
+                          const img = getProductImage(product);
+                          return (
+                            <li key={product.id}>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  handleProductSelect(product.id);
+                                  setProfileDropdownOpen(false);
+                                }}
+                                className={`w-full px-4 py-3 flex items-center gap-3 text-left hover:bg-[#E9EDF4] transition-colors ${
+                                  selectedProduct?.id === product.id ? 'bg-[#E9EDF4]' : ''
+                                }`}
+                              >
+                                {img ? (
+                                  <span className="relative w-12 h-12 shrink-0 rounded overflow-hidden bg-gray-100">
+                                    <Image
+                                      src={img}
+                                      alt=""
+                                      fill
+                                      className="object-cover"
+                                      sizes="48px"
+                                    />
+                                  </span>
+                                ) : (
+                                  <span className="w-12 h-12 shrink-0 rounded bg-gray-200" />
+                                )}
+                                <span className="flex-1 min-w-0">
+                                  <span className="font-medium text-[#050544] block truncate">
+                                    {product.nameEn} ({product.dimensions})
+                                  </span>
+                                  <span className="text-sm text-gray-600">
+                                    £{(ppm ?? product.pricePerKg ?? 0).toFixed(2)}
+                                    {ppm != null ? '/m' : '/kg'}
+                                  </span>
+                                </span>
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -301,7 +421,11 @@ export const OrderCalculator: React.FC = () => {
                       <label className="block text-sm font-semibold text-[#050544] mb-2">
                         Length (m)
                       </label>
-                      <div className="flex gap-2 mb-2">
+                      <p className="text-xs text-gray-500 mb-2">
+                        Choose a standard length or enter your own below.
+                      </p>
+                      <div className="flex gap-2 mb-3">
+                        <span className="text-xs text-gray-500 self-center shrink-0">Quick select:</span>
                         {selectedProduct.standardLengths.map((stdLength) => (
                           <button
                             key={stdLength}
@@ -319,16 +443,29 @@ export const OrderCalculator: React.FC = () => {
                           </button>
                         ))}
                       </div>
+                      <label className="block text-sm font-medium text-[#050544] mb-1">
+                        Custom length (m)
+                      </label>
                       <input
                         type="number"
-                        min="0.1"
+                        min={MIN_CUSTOM_LENGTH}
+                        max={MAX_CUSTOM_LENGTH}
                         step="0.1"
                         value={lengthInput}
                         onChange={(e) => handleLengthInputChange(e.target.value)}
                         onBlur={handleLengthInputBlur}
-                        className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#445DFE] text-[#050544]"
-                        placeholder="Or enter custom length"
+                        className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-[#050544] ${
+                          isLengthInvalid
+                            ? 'border-red-500 focus:border-red-500 bg-red-50/50'
+                            : 'border-gray-300 focus:border-[#445DFE]'
+                        }`}
+                        placeholder="e.g. 2.5, 4.2"
+                        aria-describedby="custom-length-hint"
+                        aria-invalid={isLengthInvalid}
                       />
+                      <p id="custom-length-hint" className={`text-xs mt-1 ${isLengthInvalid ? 'text-red-600' : 'text-gray-500'}`}>
+                        {isLengthInvalid ? `Length must be between ${MIN_CUSTOM_LENGTH}m and ${MAX_CUSTOM_LENGTH}m.` : 'Enter length in metres, max 25m (e.g. 2.5, 4.2). Used when you don’t use a quick-select option above.'}
+                      </p>
                     </div>
 
                     {/* Quantity */}
@@ -338,9 +475,10 @@ export const OrderCalculator: React.FC = () => {
                       </label>
                       <input
                         type="number"
-                        min="1"
-                        value={quantity}
-                        onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                        min={1}
+                        value={quantityInput}
+                        onChange={(e) => handleQuantityInputChange(e.target.value)}
+                        onBlur={handleQuantityInputBlur}
                         className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#445DFE] text-[#050544]"
                       />
                     </div>
@@ -416,17 +554,17 @@ export const OrderCalculator: React.FC = () => {
                   >
                     Add to Order
                   </Button>
-                  <button
-                    onClick={handleScrollToContact}
-                    className="flex-1 border-2 border-[#050544] text-black hover:bg-[#050544] hover:text-white py-3 px-6 text-base font-semibold transition-all duration-300 rounded-none flex flex-col items-center justify-center cursor-pointer"
+                  <Link
+                    href="/wholesale"
+                    className="flex-1 border-2 border-[#050544] text-black hover:bg-[#050544] hover:text-white py-3 px-6 text-base font-semibold transition-all duration-300 rounded-none flex flex-col items-center justify-center cursor-pointer text-center"
                   >
-                    <span>Request Wholesale Price</span>
-                    {calculation.totalWeight < 500 && (
-                      <span className="block text-xs mt-1 opacity-75">
-                        (Available for orders 500kg+)
-                      </span>
+                    <span>Request wholesale price</span>
+                    {calculation.totalWeight >= 500 ? (
+                      <span className="block text-xs mt-1 opacity-90">You qualify for wholesale pricing</span>
+                    ) : (
+                      <span className="block text-xs mt-1 opacity-75">(Available for orders 500kg+)</span>
                     )}
-                  </button>
+                  </Link>
                 </div>
               )}
             </div>

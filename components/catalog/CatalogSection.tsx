@@ -3,24 +3,87 @@
 import React, { useState, useEffect } from 'react';
 import { ProductCard } from '@/components/catalog/ProductCard';
 import { PRODUCT_CATEGORIES, CATALOG_PRODUCTS } from '@/lib/constants/catalog';
-import { ProductCategory } from '@/lib/types/product';
+import { Product, ProductCategory, ProductCategoryInfo } from '@/lib/types/product';
 import { Button } from '@/components/shared/Button';
+import { useContactModalStore } from '@/store/contactModal';
 
 const INITIAL_PRODUCTS = 20; // 5 rows on desktop (4 columns x 5 rows = 20 products)
 const PRODUCTS_PER_PAGE = 20; // Load 20 more products each time (5 more rows)
 
-export const CatalogSection: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<ProductCategory | 'all'>('all');
-  const [displayCount, setDisplayCount] = useState(INITIAL_PRODUCTS);
+function CustomQuoteCTA() {
+  const openContactModal = useContactModalStore((s) => s.open);
+  return (
+    <div className="text-center">
+      <h3 className="text-2xl sm:text-3xl font-bold text-[#050544] mb-4">
+        Can&apos;t find the profile you need?
+      </h3>
+      <p className="text-base sm:text-lg text-gray-700 mb-6">
+        Send us a drawing or description — we&apos;ll manufacture to order.
+      </p>
+      <Button
+        onClick={() => openContactModal('quote')}
+        variant="primary"
+        className="bg-[#050544] hover:bg-[#445DFE] text-white px-8 py-4 text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
+      >
+        Request individual quote
+      </Button>
+    </div>
+  );
+}
 
+export const CatalogSection: React.FC = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string | 'all'>('all');
+  const [displayCount, setDisplayCount] = useState(INITIAL_PRODUCTS);
+  const [categoriesMap, setCategoriesMap] = useState<Record<string, ProductCategoryInfo> | null>(null);
+  const [productsFromApi, setProductsFromApi] = useState<Product[] | null>(null);
+
+  useEffect(() => {
+    fetch('/api/categories')
+      .then((res) => res.ok ? res.json() : null)
+      .then((list: { id: string; name: string; nameEn: string; description: string; image?: string }[] | null) => {
+        if (!Array.isArray(list)) return;
+        const next: Record<string, ProductCategoryInfo> = {};
+        list.forEach((c) => {
+          const base = PRODUCT_CATEGORIES[c.id as ProductCategory];
+          if (base) {
+            next[c.id] = { ...base, name: c.name, nameEn: c.nameEn, description: c.description, image: c.image || base.image };
+          } else {
+            next[c.id] = {
+              name: c.name,
+              nameEn: c.nameEn,
+              description: c.description,
+              descriptionEn: c.description,
+              specifications: '',
+              specificationsEn: '',
+              applications: [],
+              applicationsEn: [],
+              image: c.image || '',
+            };
+          }
+        });
+        setCategoriesMap(next);
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    fetch('/api/products')
+      .then((res) => res.ok ? res.json() : null)
+      .then((data: { products?: Product[] } | null) => {
+        if (data && Array.isArray(data.products)) setProductsFromApi(data.products);
+      })
+      .catch(() => {});
+  }, []);
+
+  const productsList = productsFromApi !== null && productsFromApi.length > 0 ? productsFromApi : CATALOG_PRODUCTS;
   const filteredProducts =
     selectedCategory === 'all'
-      ? CATALOG_PRODUCTS
-      : CATALOG_PRODUCTS.filter((p) => p.category === selectedCategory);
+      ? productsList
+      : productsList.filter((p) => String(p.category) === selectedCategory);
 
   const displayedProducts = filteredProducts.slice(0, displayCount);
   const hasMore = displayCount < filteredProducts.length;
-  const categories = Object.entries(PRODUCT_CATEGORIES);
+  const categories = Object.entries(categoriesMap ?? PRODUCT_CATEGORIES);
 
   // Reset display count when category changes
   useEffect(() => {
@@ -45,19 +108,19 @@ export const CatalogSection: React.FC = () => {
 
           {/* Advantages */}
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-12">
-            <div className="bg-[#E9EDF4] rounded-lg p-3 sm:p-4">
+            <div className="bg-transparent border border-black rounded-lg p-3 sm:p-4">
               <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">£30+</div>
               <div className="text-xs sm:text-sm text-black leading-tight">Free UK Delivery</div>
             </div>
-            <div className="bg-[#E9EDF4] rounded-lg p-3 sm:p-4">
+            <div className="bg-transparent border border-black rounded-lg p-3 sm:p-4">
               <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">Direct</div>
               <div className="text-xs sm:text-sm text-black leading-tight">Factory Prices</div>
             </div>
-            <div className="bg-[#E9EDF4] rounded-lg p-3 sm:p-4">
+            <div className="bg-transparent border border-black rounded-lg p-3 sm:p-4">
               <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">Free</div>
               <div className="text-xs sm:text-sm text-black leading-tight">Cutting to Size</div>
             </div>
-            <div className="bg-[#E9EDF4] rounded-lg p-3 sm:p-4">
+            <div className="bg-transparent border border-black rounded-lg p-3 sm:p-4">
               <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">Custom</div>
               <div className="text-xs sm:text-sm text-black leading-tight">Processing Available</div>
             </div>
@@ -85,8 +148,10 @@ export const CatalogSection: React.FC = () => {
               {/* All Products Category */}
               <button
                 onClick={() => setSelectedCategory('all')}
-                className={`flex-shrink-0 relative h-36 w-52 rounded-lg overflow-hidden group transition-all duration-300 ${
-                  selectedCategory === 'all' ? 'ring-4 ring-[#445DFE] shadow-2xl scale-105' : 'shadow-md hover:shadow-lg'
+                className={`flex-shrink-0 relative h-36 w-52 rounded-lg overflow-hidden group transition-all duration-300 border-2 ${
+                  selectedCategory === 'all'
+                    ? 'border-[#445DFE] shadow-lg scale-105'
+                    : 'border-transparent shadow-md hover:shadow-lg'
                 }`}
               >
                 <div
@@ -95,22 +160,9 @@ export const CatalogSection: React.FC = () => {
                     backgroundImage: 'url(https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=800&q=80)',
                   }}
                 />
-                <div className={`absolute inset-0 transition-all duration-300 ${
-                  selectedCategory === 'all' 
-                    ? 'bg-gradient-to-br from-[#445DFE]/90 to-[#050544]/90' 
-                    : 'bg-black/50 group-hover:bg-black/40'
-                }`} />
-                {selectedCategory === 'all' && (
-                  <div className="absolute top-2 right-2">
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                )}
+                <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute inset-0 flex items-center justify-center p-3">
-                  <h3 className={`text-white font-bold text-center text-sm sm:text-base leading-tight transition-all duration-300 ${
-                    selectedCategory === 'all' ? 'scale-110' : ''
-                  }`}>
+                  <h3 className="text-white font-bold text-center text-sm sm:text-base leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                     All Products
                   </h3>
                 </div>
@@ -120,9 +172,11 @@ export const CatalogSection: React.FC = () => {
               {categories.map(([key, info]) => (
                 <button
                   key={key}
-                  onClick={() => setSelectedCategory(key as ProductCategory)}
-                  className={`flex-shrink-0 relative h-36 w-52 rounded-lg overflow-hidden group transition-all duration-300 ${
-                    selectedCategory === key ? 'ring-4 ring-[#445DFE] shadow-2xl scale-105' : 'shadow-md hover:shadow-lg'
+                  onClick={() => setSelectedCategory(key)}
+                  className={`flex-shrink-0 relative h-36 w-52 rounded-lg overflow-hidden group transition-all duration-300 border-2 ${
+                    selectedCategory === key
+                      ? 'border-[#445DFE] shadow-lg scale-105'
+                      : 'border-transparent shadow-md hover:shadow-lg'
                   }`}
                 >
                   <div
@@ -131,22 +185,9 @@ export const CatalogSection: React.FC = () => {
                       backgroundImage: `url(${info.image})`,
                     }}
                   />
-                  <div className={`absolute inset-0 transition-all duration-300 ${
-                    selectedCategory === key 
-                      ? 'bg-gradient-to-br from-[#445DFE]/90 to-[#050544]/90' 
-                      : 'bg-black/50 group-hover:bg-black/40'
-                  }`} />
-                  {selectedCategory === key && (
-                    <div className="absolute top-2 right-2">
-                      <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                  )}
+                  <div className="absolute inset-0 bg-black/40" />
                   <div className="absolute inset-0 flex items-center justify-center p-3">
-                    <h3 className={`text-white font-bold text-center text-sm sm:text-base leading-tight transition-all duration-300 ${
-                      selectedCategory === key ? 'scale-110' : ''
-                    }`}>
+                    <h3 className="text-white font-bold text-center text-sm sm:text-base leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                       {info.nameEn}
                     </h3>
                   </div>
@@ -172,7 +213,7 @@ export const CatalogSection: React.FC = () => {
             <ProductCard
               key={product.id}
               product={product}
-              categoryInfo={PRODUCT_CATEGORIES[product.category]}
+              categoryInfo={(categoriesMap ?? (PRODUCT_CATEGORIES as Record<string, ProductCategoryInfo>))[product.category] ?? (PRODUCT_CATEGORIES as Record<string, ProductCategoryInfo>)[product.category] ?? { name: '', nameEn: product.category, description: '', descriptionEn: '', specifications: '', specificationsEn: '', applications: [], applicationsEn: [], image: '' }}
             />
           ))}
         </div>
@@ -205,22 +246,8 @@ export const CatalogSection: React.FC = () => {
         )}
 
         {/* Custom Order CTA */}
-        <div className="max-w-3xl mx-auto mt-12 sm:mt-16 bg-gradient-to-br from-[#E9EDF4] to-gray-100 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-12 border-2 border-[#445DFE]">
-          <div className="text-center">
-            <h3 className="text-2xl sm:text-3xl font-bold text-[#050544] mb-4">
-              Can't find the profile you need?
-            </h3>
-            <p className="text-base sm:text-lg text-gray-700 mb-6">
-              Send us a drawing or description — we'll manufacture to order.
-            </p>
-            <Button
-              href="#contact"
-              variant="primary"
-              className="bg-[#050544] hover:bg-[#445DFE] text-white px-8 py-4 text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
-            >
-              Request Custom Calculation
-            </Button>
-          </div>
+        <div className="max-w-3xl mx-auto mt-12 sm:mt-16 bg-transparent rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-12 border-2 border-black">
+          <CustomQuoteCTA />
         </div>
       </div>
     </section>

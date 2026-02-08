@@ -8,6 +8,9 @@ export function useCart() {
     updateItem,
     clearCart,
     getTotal,
+    getSubtotal,
+    getDiscountAmount,
+    getDiscountPercent,
     getTotalWeight,
     getItemCount,
   } = useCartStore();
@@ -19,6 +22,9 @@ export function useCart() {
     updateItem,
     clearCart,
     total: getTotal(),
+    subtotal: getSubtotal(),
+    discountAmount: getDiscountAmount(),
+    discountPercent: getDiscountPercent(),
     totalWeight: getTotalWeight(),
     itemCount: getItemCount(),
   };

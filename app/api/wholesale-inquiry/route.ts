@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { wholesaleFormSchema } from '@/lib/utils/validators';
 import { createLead } from '@/lib/services/bitrix24';
+import { sendTelegramMessage } from '@/lib/services/telegram';
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,13 +20,14 @@ export async function POST(request: NextRequest) {
     const data = validationResult.data;
 
     // Create lead in Bitrix24
+    const attachmentLine = data.attachmentUrl ? `\nAttachment: ${data.attachmentUrl}` : '';
     const leadData = {
       TITLE: `ALTEG UK Wholesale Inquiry - ${data.company}`,
       NAME: data.contactName,
       COMPANY_TITLE: data.company,
       EMAIL: [{ VALUE: data.email, VALUE_TYPE: 'WORK' }],
       PHONE: [{ VALUE: data.phone, VALUE_TYPE: 'WORK' }],
-      COMMENTS: `Wholesale Inquiry\n\nCompany: ${data.company}\nContact: ${data.contactName}\nAnnual Volume: ${data.annualVolume || 'Not specified'}\nProduct Interests: ${data.productInterests?.join(', ') || 'Not specified'}\n\nMessage:\n${data.message || 'No message provided'}`,
+      COMMENTS: `Wholesale Inquiry\n\nCompany: ${data.company}\nContact: ${data.contactName}\nAnnual Volume: ${data.annualVolume || 'Not specified'}\nProduct Interests: ${data.productInterests?.join(', ') || 'Not specified'}\n\nMessage:\n${data.message || 'No message provided'}${attachmentLine}`,
       SOURCE_ID: 'WEB',
       SOURCE_DESCRIPTION: 'Website Wholesale Inquiry',
     };
@@ -40,6 +42,19 @@ export async function POST(request: NextRequest) {
         );
       }
 
+      const lines = [
+        '<b>🏢 Заявка оптом (wholesale)</b>',
+        `Компанія: ${data.company}`,
+        `Контакт: ${data.contactName}`,
+        `Email: ${data.email}`,
+        `Телефон: ${data.phone}`,
+        data.annualVolume ? `Обʼєм/рік: ${data.annualVolume}` : '',
+        data.productInterests?.length ? `Продукція: ${data.productInterests.join(', ')}` : '',
+        data.message ? `Повідомлення: ${data.message}` : '',
+        data.attachmentUrl ? `Файл: ${data.attachmentUrl}` : '',
+      ].filter(Boolean);
+      sendTelegramMessage(lines.join('\n')).catch(() => {});
+
       return NextResponse.json(
         { 
           success: true, 
@@ -50,7 +65,18 @@ export async function POST(request: NextRequest) {
       );
     } catch (error) {
       console.error('Bitrix24 error:', error);
-      // Still return success if Bitrix24 fails - log for admin review
+      const lines = [
+        '<b>🏢 Заявка оптом (wholesale)</b>',
+        `Компанія: ${data.company}`,
+        `Контакт: ${data.contactName}`,
+        `Email: ${data.email}`,
+        `Телефон: ${data.phone}`,
+        data.annualVolume ? `Обʼєм/рік: ${data.annualVolume}` : '',
+        data.productInterests?.length ? `Продукція: ${data.productInterests.join(', ')}` : '',
+        data.message ? `Повідомлення: ${data.message}` : '',
+        data.attachmentUrl ? `Файл: ${data.attachmentUrl}` : '',
+      ].filter(Boolean);
+      sendTelegramMessage(lines.join('\n')).catch(() => {});
       return NextResponse.json(
         { 
           success: true, 

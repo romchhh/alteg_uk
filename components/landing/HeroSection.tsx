@@ -9,7 +9,15 @@ import { contactFormSchema, ContactFormData } from '@/lib/utils/validators';
 import { Input } from '@/components/shared/Input';
 import { Button } from '@/components/shared/Button';
 
-export const HeroSection: React.FC = () => {
+interface HeroSectionProps {
+  heroTitle?: string;
+  heroSubtitle?: string;
+}
+
+export const HeroSection: React.FC<HeroSectionProps> = ({
+  heroTitle = 'ALTEG — ALUMINIUM PROFILES DIRECTLY FROM FACTORY',
+  heroSubtitle = 'Calculate costs and order online with UK delivery. Direct manufacturer prices.',
+}) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -75,12 +83,12 @@ export const HeroSection: React.FC = () => {
           <div className="w-full flex flex-col items-start text-left">
             {/* Main Heading */}
             <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold text-white mb-8 sm:mb-6 leading-tight tracking-tight">
-              ALTEG — ALUMINIUM PROFILES DIRECTLY FROM FACTORY
+              {heroTitle}
             </h1>
             
             {/* Subtitle */}
             <p className="text-2xl sm:text-2xl md:text-xl lg:text-xl xl:text-2xl text-white/90 mb-8 sm:mb-6 md:mb-8 max-w-3xl leading-relaxed">
-              Calculate costs and order online with UK delivery. Direct manufacturer prices.
+              {heroSubtitle}
             </p>
           </div>
 
@@ -181,7 +189,7 @@ export const HeroSection: React.FC = () => {
             </Link>
 
             {/* Button 3: Wholesale Calculation */}
-            <Link href="#catalog" className="w-full">
+            <Link href="/wholesale" className="w-full">
               <button className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-3 sm:py-4 lg:py-4 xl:py-5 border-2 border-white hover:bg-white/10 text-white font-semibold text-base sm:text-lg lg:text-lg xl:text-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center rounded-none">
                 Wholesale Order — Get Quote
               </button>

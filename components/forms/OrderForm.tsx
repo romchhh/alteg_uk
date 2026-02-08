@@ -9,12 +9,34 @@ import { Button } from '@/components/shared/Button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/shared/Card';
 import { useCart } from '@/hooks/useCart';
 import { useDelivery } from '@/hooks/useDelivery';
-import { submitOrder } from '@/lib/services/orders';
 import { DELIVERY_METHODS } from '@/lib/constants/delivery';
 import { formatCurrency } from '@/lib/utils/calculations';
 
+export interface OrderSummaryItem {
+  productName: string;
+  dimensions: string;
+  length: number;
+  quantity: number;
+  calculatedPrice: number;
+  calculatedWeight: number;
+  image?: string;
+  category?: string;
+}
+
+export interface OrderSuccessData {
+  items: OrderSummaryItem[];
+  subtotal: number;
+  deliveryCost: number;
+  total: number;
+  totalWeight: number;
+  isWholesale: boolean;
+  customer: { name: string; email: string; phone: string; company?: string };
+  delivery: { postcode: string; method?: string; instructions?: string };
+  notes?: string;
+}
+
 interface OrderFormProps {
-  onSuccess?: () => void;
+  onSuccess?: (data: OrderSuccessData) => void;
   onError?: (error: string) => void;
 }
 
@@ -58,8 +80,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ onSuccess, onError }) => {
   const onSubmit = async (data: OrderFormData) => {
     try {
       const orderTotal = total + deliveryCost;
-      
-      const result = await submitOrder({
+      const payload = {
         cart: items,
         customer: data.customer,
         delivery: {
@@ -73,13 +94,44 @@ export const OrderForm: React.FC<OrderFormProps> = ({ onSuccess, onError }) => {
         totalWeight,
         isWholesale: totalWeight >= 100,
         notes: data.notes,
-        createdAt: new Date(),
+      };
+
+      const res = await fetch('/api/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
+      const result = await res.json();
 
       if (result.success) {
+        const orderTotal = total + deliveryCost;
+        const successData: OrderSuccessData = {
+          items: items.map((i) => ({
+            productName: i.product.nameEn,
+            dimensions: i.product.dimensions,
+            length: i.length,
+            quantity: i.quantity,
+            calculatedPrice: i.calculatedPrice,
+            calculatedWeight: i.calculatedWeight,
+            image: i.product.image,
+            category: i.product.category,
+          })),
+          subtotal: total,
+          deliveryCost,
+          total: orderTotal,
+          totalWeight,
+          isWholesale: totalWeight >= 100,
+          customer: data.customer,
+          delivery: {
+            postcode: data.delivery.postcode,
+            method: data.delivery.method,
+            instructions: data.delivery.instructions,
+          },
+          notes: data.notes,
+        };
         reset();
         clearCart();
-        onSuccess?.();
+        onSuccess?.(successData);
       } else {
         onError?.(result.error || 'Failed to submit order');
       }

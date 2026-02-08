@@ -1,10 +1,15 @@
 import { Product, ProductCategory } from '@/lib/types/product';
 import { SAMPLE_PRODUCTS } from '@/lib/constants/products';
+import { getProducts } from '@/lib/data/products';
 
 export async function getAllProducts(): Promise<Product[]> {
-  // In production, this would fetch from an API or database
-  // For now, return sample data
-  return Promise.resolve(SAMPLE_PRODUCTS);
+  try {
+    const dataProducts = await getProducts();
+    if (dataProducts.length > 0) return dataProducts.filter((p) => !p.hidden);
+  } catch {
+    // Fallback to catalog if no data file
+  }
+  return Promise.resolve(SAMPLE_PRODUCTS.filter((p) => !p.hidden));
 }
 
 export async function getProductsByCategory(category: ProductCategory): Promise<Product[]> {

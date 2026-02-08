@@ -9,7 +9,7 @@ const banners = [
     description: 'Free metal cutting to your sizes with every order.',
     cta: 'Order Now',
     href: '/checkout',
-    bgGradient: 'from-[#445DFE] to-[#050544]',
+    bgImage: '/gallery/factory-01.jpg',
   },
   {
     id: 2,
@@ -18,7 +18,7 @@ const banners = [
     description: 'Free standard delivery on all orders over £30. Fast and reliable UK-wide delivery.',
     cta: 'Shop Now',
     href: '/#catalog',
-    bgGradient: 'from-[#050544] to-black',
+    bgImage: '/gallery/factory-03.jpg',
   },
   {
     id: 3,
@@ -26,8 +26,8 @@ const banners = [
     subtitle: 'Made to Order',
     description: "Can't find the profile you need? Send us a drawing or description — we'll manufacture to order.",
     cta: 'Request Quote',
-    href: '#catalog',
-    bgGradient: 'from-black to-[#141414]',
+    href: '/#catalog',
+    bgImage: '/gallery/factory-06.jpg',
   },
   {
     id: 4,
@@ -35,8 +35,8 @@ const banners = [
     subtitle: 'Individual Discount',
     description: 'Order now and receive an individual discount tailored to your needs.',
     cta: 'Get Discount',
-    href: '#catalog',
-    bgGradient: 'from-[#445DFE] to-[#B7D2FF]',
+    href: '/#catalog',
+    bgImage: '/gallery/DSC04928.jpg',
   },
 ];
 
@@ -57,30 +57,40 @@ export const PromoBanners: React.FC = () => {
             <Link 
               key={banner.id}
               href={banner.href}
-              className="group"
+              className="group block h-full"
             >
-              <div className={`bg-gradient-to-r ${banner.bgGradient} rounded-xl p-6 sm:p-8 md:p-10 text-white h-full transform transition-all duration-300 hover:scale-105 hover:shadow-2xl`}>
-                <div className="flex items-start justify-between mb-3 sm:mb-4">
-                  <div className="flex-1 pr-2">
+              <div
+                className="relative rounded-xl p-6 sm:p-8 md:p-10 text-white h-full min-h-[220px] sm:min-h-[260px] overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
+                style={{
+                  backgroundImage: `url(${banner.bgImage})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-[#050544]/85 via-[#050544]/70 to-transparent rounded-xl" />
+                <div className="relative z-10 h-full flex flex-col">
+                  <div className="flex items-start justify-between mb-3 sm:mb-4">
+                    <div className="flex-1 pr-2">
                     <div className="text-xs sm:text-sm md:text-base font-semibold text-white/80 mb-1 uppercase tracking-wide">
                       {banner.title}
                     </div>
                     <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 sm:mb-3 leading-tight tracking-tight">
                       {banner.subtitle}
                     </h3>
+                    </div>
+                    <div className="opacity-50 group-hover:opacity-100 transition-opacity flex-shrink-0">
+                      <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
                   </div>
-                  <div className="opacity-50 group-hover:opacity-100 transition-opacity flex-shrink-0">
-                    <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
+                  <p className="text-white/90 text-sm sm:text-base mb-4 sm:mb-6 leading-relaxed flex-1">
+                    {banner.description}
+                  </p>
+                  <button className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-white text-[#050544] hover:bg-gray-100 font-semibold text-sm sm:text-base md:text-lg transition-all duration-300 shadow-lg hover:shadow-xl text-center rounded-none">
+                    {banner.cta}
+                  </button>
                 </div>
-                <p className="text-white/90 text-sm sm:text-base mb-4 sm:mb-6 leading-relaxed">
-                  {banner.description}
-                </p>
-                <button className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-white text-[#050544] hover:bg-gray-100 font-semibold text-sm sm:text-base md:text-lg transition-all duration-300 shadow-lg hover:shadow-xl text-center rounded-none">
-                  {banner.cta}
-                </button>
               </div>
             </Link>
           ))}

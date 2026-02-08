@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { contactFormSchema, ContactFormData } from '@/lib/utils/validators';
@@ -33,9 +34,18 @@ const ClockIcon: React.FC<{ className?: string }> = ({ className = '' }) => (
   </svg>
 );
 
+const HOMEPAGE_SECTION_IDS = ['catalog', 'advantages', 'how-to-order', 'faq', 'trust', 'features', 'about', 'calculator', 'customer-segments'];
+
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  useEffect(() => {
+    const hash = typeof window !== 'undefined' ? window.location.hash.slice(1) : '';
+    if (hash && HOMEPAGE_SECTION_IDS.includes(hash)) {
+      window.location.replace(`/#${hash}`);
+    }
+  }, []);
 
   const {
     register,
@@ -76,9 +86,21 @@ export default function ContactPage() {
 
   return (
     <main className="min-h-screen bg-white pt-16 md:pt-20">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[#050544] to-[#445DFE] text-white py-12 sm:py-16 md:py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Hero Section — photo + dark blur */}
+      <section className="relative text-white py-12 sm:py-16 md:py-20 overflow-hidden min-h-[280px] sm:min-h-[320px] md:min-h-[360px] flex items-center">
+        <div className="absolute inset-0">
+          <Image
+            src="/hero.jpg"
+            alt="ALTEG — Get in touch"
+            fill
+            className="object-cover scale-105 blur-[2px]"
+            priority
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" aria-hidden="true" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/40" aria-hidden="true" />
+        </div>
+        <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 leading-tight">
               Get in Touch
@@ -95,71 +117,60 @@ export default function ContactPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-              {/* Left Side - Contact Information */}
-              <div className="space-y-8">
-                <div>
-                  <h2 className="text-3xl sm:text-4xl font-bold text-[#050544] mb-6">
-                    Contact Information
-                  </h2>
-                  <p className="text-lg text-gray-600 mb-8">
-                    Reach out to us through any of the following channels. Our team is ready to assist you with your aluminium profile requirements.
-                  </p>
-                </div>
+              {/* Left Side - Contact Information (one block) */}
+              <div>
+                <h2 className="text-3xl sm:text-4xl font-bold text-[#050544] mb-6">
+                  Contact Information
+                </h2>
+                <p className="text-lg text-gray-600 mb-8">
+                  Reach out to us through any of the following channels. Our team is ready to assist you with your aluminium profile requirements.
+                </p>
 
-                {/* Contact Cards */}
-                <div className="space-y-6">
+                <div className="bg-gray-50 rounded-xl p-6 sm:p-8 border border-gray-100">
                   {/* Phone */}
-                  <div className="flex items-start gap-4 p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                    <div className="flex-shrink-0 w-12 h-12 bg-[#445DFE] rounded-lg flex items-center justify-center">
-                      <PhoneIcon className="w-6 h-6 text-white" />
-                    </div>
+                  <div className="flex items-start gap-4 pb-6 border-b border-gray-200 last:border-0 last:pb-0 last:pt-0 pt-0">
+                    <PhoneIcon className="w-6 h-6 text-gray-700 flex-shrink-0 mt-0.5" />
                     <div>
-                      <h3 className="text-lg font-semibold text-[#050544] mb-2">Phone</h3>
+                      <h3 className="text-lg font-semibold text-[#050544] mb-1">Phone</h3>
                       <a href={`tel:${siteConfig.links.phone}`} className="text-gray-700 hover:text-[#445DFE] transition-colors text-base">
                         {siteConfig.links.phoneDisplay || siteConfig.links.phone}
                       </a>
-                      <p className="text-sm text-gray-500 mt-1">Mon-Fri: 9AM-6PM</p>
+                      <p className="text-sm text-gray-500 mt-0.5">Mon-Fri: 9AM-6PM</p>
                     </div>
                   </div>
 
                   {/* Email */}
-                  <div className="flex items-start gap-4 p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                    <div className="flex-shrink-0 w-12 h-12 bg-[#445DFE] rounded-lg flex items-center justify-center">
-                      <MailIcon className="w-6 h-6 text-white" />
-                    </div>
+                  <div className="flex items-start gap-4 py-6 border-b border-gray-200 last:border-0 last:pb-0 last:pt-0">
+                    <MailIcon className="w-6 h-6 text-gray-700 flex-shrink-0 mt-0.5" />
                     <div>
-                      <h3 className="text-lg font-semibold text-[#050544] mb-2">Email</h3>
+                      <h3 className="text-lg font-semibold text-[#050544] mb-1">Email</h3>
                       <a href={`mailto:${siteConfig.links.email}`} className="text-gray-700 hover:text-[#445DFE] transition-colors text-base">
                         {siteConfig.links.email}
                       </a>
-                      <p className="text-sm text-gray-500 mt-1">We'll respond within 24 hours</p>
+                      <p className="text-sm text-gray-500 mt-0.5">We'll respond within 24 hours</p>
                     </div>
                   </div>
 
                   {/* Address */}
-                  <div className="flex items-start gap-4 p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                    <div className="flex-shrink-0 w-12 h-12 bg-[#445DFE] rounded-lg flex items-center justify-center">
-                      <MapPinIcon className="w-6 h-6 text-white" />
-                    </div>
+                  <div className="flex items-start gap-4 py-6 border-b border-gray-200 last:border-0 last:pb-0 last:pt-0">
+                    <MapPinIcon className="w-6 h-6 text-gray-700 flex-shrink-0 mt-0.5" />
                     <div>
-                      <h3 className="text-lg font-semibold text-[#050544] mb-2">Warehouse & Office</h3>
+                      <h3 className="text-lg font-semibold text-[#050544] mb-1">Warehouse & Office</h3>
                       <a href={siteConfig.links.mapUrl} target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-[#445DFE] transition-colors text-base block">
                         ALTEG UK LTD<br />
                         {siteConfig.links.address}
                       </a>
-                      <p className="text-sm text-gray-500 mt-1">
+                      <p className="text-sm text-gray-500 mt-0.5">
                         <a href={siteConfig.links.mapUrl} target="_blank" rel="noopener noreferrer" className="text-[#445DFE] hover:underline">View on Google Maps</a>
                       </p>
                     </div>
                   </div>
 
                   {/* Business Hours */}
-                  <div className="flex items-start gap-4 p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                    <div className="flex-shrink-0 w-12 h-12 bg-[#445DFE] rounded-lg flex items-center justify-center">
-                      <ClockIcon className="w-6 h-6 text-white" />
-                    </div>
+                  <div className="flex items-start gap-4 py-6 border-b border-gray-200 last:border-0 last:pb-0">
+                    <ClockIcon className="w-6 h-6 text-gray-700 flex-shrink-0 mt-0.5" />
                     <div>
-                      <h3 className="text-lg font-semibold text-[#050544] mb-2">Business Hours</h3>
+                      <h3 className="text-lg font-semibold text-[#050544] mb-1">Business Hours</h3>
                       <p className="text-gray-700 text-base">
                         Monday - Friday: 9:00 AM - 6:00 PM<br />
                         <span className="text-sm text-gray-500">Saturday & Sunday: Closed</span>

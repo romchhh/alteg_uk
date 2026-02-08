@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { contactFormSchema } from '@/lib/utils/validators';
 import { createLead, Bitrix24Lead } from '@/lib/services/bitrix24';
+import { sendTelegramMessage } from '@/lib/services/telegram';
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,6 +40,14 @@ export async function POST(request: NextRequest) {
         );
       }
 
+      const lines = [
+        '<b>📩 Заявка з форми контакту</b>',
+        `Ім'я: ${data.name}`,
+        `Телефон: ${data.phone}`,
+        `Що цікавить: ${data.interest}`,
+      ];
+      sendTelegramMessage(lines.join('\n')).catch(() => {});
+
       return NextResponse.json(
         { 
           success: true, 
@@ -49,7 +58,13 @@ export async function POST(request: NextRequest) {
       );
     } catch (error) {
       console.error('Bitrix24 error:', error);
-      // Still return success if Bitrix24 fails - log for admin review
+      const lines = [
+        '<b>📩 Заявка з форми контакту</b>',
+        `Ім'я: ${data.name}`,
+        `Телефон: ${data.phone}`,
+        `Що цікавить: ${data.interest}`,
+      ];
+      sendTelegramMessage(lines.join('\n')).catch(() => {});
       return NextResponse.json(
         { 
           success: true, 

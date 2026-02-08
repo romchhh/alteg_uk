@@ -20,6 +20,14 @@
 # production
 /build
 
+# sqlite
+/data/*.db
+/data/*.db-wal
+/data/*.db-shm
+
+# uploads (admin drag-and-drop)
+/public/uploads
+
 # misc
 .DS_Store
 *.pem

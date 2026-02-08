@@ -42,7 +42,7 @@ export const Button: React.FC<ButtonProps> = ({
   
   if (href) {
     return (
-      <Link href={href} className={buttonClasses}>
+      <Link href={href} className={buttonClasses} onClick={props.onClick as React.MouseEventHandler<HTMLAnchorElement> | undefined}>
         {isLoading && (
           <svg
             className="animate-spin -ml-1 mr-2 h-4 w-4"

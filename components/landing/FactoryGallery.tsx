@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import Image from 'next/image';
+import { lockBodyScroll, unlockBodyScroll } from '@/lib/utils/bodyScrollLock';
 
 const GALLERY_IMAGES = [
   { src: '/gallery/factory-01.jpg', alt: 'ALTEG factory production' },
@@ -64,7 +65,7 @@ export const FactoryGallery: React.FC = () => {
   // Keyboard: Arrow Left/Right to scroll, Escape to close; lock body scroll
   useEffect(() => {
     if (lightboxIndex === null) return;
-    document.body.style.overflow = 'hidden';
+    lockBodyScroll();
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
@@ -82,7 +83,7 @@ export const FactoryGallery: React.FC = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
+      unlockBodyScroll();
     };
   }, [lightboxIndex, goPrev, goNext, closeLightbox]);
 

@@ -1,29 +1,96 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Product, ProductCategoryInfo } from '@/lib/types/product';
 import { Button } from '@/components/shared/Button';
 import { useCartStore } from '@/store/cart';
 import { Modal } from '@/components/shared/Modal';
 import { SuccessAlert } from '@/components/shared/SuccessAlert';
+import { getPricePerMeter } from '@/lib/utils/calculations';
+import { getLengthDiscount } from '@/lib/constants/prices';
 
 interface ProductCardProps {
   product: Product;
   categoryInfo: ProductCategoryInfo;
 }
 
+const MIN_CUSTOM_LENGTH = 0.1;
+const MAX_CUSTOM_LENGTH = 25;
+
 export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [isSuccessAlertOpen, setIsSuccessAlertOpen] = useState(false);
-  const [selectedLength, setSelectedLength] = useState(product.standardLengths[0]);
+  const [length, setLength] = useState(product.standardLengths[0]);
+  const [lengthInput, setLengthInput] = useState(product.standardLengths[0].toString());
   const [quantity, setQuantity] = useState(1);
+  const [quantityInput, setQuantityInput] = useState('1');
   const [freeCutting, setFreeCutting] = useState(false);
+  const [additionalProcessing, setAdditionalProcessing] = useState('');
   const addItem = useCartStore((state) => state.addItem);
 
+  const effectiveLength = Math.min(MAX_CUSTOM_LENGTH, Math.max(MIN_CUSTOM_LENGTH, length));
+
+  useEffect(() => {
+    if (isModalOpen) {
+      const defaultLen = product.standardLengths[0];
+      setLength(defaultLen);
+      setLengthInput(defaultLen.toString());
+      setQuantity(1);
+      setQuantityInput('1');
+      setFreeCutting(false);
+      setAdditionalProcessing('');
+    }
+  }, [isModalOpen, product.id, product.standardLengths]);
+
+  const handleLengthInputChange = (value: string) => {
+    setLengthInput(value);
+    if (value === '' || value === '-' || value === '.') return;
+    const num = parseFloat(value.replace(',', '.'));
+    if (!Number.isNaN(num) && num >= MIN_CUSTOM_LENGTH && num <= MAX_CUSTOM_LENGTH) {
+      setLength(num);
+    }
+  };
+
+  const lengthNum = parseFloat(lengthInput.replace(',', '.'));
+  const isLengthInvalid =
+    lengthInput !== '' &&
+    lengthInput !== '-' &&
+    lengthInput !== '.' &&
+    (Number.isNaN(lengthNum) || lengthNum < MIN_CUSTOM_LENGTH || lengthNum > MAX_CUSTOM_LENGTH);
+
+  const handleLengthInputBlur = () => {
+    const num = parseFloat(lengthInput.replace(',', '.'));
+    if (lengthInput === '' || Number.isNaN(num) || num < MIN_CUSTOM_LENGTH || num > MAX_CUSTOM_LENGTH) {
+      const defaultLen = product.standardLengths[0] ?? MIN_CUSTOM_LENGTH;
+      setLength(defaultLen);
+      setLengthInput(defaultLen.toString());
+    } else {
+      setLength(num);
+      setLengthInput(num.toString());
+    }
+  };
+
+  const handleQuantityChange = (value: string) => {
+    setQuantityInput(value);
+    const num = parseInt(value, 10);
+    if (value !== '' && !Number.isNaN(num) && num >= 1) setQuantity(num);
+  };
+
+  const handleQuantityBlur = () => {
+    const num = parseInt(quantityInput, 10);
+    if (quantityInput === '' || Number.isNaN(num) || num < 1) {
+      setQuantity(1);
+      setQuantityInput('1');
+    } else {
+      setQuantity(num);
+      setQuantityInput(num.toString());
+    }
+  };
+
   const handleAddToCart = () => {
-    addItem(product, selectedLength, quantity, freeCutting);
+    addItem(product, effectiveLength, quantity, freeCutting, additionalProcessing.trim() || undefined);
     setIsModalOpen(false);
     setIsSuccessAlertOpen(true);
   };
@@ -37,13 +104,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
     }
   };
 
+  const pricePerMeter = getPricePerMeter(product);
+  const getPriceBreakdown = () => {
+    if (pricePerMeter == null) return null;
+    const totalLength = effectiveLength * quantity;
+    const materialCost = totalLength * pricePerMeter;
+    const lengthDiscountRate = getLengthDiscount(totalLength);
+    const discountAmount = materialCost * lengthDiscountRate;
+    const finalPrice = materialCost - discountAmount;
+    return { materialCost, lengthDiscountRate, discountAmount, finalPrice };
+  };
   const calculatePrice = () => {
-    if (product.pricePerMeter) {
-      return (product.pricePerMeter * selectedLength * quantity).toFixed(2);
-    } else if (product.pricePerKg) {
-      return (product.pricePerKg * product.weightPerMeter * quantity).toFixed(2);
-    }
-    return '0.00';
+    const b = getPriceBreakdown();
+    return b ? b.finalPrice.toFixed(2) : '0.00';
   };
 
   return (
@@ -59,8 +132,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
             sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
           {product.inStock && (
-            <div className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded">
-              In Stock
+            <div className="absolute top-2 right-2 bg-white/95 backdrop-blur-sm text-emerald-700 text-xs font-semibold px-2.5 py-1 rounded-md shadow-sm border border-emerald-200/80">
+              In stock
             </div>
           )}
         </div>
@@ -69,11 +142,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
         <div className="p-4 flex flex-col flex-grow">
           <h3 className="text-lg font-bold text-[#050544] mb-1">{product.nameEn}</h3>
           <p className="text-sm text-gray-600 mb-2">{product.dimensions}</p>
-          
-          {/* Stock Status */}
-          {product.inStock && (
-            <p className="text-xs text-green-600 font-semibold mb-2">In Stock</p>
-          )}
 
           {/* Material - First Row */}
           <p className="text-xs text-gray-500 mb-1">
@@ -95,9 +163,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
             <p className="text-sm text-gray-600">
               From{' '}
               <span className="text-base font-bold text-[#445DFE]">
-                £{product.pricePerMeter?.toFixed(2) || product.pricePerKg?.toFixed(2)}
+                £{(pricePerMeter ?? product.pricePerKg ?? 0).toFixed(2)}
               </span>
-              {product.pricePerMeter ? '/m' : '/kg'}
+              {pricePerMeter != null ? '/m' : '/kg'}
             </p>
           </div>
 
@@ -124,30 +192,69 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
       {/* Add to Cart Modal */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className="p-6">
+          {(product.image || categoryInfo.image) && (
+            <div className="relative w-full aspect-square max-h-56 sm:max-h-72 overflow-hidden bg-gray-100 mb-4">
+              <Image
+                src={product.image || categoryInfo.image || ''}
+                alt={product.nameEn}
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, 512px"
+              />
+            </div>
+          )}
           <h2 className="text-2xl font-bold text-[#050544] mb-4">{product.nameEn}</h2>
           <p className="text-gray-900 mb-6">{product.dimensions}</p>
 
           <div className="space-y-4">
-            {/* Length Selection */}
+            {/* Length Selection - same as calculator */}
             <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">
+              <label className="block text-sm font-semibold text-[#050544] mb-2">
                 Select Length (meters):
               </label>
-              <div className="flex gap-2">
-                {product.standardLengths.map((length) => (
+              <p className="text-xs text-gray-500 mb-2">
+                Choose a standard length or enter your own below.
+              </p>
+              <div className="flex flex-wrap gap-2 mb-3">
+                {product.standardLengths.map((stdLength) => (
                   <button
-                    key={length}
-                    onClick={() => setSelectedLength(length)}
-                    className={`px-4 py-2 border rounded transition-colors ${
-                      selectedLength === length
+                    key={stdLength}
+                    type="button"
+                    onClick={() => {
+                      setLength(stdLength);
+                      setLengthInput(stdLength.toString());
+                    }}
+                    className={`px-4 py-2 border-2 rounded-lg transition-colors ${
+                      length === stdLength
                         ? 'bg-[#445DFE] text-white border-[#445DFE]'
-                        : 'bg-white text-gray-900 border-gray-300 hover:border-[#445DFE]'
+                        : 'bg-white text-[#050544] border-gray-300 hover:border-[#445DFE]'
                     }`}
                   >
-                    {length}m
+                    {stdLength}m
                   </button>
                 ))}
               </div>
+              <label className="block text-sm font-medium text-[#050544] mb-1">
+                Custom length (m)
+              </label>
+              <input
+                type="number"
+                min={MIN_CUSTOM_LENGTH}
+                max={MAX_CUSTOM_LENGTH}
+                step="0.1"
+                value={lengthInput}
+                onChange={(e) => handleLengthInputChange(e.target.value)}
+                onBlur={handleLengthInputBlur}
+                className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none text-[#050544] ${
+                  isLengthInvalid ? 'border-red-500 focus:border-red-500 bg-red-50/50' : 'border-gray-300 focus:border-[#445DFE]'
+                }`}
+                placeholder="e.g. 2.5, 4.2"
+                aria-describedby="product-custom-length-hint"
+                aria-invalid={isLengthInvalid}
+              />
+              <p id="product-custom-length-hint" className={`text-xs mt-1 ${isLengthInvalid ? 'text-red-600' : 'text-gray-500'}`}>
+                {isLengthInvalid ? `Length must be between ${MIN_CUSTOM_LENGTH}m and ${MAX_CUSTOM_LENGTH}m.` : 'Enter length in metres (max 25m). Used when you don’t use a quick-select option above.'}
+              </p>
             </div>
 
             {/* Quantity */}
@@ -156,11 +263,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
                 Quantity:
               </label>
               <input
-                type="number"
-                min="1"
-                value={quantity}
-                onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#445DFE] text-gray-900"
+                type="text"
+                inputMode="numeric"
+                value={quantityInput}
+                onChange={(e) => handleQuantityChange(e.target.value)}
+                onBlur={handleQuantityBlur}
+                className="w-full max-w-[140px] px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#445DFE] text-gray-900"
               />
             </div>
 
@@ -175,17 +283,46 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
                 />
                 <span className="text-sm text-gray-900">Free cutting to size</span>
               </label>
+              {freeCutting && (
+                <input
+                  type="text"
+                  placeholder="e.g. 2×1.5m, 1×0.5m or instructions (optional)"
+                  value={additionalProcessing}
+                  onChange={(e) => setAdditionalProcessing(e.target.value)}
+                  className="mt-2 w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#445DFE] text-gray-900 text-sm"
+                />
+              )}
             </div>
 
             {/* Price Summary */}
             <div className="bg-[#E9EDF4] p-4 rounded">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-900">Total:</span>
-                <span className="text-2xl font-bold text-[#445DFE]">£{calculatePrice()}</span>
-              </div>
-              <p className="text-xs text-gray-900 mt-2">
-                {quantity} x {selectedLength}m = {(quantity * selectedLength).toFixed(1)}m total
-              </p>
+              {(() => {
+                const b = getPriceBreakdown();
+                const hasDiscount = b && b.lengthDiscountRate > 0;
+                return (
+                  <>
+                    {hasDiscount && b && (
+                      <>
+                        <div className="flex justify-between text-sm text-gray-600 mb-1">
+                          <span>Subtotal:</span>
+                          <span className="line-through">£{b.materialCost.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between text-sm text-green-700 mb-2">
+                          <span>Length discount ({(b.lengthDiscountRate * 100).toFixed(0)}%):</span>
+                          <span>-£{b.discountAmount.toFixed(2)}</span>
+                        </div>
+                      </>
+                    )}
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-gray-900">Total:</span>
+                      <span className="text-xl font-bold text-[#445DFE]">£{calculatePrice()}</span>
+                    </div>
+                    <p className="text-xs text-gray-900 mt-2">
+                      {quantity} × {effectiveLength}m = {(quantity * effectiveLength).toFixed(1)}m total
+                    </p>
+                  </>
+                );
+              })()}
             </div>
 
             {/* Actions */}
@@ -212,9 +349,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
       {/* Detail Modal - Full Product Information */}
       <Modal isOpen={isDetailModalOpen} onClose={() => setIsDetailModalOpen(false)} size="lg">
         <div className="space-y-4 sm:space-y-6">
+          {(product.image || categoryInfo.image) && (
+            <div className="relative w-full aspect-square max-h-56 sm:max-h-72 overflow-hidden bg-gray-100 mb-4">
+              <Image
+                src={product.image || categoryInfo.image || ''}
+                alt={product.nameEn}
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, 576px"
+              />
+            </div>
+          )}
           <h2 className="text-xl sm:text-2xl font-bold text-[#050544]">{product.nameEn}</h2>
           <p className="text-base sm:text-lg text-gray-900 font-semibold">{product.dimensions}</p>
-          
+
           {/* Full Description */}
           <div>
             <h3 className="text-base sm:text-lg font-semibold text-[#050544] mb-2">Description</h3>
@@ -267,8 +415,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
               Price:
             </p>
             <p className="text-xl sm:text-2xl font-bold text-[#445DFE]">
-              £{product.pricePerMeter?.toFixed(2) || product.pricePerKg?.toFixed(2)}
-              {product.pricePerMeter ? '/m' : '/kg'}
+              £{(pricePerMeter ?? product.pricePerKg ?? 0).toFixed(2)}
+              {pricePerMeter != null ? '/m' : '/kg'}
             </p>
           </div>
 
@@ -302,7 +450,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
         onViewCart={handleViewCart}
         productName={product.nameEn}
         quantity={quantity}
-        length={selectedLength}
+        length={effectiveLength}
       />
     </>
   );

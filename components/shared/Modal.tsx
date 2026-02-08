@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import { lockBodyScroll, unlockBodyScroll } from '@/lib/utils/bodyScrollLock';
 import { Button } from './Button';
 
 export interface ModalProps {
@@ -11,6 +12,7 @@ export interface ModalProps {
   footer?: React.ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   closeOnOverlayClick?: boolean;
+  rounded?: boolean;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -21,17 +23,15 @@ export const Modal: React.FC<ModalProps> = ({
   footer,
   size = 'md',
   closeOnOverlayClick = true,
+  rounded = true,
 }) => {
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      lockBodyScroll();
     } else {
-      document.body.style.overflow = 'unset';
+      unlockBodyScroll();
     }
-    
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
+    return () => unlockBodyScroll();
   }, [isOpen]);
 
   useEffect(() => {
@@ -57,11 +57,11 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black bg-opacity-50 overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/40 overflow-y-auto"
       onClick={closeOnOverlayClick && onClose ? onClose : undefined}
     >
       <div
-        className={`bg-white rounded-lg shadow-xl ${sizeClasses[size]} w-full my-auto max-h-[95vh] sm:max-h-[90vh] flex flex-col`}
+        className={`bg-white shadow-xl ${sizeClasses[size]} w-full my-auto max-h-[95vh] sm:max-h-[90vh] flex flex-col ${rounded ? 'rounded-lg' : 'rounded-none'}`}
         onClick={(e) => e.stopPropagation()}
       >
         {(title || onClose) && (

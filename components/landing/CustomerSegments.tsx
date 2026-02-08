@@ -62,11 +62,9 @@ export const CustomerSegments: React.FC = () => {
               className="bg-white rounded-xl p-6 sm:p-8 border-2 border-gray-100 hover:border-[#445DFE] transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 group h-full flex flex-col"
             >
               <div className="flex flex-col items-start gap-5 mb-5 flex-1">
-                {/* Icon with background circle */}
-                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-[#E9EDF4] to-gray-100 rounded-xl flex items-center justify-center text-[#050544] group-hover:from-[#445DFE] group-hover:to-[#050544] group-hover:text-white transition-all duration-300 flex-shrink-0">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10">
-                    {segment.icon}
-                  </div>
+                {/* Icon without background */}
+                <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center text-[#050544] group-hover:text-[#445DFE] transition-colors duration-300 flex-shrink-0">
+                  {segment.icon}
                 </div>
                 
                 <div className="flex-1 w-full">

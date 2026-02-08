@@ -9,9 +9,11 @@ export const siteConfig = {
     email: 'info@alteg-uk.co.uk',
     phone: '+447441429829',
     phoneDisplay: '+44 7441 429829',
+    whatsApp: 'https://wa.me/447441429829',
     address: 'Unit A3, Riverside Industrial Estate, Littlehampton, West Sussex, BN17 5DF',
     mapUrl: 'https://goo.gl/maps/h5iBbC38PnGJpkUc9',
     mapEmbedUrl: 'https://www.google.com/maps?q=Unit+A3+Riverside+Industrial+Estate+Littlehampton+West+Sussex+BN17+5DF&z=16&output=embed',
+    trustpilot: (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_TRUSTPILOT_URL) || 'https://www.trustpilot.com/',
   },
 } as const;
 

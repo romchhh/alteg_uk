@@ -1,21 +1,23 @@
 import { Order, QuoteRequest } from '@/lib/types/order';
 import { createOrderLead, createQuoteLead } from './bitrix24';
+import { saveOrder } from '@/lib/data/orders';
 
 export async function submitOrder(order: Order): Promise<{ success: boolean; orderId?: string; error?: string }> {
   try {
-    // Create lead in Bitrix24
-    const response = await createOrderLead(order);
-    
-    if (response.error) {
-      return {
-        success: false,
-        error: response.error_description || response.error || 'Failed to create order',
-      };
+    const orderId = saveOrder(order);
+
+    try {
+      const response = await createOrderLead(order);
+      if (response.error) {
+        console.error('Bitrix24 order lead failed:', response.error_description || response.error);
+      }
+    } catch (bitrixError) {
+      console.error('Bitrix24 order lead error:', bitrixError);
     }
-    
+
     return {
       success: true,
-      orderId: response.result?.toString(),
+      orderId,
     };
   } catch (error) {
     console.error('Error submitting order:', error);

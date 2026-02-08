@@ -1,10 +1,20 @@
 import { Product } from '@/lib/types/product';
-import { getWholesaleDiscount } from '@/lib/constants/prices';
+import { getWholesaleDiscount, getLengthDiscount } from '@/lib/constants/prices';
+
+/** Price per meter = price per kg × weight per meter (density). */
+export function getPricePerMeter(product: Product): number | undefined {
+  if (product.pricePerKg != null && product.weightPerMeter != null) {
+    return product.pricePerKg * product.weightPerMeter;
+  }
+  return product.pricePerMeter;
+}
 
 export interface CalculationResult {
   totalLength: number;
   totalWeight: number;
   materialCost: number;
+  lengthDiscount: number;
+  lengthDiscountAmount: number;
   discount: number;
   discountAmount: number;
   finalPrice: number;
@@ -19,21 +29,26 @@ export function calculateOrder(
   const totalLength = length * quantity;
   const totalWeight = product.weightPerMeter * totalLength;
 
-  // Calculate material cost based on pricing method
-  const materialCost = product.pricePerMeter
-    ? totalLength * product.pricePerMeter
-    : totalWeight * (product.pricePerKg || 0);
+  const pricePerMeter = getPricePerMeter(product);
+  const materialCost = pricePerMeter != null
+    ? totalLength * pricePerMeter
+    : totalWeight * (product.pricePerKg ?? 0);
 
-  // Apply wholesale discount if applicable
-  const discount = isWholesale ? getWholesaleDiscount(totalWeight) : 0;
-  const discountAmount = materialCost * discount;
-  const finalPrice = materialCost - discountAmount;
+  const lengthDiscount = getLengthDiscount(totalLength);
+  const lengthDiscountAmount = materialCost * lengthDiscount;
+  const afterLengthDiscount = materialCost - lengthDiscountAmount;
+
+  const wholesaleDiscount = isWholesale ? getWholesaleDiscount(totalWeight) : 0;
+  const discountAmount = afterLengthDiscount * wholesaleDiscount;
+  const finalPrice = afterLengthDiscount - discountAmount;
 
   return {
     totalLength,
     totalWeight,
     materialCost,
-    discount,
+    lengthDiscount,
+    lengthDiscountAmount,
+    discount: wholesaleDiscount,
     discountAmount,
     finalPrice,
   };
@@ -57,11 +72,9 @@ export function calculateCartTotal(
 } {
   const subtotal = items.reduce((sum, item) => sum + item.calculatedPrice, 0);
   const totalWeight = items.reduce((sum, item) => sum + item.calculatedWeight, 0);
-
   const discount = isWholesale ? getWholesaleDiscount(totalWeight) : 0;
   const discountAmount = subtotal * discount;
   const total = subtotal - discountAmount;
-
   return {
     subtotal,
     totalWeight,

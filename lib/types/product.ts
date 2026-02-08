@@ -28,7 +28,7 @@ export interface ProductCategoryInfo {
 
 export interface Product {
   id: string;
-  category: ProductCategory;
+  category: ProductCategory | string;
   name: string;
   nameEn: string;
   dimensions: string; // e.g., "25x25x3"
@@ -39,6 +39,8 @@ export interface Product {
   image?: string;
   applications?: string[];
   inStock: boolean;
+  /** When true, product is hidden from public catalog (CMS/admin control). */
+  hidden?: boolean;
   description?: string;
   descriptionEn?: string;
   material?: string; // e.g., "6063-T5", "6082-T6"
