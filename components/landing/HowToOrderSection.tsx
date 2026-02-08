@@ -55,9 +55,6 @@ export const HowToOrderSection: React.FC = () => {
                   <p>{step.description}</p>
                 </div>
               </div>
-              
-              {/* Decorative line */}
-              <div className="mt-6 sm:mt-8 h-1 w-20 bg-gradient-to-r from-[#445DFE] to-transparent rounded-full"></div>
             </div>
           ))}
         </div>

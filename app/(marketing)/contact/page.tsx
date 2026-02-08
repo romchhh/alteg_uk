@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { contactFormSchema, ContactFormData } from '@/lib/utils/validators';
 import { Input } from '@/components/shared/Input';
 import { Button } from '@/components/shared/Button';
+import { siteConfig } from '@/config/site';
 
 const PhoneIcon: React.FC<{ className?: string }> = ({ className = '' }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -114,8 +115,8 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-[#050544] mb-2">Phone</h3>
-                      <a href="tel:+4420XXXXXXXX" className="text-gray-700 hover:text-[#445DFE] transition-colors text-base">
-                        +44 (0) 20 XXXX XXXX
+                      <a href={`tel:${siteConfig.links.phone}`} className="text-gray-700 hover:text-[#445DFE] transition-colors text-base">
+                        {siteConfig.links.phoneDisplay || siteConfig.links.phone}
                       </a>
                       <p className="text-sm text-gray-500 mt-1">Mon-Fri: 9AM-6PM</p>
                     </div>
@@ -128,8 +129,8 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-[#050544] mb-2">Email</h3>
-                      <a href="mailto:info@alteg.co.uk" className="text-gray-700 hover:text-[#445DFE] transition-colors text-base">
-                        info@alteg.co.uk
+                      <a href={`mailto:${siteConfig.links.email}`} className="text-gray-700 hover:text-[#445DFE] transition-colors text-base">
+                        {siteConfig.links.email}
                       </a>
                       <p className="text-sm text-gray-500 mt-1">We'll respond within 24 hours</p>
                     </div>
@@ -141,10 +142,13 @@ export default function ContactPage() {
                       <MapPinIcon className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-[#050544] mb-2">Address</h3>
-                      <p className="text-gray-700 text-base">
-                        UK Distribution Centre<br />
-                        <span className="text-sm text-gray-500">Details available on request</span>
+                      <h3 className="text-lg font-semibold text-[#050544] mb-2">Warehouse & Office</h3>
+                      <a href={siteConfig.links.mapUrl} target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-[#445DFE] transition-colors text-base block">
+                        ALTEG UK LTD<br />
+                        {siteConfig.links.address}
+                      </a>
+                      <p className="text-sm text-gray-500 mt-1">
+                        <a href={siteConfig.links.mapUrl} target="_blank" rel="noopener noreferrer" className="text-[#445DFE] hover:underline">View on Google Maps</a>
                       </p>
                     </div>
                   </div>
@@ -256,18 +260,22 @@ export default function ContactPage() {
               </h2>
               <div className="bg-gray-200 rounded-lg overflow-hidden shadow-lg" style={{ height: '400px' }}>
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2483.0!2d-0.1276!3d51.5074!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTHCsDMwJzI2LjYiTiAwwrAwNyczOS40Ilc!5e0!3m2!1sen!2suk!4v1234567890"
+                  src={siteConfig.links.mapEmbedUrl}
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="ALTEG UK Location"
+                  title="ALTEG UK - Unit A3, Riverside Industrial Estate, Littlehampton"
                 />
               </div>
               <p className="text-center text-gray-600 mt-4 text-sm">
-                <em>Note: Exact location details available upon request for business inquiries.</em>
+                <a href={siteConfig.links.mapUrl} target="_blank" rel="noopener noreferrer" className="text-[#445DFE] font-semibold hover:underline">
+                  Open in Google Maps
+                </a>
+                {' — '}
+                {siteConfig.links.address}
               </p>
             </div>
           </div>

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/hooks/useCart';
 import { Button } from '@/components/shared/Button';
+import { siteConfig } from '@/config/site';
 
 const MenuIcon: React.FC<{ className?: string }> = ({ className = '' }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -73,7 +74,7 @@ export const Header: React.FC = () => {
           {/* Right side - CTA & Burger Menu */}
           <div className="flex items-center gap-4">
             {/* Desktop Phone */}
-            <a href="tel:+44000000000" className="hidden lg:block text-[#050544] hover:text-[#445DFE] transition-colors p-2">
+            <a href={`tel:${siteConfig.links.phone}`} className="hidden lg:block text-[#050544] hover:text-[#445DFE] transition-colors p-2">
               <PhoneIcon className="w-7 h-7" />
             </a>
 
@@ -96,7 +97,7 @@ export const Header: React.FC = () => {
 
             {/* Mobile Phone, Cart & Burger Menu */}
             <div className="flex items-center gap-3 lg:hidden">
-              <a href="tel:+44000000000" className="text-[#050544] hover:text-[#445DFE] transition-colors p-2">
+              <a href={`tel:${siteConfig.links.phone}`} className="text-[#050544] hover:text-[#445DFE] transition-colors p-2">
                 <PhoneIcon className="w-7 h-7" />
               </a>
 
@@ -163,12 +164,12 @@ export const Header: React.FC = () => {
                   Contact
                 </Link>
                 <a 
-                  href="tel:+44000000000" 
+                  href={`tel:${siteConfig.links.phone}`} 
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full text-center text-white hover:text-[#B7D2FF] font-bold transition-colors text-xl md:text-2xl py-4 flex items-center justify-center gap-2"
                 >
                   <PhoneIcon className="w-6 h-6 md:w-7 md:h-7" />
-                  <span>+44 00 000 00 00</span>
+                  <span>{siteConfig.links.phoneDisplay || siteConfig.links.phone}</span>
                 </a>
               </nav>
 

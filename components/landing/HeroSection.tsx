@@ -55,7 +55,7 @@ export const HeroSection: React.FC = () => {
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
-          src="/production_1.jpg"
+          src="/hero.jpg"
           alt="ALTEG Aluminium Profiles Factory Background"
           fill
           className="object-cover"

@@ -78,9 +78,6 @@ export const CustomerSegments: React.FC = () => {
                   </div>
                 </div>
               </div>
-              
-              {/* Decorative line */}
-              <div className="mt-auto pt-4 h-1 w-16 sm:w-20 bg-gradient-to-r from-[#445DFE] to-transparent rounded-full"></div>
             </div>
           ))}
         </div>

@@ -127,23 +127,26 @@ export const Footer: React.FC = () => {
               <li className="flex items-start gap-3 justify-center sm:justify-start">
                 <PhoneIcon className="w-5 h-5 text-[#445DFE] flex-shrink-0 mt-0.5" />
                 <div>
-                  <div className="text-white">+44 (0) 20 XXXX XXXX</div>
+                  <a href="tel:+447441429829" className="text-white hover:text-[#B7D2FF] transition-colors">+44 7441 429829</a>
                   <div className="text-xs">Mon-Fri: 9AM-6PM</div>
                 </div>
               </li>
               <li className="flex items-start gap-3 justify-center sm:justify-start">
                 <MailIcon className="w-5 h-5 text-[#445DFE] flex-shrink-0 mt-0.5" />
                 <div>
-                  <a href="mailto:info@alteg.co.uk" className="text-white hover:text-[#B7D2FF] transition-colors">
-                    info@alteg.co.uk
+                  <a href="mailto:info@alteg-uk.co.uk" className="text-white hover:text-[#B7D2FF] transition-colors">
+                    info@alteg-uk.co.uk
                   </a>
                 </div>
               </li>
               <li className="flex items-start gap-3 justify-center sm:justify-start">
                 <MapPinIcon className="w-5 h-5 text-[#445DFE] flex-shrink-0 mt-0.5" />
                 <div className="text-white">
-                  UK Distribution Centre<br />
-                  <span className="text-xs text-gray-400">Details available on request</span>
+                  <a href="https://goo.gl/maps/h5iBbC38PnGJpkUc9" target="_blank" rel="noopener noreferrer" className="hover:text-[#B7D2FF] transition-colors">
+                    ALTEG UK LTD<br />
+                    Unit A3, Riverside Industrial Estate,<br />
+                    Littlehampton, West Sussex, BN17 5DF
+                  </a>
                 </div>
               </li>
             </ul>
