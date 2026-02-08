@@ -178,7 +178,7 @@ export default function OrderDetailPage() {
                         <td className="px-3 py-2 align-middle">
                           {productImage ? (
                             <div className="relative w-10 h-10 rounded overflow-hidden bg-gray-100 shrink-0">
-                              <Image src={productImage} alt={item.product.nameEn} fill className="object-cover" sizes="40px" />
+                              <Image src={productImage} alt={item.product.nameEn} fill className="object-cover" sizes="40px" unoptimized={productImage.startsWith("/uploads")} />
                             </div>
                           ) : (
                             <div className="w-10 h-10 rounded bg-gray-200 flex items-center justify-center text-gray-400 shrink-0">

@@ -310,6 +310,7 @@ export const OrderCalculator: React.FC = () => {
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                           quality={92}
                           className="object-cover"
+                          unoptimized={getCategoryImage(key).startsWith("/uploads")}
                         />
                         <div className="absolute inset-0 bg-black/40" />
                       </div>
@@ -343,6 +344,7 @@ export const OrderCalculator: React.FC = () => {
                                 fill
                                 className="object-cover"
                                 sizes="40px"
+                                unoptimized={getProductImage(selectedProduct).startsWith("/uploads")}
                               />
                             </span>
                           ) : null}
@@ -384,6 +386,7 @@ export const OrderCalculator: React.FC = () => {
                                       fill
                                       className="object-cover"
                                       sizes="48px"
+                                      unoptimized={img.startsWith("/uploads")}
                                     />
                                   </span>
                                 ) : (

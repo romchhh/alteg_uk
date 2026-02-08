@@ -129,6 +129,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
             alt={product.nameEn}
             fill
             className="object-cover"
+            unoptimized={(product.image || categoryInfo.image || "").startsWith("/uploads")}
             sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
           {product.inStock && (
@@ -199,6 +200,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
                 alt={product.nameEn}
                 fill
                 className="object-cover"
+                unoptimized={(product.image || categoryInfo.image || "").startsWith("/uploads")}
                 sizes="(max-width: 640px) 100vw, 512px"
               />
             </div>
@@ -356,6 +358,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
                 alt={product.nameEn}
                 fill
                 className="object-cover"
+                unoptimized={(product.image || categoryInfo.image || "").startsWith("/uploads")}
                 sizes="(max-width: 640px) 100vw, 576px"
               />
             </div>

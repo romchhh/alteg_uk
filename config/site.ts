@@ -18,6 +18,7 @@ export const siteConfig = {
 } as const;
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: {
     default: 'ALTEG UK - Aluminium Profiles Direct from Factory',
     template: '%s | ALTEG UK',

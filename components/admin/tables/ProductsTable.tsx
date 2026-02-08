@@ -423,7 +423,7 @@ export default function ProductsTable() {
                           fill
                           className="object-cover"
                           sizes="40px"
-                          unoptimized={imageSrc.startsWith("http")}
+                          unoptimized={imageSrc.startsWith("http") || imageSrc.startsWith("/uploads")}
                         />
                       </div>
                     ) : (

@@ -120,7 +120,7 @@ export default function CheckoutPage() {
                           <div className="flex items-center gap-3">
                             {productImage ? (
                               <div className="relative w-11 h-11 rounded-lg overflow-hidden bg-gray-100 shrink-0">
-                                <Image src={productImage} alt={item.productName} fill className="object-cover" sizes="44px" />
+                                <Image src={productImage} alt={item.productName} fill className="object-cover" sizes="44px" unoptimized={productImage.startsWith("/uploads")} />
                               </div>
                             ) : (
                               <div className="w-11 h-11 rounded-lg bg-gray-200 shrink-0 flex items-center justify-center text-gray-400">
@@ -236,6 +236,7 @@ export default function CheckoutPage() {
                           fill
                           className="object-cover"
                           sizes="80px"
+                          unoptimized={productImage.startsWith("/uploads")}
                         />
                       </div>
                     

@@ -83,7 +83,7 @@ export function ImageUpload({ value, onChange, label = "Image", hint }: ImageUpl
                 fill
                 className="object-cover"
                 sizes="128px"
-                unoptimized={value.startsWith("http")}
+                unoptimized={value.startsWith("http") || value.startsWith("/uploads")}
               />
             </div>
             <p className="text-xs text-gray-600 truncate max-w-full">{value}</p>

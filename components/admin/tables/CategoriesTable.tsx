@@ -195,7 +195,7 @@ export default function CategoriesTable() {
                           fill
                           className="object-cover"
                           sizes="40px"
-                          unoptimized={cat.image.startsWith("http")}
+                          unoptimized={cat.image.startsWith("http") || cat.image.startsWith("/uploads")}
                         />
                       </div>
                     ) : (
