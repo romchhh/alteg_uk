@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import Image from "next/image";
+import { getUploadImageSrc } from "@/lib/utils/image";
 
 interface ImageUploadProps {
   value: string;
@@ -28,7 +29,8 @@ export function ImageUpload({ value, onChange, label = "Image", hint }: ImageUpl
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Upload failed");
-      onChange(data.url);
+      const url = data.url.startsWith("/uploads/") ? data.url.replace("/uploads/", "/api/uploads/") : data.url;
+      onChange(url);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Upload failed");
     } finally {
@@ -78,12 +80,12 @@ export function ImageUpload({ value, onChange, label = "Image", hint }: ImageUpl
           <div className="space-y-2">
             <div className="relative mx-auto w-32 h-32 rounded overflow-hidden bg-gray-100">
               <Image
-                src={value}
+                src={getUploadImageSrc(value)}
                 alt=""
                 fill
                 className="object-cover"
                 sizes="128px"
-                unoptimized={value.startsWith("http") || value.startsWith("/uploads")}
+                unoptimized={value.startsWith("http") || value.startsWith("/uploads") || value.startsWith("/api/uploads")}
               />
             </div>
             <p className="text-xs text-gray-600 truncate max-w-full">{value}</p>

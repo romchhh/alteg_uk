@@ -7,6 +7,7 @@ import { Product, ProductCategory } from '@/lib/types/product';
 import { CATALOG_PRODUCTS, PRODUCT_CATEGORIES } from '@/lib/constants/catalog';
 import { useCartStore } from '@/store/cart';
 import { calculateOrder, getPricePerMeter } from '@/lib/utils/calculations';
+import { getUploadImageSrc } from '@/lib/utils/image';
 import { isWholesaleOrder } from '@/lib/constants/prices';
 import { Button } from '@/components/shared/Button';
 import { Modal } from '@/components/shared/Modal';
@@ -304,13 +305,13 @@ export const OrderCalculator: React.FC = () => {
                       {/* Background: from API/categories or PRODUCT_CATEGORIES, fallback /production_1.jpg */}
                       <div className="absolute inset-0 z-0">
                         <Image
-                          src={getCategoryImage(key)}
+                          src={getUploadImageSrc(getCategoryImage(key))}
                           alt={`${getCategoryName(key)} background`}
                           fill
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                           quality={92}
                           className="object-cover"
-                          unoptimized={getCategoryImage(key).startsWith("/uploads")}
+                          unoptimized={getCategoryImage(key).startsWith("/uploads") || getCategoryImage(key).startsWith("/api/uploads")}
                         />
                         <div className="absolute inset-0 bg-black/40" />
                       </div>
@@ -339,12 +340,12 @@ export const OrderCalculator: React.FC = () => {
                           {getProductImage(selectedProduct) ? (
                             <span className="relative w-10 h-10 shrink-0 rounded overflow-hidden bg-gray-100">
                               <Image
-                                src={getProductImage(selectedProduct)}
+                                src={getUploadImageSrc(getProductImage(selectedProduct))}
                                 alt=""
                                 fill
                                 className="object-cover"
                                 sizes="40px"
-                                unoptimized={getProductImage(selectedProduct).startsWith("/uploads")}
+                                unoptimized={getProductImage(selectedProduct).startsWith("/uploads") || getProductImage(selectedProduct).startsWith("/api/uploads")}
                               />
                             </span>
                           ) : null}
@@ -381,12 +382,12 @@ export const OrderCalculator: React.FC = () => {
                                 {img ? (
                                   <span className="relative w-12 h-12 shrink-0 rounded overflow-hidden bg-gray-100">
                                     <Image
-                                      src={img}
+                                      src={getUploadImageSrc(img)}
                                       alt=""
                                       fill
                                       className="object-cover"
                                       sizes="48px"
-                                      unoptimized={img.startsWith("/uploads")}
+                                      unoptimized={img.startsWith("/uploads") || img.startsWith("/api/uploads")}
                                     />
                                   </span>
                                 ) : (

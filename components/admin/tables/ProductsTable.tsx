@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import { Product, ProductCategory } from "@/lib/types/product";
 import { PRODUCT_CATEGORIES } from "@/lib/constants/catalog";
+import { getUploadImageSrc } from "@/lib/utils/image";
 
 function useProductsListUrl() {
   const router = useRouter();
@@ -418,7 +419,7 @@ export default function ProductsTable() {
                     {imageSrc ? (
                       <div className="relative h-10 w-10 rounded overflow-hidden bg-gray-100">
                         <Image
-                          src={imageSrc}
+                          src={getUploadImageSrc(imageSrc)}
                           alt=""
                           fill
                           className="object-cover"

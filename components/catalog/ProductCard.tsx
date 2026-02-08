@@ -9,6 +9,7 @@ import { Modal } from '@/components/shared/Modal';
 import { SuccessAlert } from '@/components/shared/SuccessAlert';
 import { getPricePerMeter } from '@/lib/utils/calculations';
 import { getLengthDiscount } from '@/lib/constants/prices';
+import { getUploadImageSrc } from '@/lib/utils/image';
 
 interface ProductCardProps {
   product: Product;
@@ -125,11 +126,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
         {/* Product Image */}
         <div className="relative h-48 bg-gray-100">
           <Image
-            src={product.image || categoryInfo.image}
+            src={getUploadImageSrc(product.image || categoryInfo.image || "")}
             alt={product.nameEn}
             fill
             className="object-cover"
-            unoptimized={(product.image || categoryInfo.image || "").startsWith("/uploads")}
+            unoptimized={(product.image || categoryInfo.image || "").startsWith("/uploads") || (product.image || categoryInfo.image || "").startsWith("/api/uploads")}
             sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
           {product.inStock && (
@@ -196,11 +197,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
           {(product.image || categoryInfo.image) && (
             <div className="relative w-full aspect-square max-h-56 sm:max-h-72 overflow-hidden bg-gray-100 mb-4">
               <Image
-                src={product.image || categoryInfo.image || ''}
+                src={getUploadImageSrc(product.image || categoryInfo.image || '')}
                 alt={product.nameEn}
                 fill
                 className="object-cover"
-                unoptimized={(product.image || categoryInfo.image || "").startsWith("/uploads")}
+                unoptimized={(product.image || categoryInfo.image || "").startsWith("/uploads") || (product.image || categoryInfo.image || "").startsWith("/api/uploads")}
                 sizes="(max-width: 640px) 100vw, 512px"
               />
             </div>
@@ -354,11 +355,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
           {(product.image || categoryInfo.image) && (
             <div className="relative w-full aspect-square max-h-56 sm:max-h-72 overflow-hidden bg-gray-100 mb-4">
               <Image
-                src={product.image || categoryInfo.image || ''}
+                src={getUploadImageSrc(product.image || categoryInfo.image || '')}
                 alt={product.nameEn}
                 fill
                 className="object-cover"
-                unoptimized={(product.image || categoryInfo.image || "").startsWith("/uploads")}
+                unoptimized={(product.image || categoryInfo.image || "").startsWith("/uploads") || (product.image || categoryInfo.image || "").startsWith("/api/uploads")}
                 sizes="(max-width: 640px) 100vw, 576px"
               />
             </div>

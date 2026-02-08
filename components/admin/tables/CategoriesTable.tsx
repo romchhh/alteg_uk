@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { getUploadImageSrc } from "@/lib/utils/image";
 
 interface Category {
   id: string;
@@ -190,7 +191,7 @@ export default function CategoriesTable() {
                     {cat.image ? (
                       <div className="relative h-10 w-10 rounded overflow-hidden bg-gray-100">
                         <Image
-                          src={cat.image}
+                          src={getUploadImageSrc(cat.image)}
                           alt=""
                           fill
                           className="object-cover"

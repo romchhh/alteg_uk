@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import PageBreadcrumb from "@/components/admin/PageBreadCrumb";
 import { formatDateTimeUK } from "@/lib/utils/formatters";
+import { getUploadImageSrc } from "@/lib/utils/image";
 import { PRODUCT_CATEGORIES } from "@/lib/constants/catalog";
 import type { Order } from "@/lib/types/order";
 import type { ProductCategory } from "@/lib/types/product";
@@ -178,7 +179,7 @@ export default function OrderDetailPage() {
                         <td className="px-3 py-2 align-middle">
                           {productImage ? (
                             <div className="relative w-10 h-10 rounded overflow-hidden bg-gray-100 shrink-0">
-                              <Image src={productImage} alt={item.product.nameEn} fill className="object-cover" sizes="40px" unoptimized={productImage.startsWith("/uploads")} />
+                              <Image src={getUploadImageSrc(productImage)} alt={item.product.nameEn} fill className="object-cover" sizes="40px" unoptimized={productImage.startsWith("/uploads") || productImage.startsWith("/api/uploads")} />
                             </div>
                           ) : (
                             <div className="w-10 h-10 rounded bg-gray-200 flex items-center justify-center text-gray-400 shrink-0">

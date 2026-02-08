@@ -8,6 +8,7 @@ import { OrderForm, type OrderSuccessData } from '@/components/forms/OrderForm';
 import { Button } from '@/components/shared/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shared/Card';
 import { formatCurrency, formatWeight } from '@/lib/utils/calculations';
+import { getUploadImageSrc } from '@/lib/utils/image';
 import { Icon } from '@/components/shared/Icon';
 import { PRODUCT_CATEGORIES } from '@/lib/constants/catalog';
 
@@ -120,7 +121,7 @@ export default function CheckoutPage() {
                           <div className="flex items-center gap-3">
                             {productImage ? (
                               <div className="relative w-11 h-11 rounded-lg overflow-hidden bg-gray-100 shrink-0">
-                                <Image src={productImage} alt={item.productName} fill className="object-cover" sizes="44px" unoptimized={productImage.startsWith("/uploads")} />
+                                <Image src={getUploadImageSrc(productImage)} alt={item.productName} fill className="object-cover" sizes="44px" unoptimized={productImage.startsWith("/uploads") || productImage.startsWith("/api/uploads")} />
                               </div>
                             ) : (
                               <div className="w-11 h-11 rounded-lg bg-gray-200 shrink-0 flex items-center justify-center text-gray-400">
@@ -231,12 +232,12 @@ export default function CheckoutPage() {
                       {/* Product Image */}
                       <div className="relative w-20 h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
                         <Image
-                          src={productImage}
+                          src={getUploadImageSrc(productImage)}
                           alt={item.product.nameEn}
                           fill
                           className="object-cover"
                           sizes="80px"
-                          unoptimized={productImage.startsWith("/uploads")}
+                          unoptimized={productImage.startsWith("/uploads") || productImage.startsWith("/api/uploads")}
                         />
                       </div>
                     
