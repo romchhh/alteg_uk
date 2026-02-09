@@ -42,7 +42,7 @@ export const DescriptionSection: React.FC = () => {
               <div className="h-px w-20 bg-black mb-4 sm:mb-6 mx-auto lg:mx-0 lg:ml-auto"></div>
               
               {/* PROFILES Stylized */}
-              <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light text-black tracking-tighter mb-3 sm:mb-4 leading-none" style={{ fontFamily: 'sans-serif', letterSpacing: '-0.05em' }}>
+              <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-black tracking-tighter mb-3 sm:mb-4 leading-none" style={{ fontFamily: 'sans-serif', letterSpacing: '-0.05em' }}>
                 PROFILES
               </div>
               
