@@ -129,7 +129,7 @@ export default function EditProductPage() {
         hidden,
         material: material || undefined,
         finish: finish || undefined,
-        image: image || undefined,
+        image: image.trim(),
       };
 
       const res = await fetch(`/api/admin/products/${id}`, {

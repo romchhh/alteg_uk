@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getProductById, updateProduct, deleteProduct } from '@/lib/data/products';
 import { z } from 'zod';
+import { deleteUploadFile } from '@/lib/utils/uploadPath';
+import { isServerUploadUrl } from '@/lib/utils/image';
 
 const productUpdateSchema = z.object({
   category: z.string().optional(),
@@ -56,6 +58,14 @@ export async function PUT(
     }
     const update: Record<string, unknown> = { ...parsed.data };
     if (body.applications !== undefined) update.applications = body.applications;
+    if (parsed.data.image !== undefined) {
+      const existing = await getProductById(id);
+      const oldImage = existing?.image ?? '';
+      const newImage = typeof parsed.data.image === 'string' ? parsed.data.image : '';
+      if (oldImage && isServerUploadUrl(oldImage) && oldImage !== newImage) {
+        await deleteUploadFile(oldImage);
+      }
+    }
     await updateProduct(id, update);
     const product = await getProductById(id);
     return NextResponse.json(product);

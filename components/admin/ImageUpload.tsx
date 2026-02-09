@@ -68,7 +68,7 @@ export function ImageUpload({ value, onChange, label = "Image", hint, onUploadin
       {label && (
         <label className="mb-1.5 block text-sm font-medium text-gray-700">{label}</label>
       )}
-      {value ? (
+      {value != null && value.trim() !== "" ? (
         <div className="space-y-3">
           <div className="relative w-32 h-32 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
             {isServerUploadUrl(value) ? (
@@ -93,12 +93,16 @@ export function ImageUpload({ value, onChange, label = "Image", hint, onUploadin
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
-              onClick={() => onChange("")}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onChange("");
+              }}
               className="text-xs text-red-600 hover:underline"
             >
               Remove image
             </button>
-            <span className="text-xs text-gray-400">or replace with file below</span>
+            <span className="text-xs text-gray-400">or replace with file below. Click Save to apply.</span>
           </div>
         </div>
       ) : null}
@@ -129,7 +133,7 @@ export function ImageUpload({ value, onChange, label = "Image", hint, onUploadin
             <p className="text-sm text-gray-600">
               {value ? "Drop new image or click to replace" : "Drag image here or click to select file"}
             </p>
-            <p className="text-xs text-gray-400 mt-1">JPEG, PNG, GIF, WebP, up to 5 MB. Saved as file in /uploads/</p>
+            <p className="text-xs text-gray-400 mt-1">JPEG, PNG, GIF, WebP, up to 5 MB. Click Save after uploading to apply.</p>
           </>
         )}
       </label>

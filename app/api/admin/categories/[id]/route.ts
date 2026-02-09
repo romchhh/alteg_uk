@@ -9,6 +9,8 @@ import {
   isCustomCategoryId,
 } from '@/lib/data/categories';
 import { PRODUCT_CATEGORIES } from '@/lib/constants/catalog';
+import { deleteUploadFile } from '@/lib/utils/uploadPath';
+import { isServerUploadUrl } from '@/lib/utils/image';
 
 export async function GET(
   _request: NextRequest,
@@ -52,10 +54,15 @@ export async function PATCH(
     const nameEn = typeof body.nameEn === 'string' ? body.nameEn : undefined;
     const description = typeof body.description === 'string' ? body.description : undefined;
     const image = typeof body.image === 'string' ? body.image : undefined;
+    const newImage = image ?? '';
 
     if (isCustomCategoryId(id)) {
       const custom = getCustomCategory(id);
       if (!custom) return NextResponse.json({ error: 'Category not found' }, { status: 404 });
+      const oldImage = custom.image ?? '';
+      if (oldImage && isServerUploadUrl(oldImage) && oldImage !== newImage) {
+        await deleteUploadFile(oldImage);
+      }
       updateCustomCategory(id, { name, nameEn, description, image });
       const updated = getCustomCategory(id);
       return NextResponse.json({
@@ -70,15 +77,20 @@ export async function PATCH(
     if (!isValidCategoryId(id)) {
       return NextResponse.json({ error: 'Category not found' }, { status: 404 });
     }
-    upsertCategoryOverride(id, { name, nameEn, description, image });
     const override = getCategoryOverride(id);
     const base = PRODUCT_CATEGORIES[id];
+    const oldImage = override?.image ?? base?.image ?? '';
+    if (oldImage && isServerUploadUrl(oldImage) && oldImage !== newImage) {
+      await deleteUploadFile(oldImage);
+    }
+    upsertCategoryOverride(id, { name, nameEn, description, image });
+    const updatedOverride = getCategoryOverride(id);
     return NextResponse.json({
       id,
-      name: override?.name ?? base.name,
-      nameEn: override?.name_en ?? base.nameEn,
-      description: override?.description ?? base.description ?? '',
-      image: override?.image ?? base.image ?? '',
+      name: updatedOverride?.name ?? base.name,
+      nameEn: updatedOverride?.name_en ?? base.nameEn,
+      description: updatedOverride?.description ?? base.description ?? '',
+      image: updatedOverride?.image ?? base.image ?? '',
       isCustom: false,
     });
   } catch (error) {
