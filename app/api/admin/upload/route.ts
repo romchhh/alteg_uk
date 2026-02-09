@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
+import { existsSync } from "fs";
 import path from "path";
+import { getUploadDir, getUploadFilePath } from "@/lib/utils/uploadPath";
 
-const UPLOAD_DIR = "public/uploads";
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"];
 const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
@@ -35,14 +36,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const dir = path.join(process.cwd(), UPLOAD_DIR);
+    const dir = getUploadDir();
     await mkdir(dir, { recursive: true });
 
     const filename = safeName(file.name);
-    const filepath = path.join(dir, filename);
+    const filepath = getUploadFilePath(filename);
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     await writeFile(filepath, buffer);
+
+    if (!existsSync(filepath)) {
+      console.error("Upload write succeeded but file missing:", filepath);
+      return NextResponse.json(
+        { error: "Upload could not be saved. Check server disk and UPLOADS_DIR." },
+        { status: 500 }
+      );
+    }
 
     const url = `/uploads/${filename}`;
     return NextResponse.json({ url });

@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { readFile } from "fs/promises";
 import path from "path";
-
-const UPLOAD_DIR = "public/uploads";
+import { getUploadFilePath } from "@/lib/utils/uploadPath";
 
 const MIME_TYPES: Record<string, string> = {
   ".jpg": "image/jpeg",
@@ -22,7 +21,7 @@ export async function GET(
       return new NextResponse("Bad request", { status: 400 });
     }
     const basename = path.basename(filename);
-    const filepath = path.join(process.cwd(), UPLOAD_DIR, basename);
+    const filepath = getUploadFilePath(basename);
 
     const buffer = await readFile(filepath);
 
@@ -35,8 +34,13 @@ export async function GET(
         "Cache-Control": "public, max-age=31536000, immutable",
       },
     });
-  } catch (error) {
-    console.error("Image fetch error:", error);
+  } catch (err: unknown) {
+    const isNotFound =
+      err instanceof Error && ("code" in err && (err as NodeJS.ErrnoException).code === "ENOENT");
+    if (isNotFound) {
+      return new NextResponse("Image not found", { status: 404 });
+    }
+    console.error("Image fetch error:", err);
     return new NextResponse("Image not found", { status: 404 });
   }
 }
