@@ -15,7 +15,7 @@ import { PRODUCT_CATEGORIES } from '@/lib/constants/catalog';
 const HOMEPAGE_SECTION_IDS = ['catalog', 'advantages', 'how-to-order', 'faq', 'trust', 'features', 'about', 'calculator', 'customer-segments'];
 
 export default function CheckoutPage() {
-  const { items, total, subtotal, discountAmount, discountPercent, totalWeight, itemCount } = useCart();
+  const { items, total, subtotal, discountAmount, discountPercent, totalWeight, itemCount, removeItem, updateItem } = useCart();
   const hasDiscount = discountAmount > 0;
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -226,41 +226,84 @@ export default function CheckoutPage() {
                 {items.map((item) => {
                   const categoryImage = categoriesMap?.[item.product.category]?.image ?? (PRODUCT_CATEGORIES as Record<string, { image?: string }>)[item.product.category]?.image;
                   const productImage = item.product.image || categoryImage || '/favicon.png';
+                  const displaySrc = (productImage && (productImage.startsWith("/uploads") || productImage.startsWith("/api/uploads"))) ? getUploadImageSrc(productImage) : productImage || '/favicon.png';
 
                   return (
-                    <div key={item.id} className="flex items-start gap-4 border-b border-gray-200 pb-4">
+                    <div key={item.id} className="flex flex-wrap items-start gap-4 border-b border-gray-200 pb-4">
                       {/* Product Image */}
                       <div className="relative w-20 h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
                         <Image
-                          src={getUploadImageSrc(productImage)}
+                          src={displaySrc}
                           alt={item.product.nameEn}
                           fill
                           className="object-cover"
                           sizes="80px"
-                          unoptimized={productImage.startsWith("/uploads") || productImage.startsWith("/api/uploads")}
+                          unoptimized={displaySrc.startsWith("/api/uploads")}
                         />
                       </div>
-                    
-                    {/* Product Details */}
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900">{item.product.nameEn}</h3>
-                      <p className="text-sm text-gray-900">{item.product.dimensions}</p>
-                      <p className="text-sm text-gray-900">
-                        {item.length}m × {item.quantity} = {(item.length * item.quantity).toFixed(2)}m
-                      </p>
-                      {item.freeCutting && (
-                        <span className="inline-block mt-1 text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
-                          Free Cutting
-                        </span>
-                      )}
+
+                      {/* Product Details */}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-gray-900">{item.product.nameEn}</h3>
+                        <p className="text-sm text-gray-900">{item.product.dimensions}</p>
+                        <p className="text-sm text-gray-900">
+                          {item.length}m × {item.quantity} = {(item.length * item.quantity).toFixed(2)}m
+                        </p>
+                        {item.freeCutting && (
+                          <span className="inline-block mt-1 text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                            Free Cutting
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Quantity controls */}
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden bg-white">
+                          <button
+                            type="button"
+                            disabled={item.quantity <= 1}
+                            onClick={() => {
+                              if (item.quantity <= 1) return;
+                              updateItem(item.id, { quantity: item.quantity - 1 });
+                            }}
+                            className="w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            aria-label="Decrease quantity"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                            </svg>
+                          </button>
+                          <span className="w-8 text-center text-sm font-medium text-gray-900 tabular-nums">{item.quantity}</span>
+                          <button
+                            type="button"
+                            onClick={() => updateItem(item.id, { quantity: item.quantity + 1 })}
+                            className="w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-gray-100"
+                            aria-label="Increase quantity"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                            </svg>
+                          </button>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeItem(item.id)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          aria-label="Remove from cart"
+                          title="Remove from cart"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </div>
+
+                      {/* Price */}
+                      <div className="text-right">
+                        <div className="font-semibold text-gray-900">{formatCurrency(item.calculatedPrice)}</div>
+                        <div className="text-sm text-gray-900">{formatWeight(item.calculatedWeight)}</div>
+                      </div>
                     </div>
-                    
-                    {/* Price */}
-                    <div className="text-right">
-                      <div className="font-semibold text-gray-900">{formatCurrency(item.calculatedPrice)}</div>
-                      <div className="text-sm text-gray-900">{formatWeight(item.calculatedWeight)}</div>
-                    </div>
-                  </div>
                   );
                 })}
                 <div className="pt-4 border-t border-gray-200">
