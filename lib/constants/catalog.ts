@@ -11,7 +11,7 @@ export const PRODUCT_CATEGORIES: Record<ProductCategory, ProductCategoryInfo> = 
     specificationsEn: 'Standard sizes, length up to 6m, cutting to size',
     applications: ['Каркаси', 'Конструкції', 'Меблі'],
     applicationsEn: ['Frames', 'Structures', 'Furniture'],
-    image: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?w=800&q=80',
+    image: '',
   },
   plate: {
     name: 'Пластина',
@@ -22,7 +22,7 @@ export const PRODUCT_CATEGORIES: Record<ProductCategory, ProductCategoryInfo> = 
     specificationsEn: 'Various thickness, standard and custom sizes',
     applications: ['Машинобудування', 'Кріпильні елементи'],
     applicationsEn: ['Engineering', 'Fastening elements'],
-    image: 'https://images.unsplash.com/photo-1597583190535-852409d75ba2?w=800&q=80',
+    image: '',
   },
   channel: {
     name: 'Швелер / Канал',
@@ -33,7 +33,7 @@ export const PRODUCT_CATEGORIES: Record<ProductCategory, ProductCategoryInfo> = 
     specificationsEn: 'EN standards, factory quality',
     applications: ['Несучі конструкції', 'Монтажні системи'],
     applicationsEn: ['Load-bearing structures', 'Mounting systems'],
-    image: 'https://images.unsplash.com/photo-1586864387634-45a5b9f7fbc5?w=800&q=80',
+    image: '',
   },
   i_beam: {
     name: 'Двутавр',
@@ -44,7 +44,7 @@ export const PRODUCT_CATEGORIES: Record<ProductCategory, ProductCategoryInfo> = 
     specificationsEn: 'High strength at low weight',
     applications: ['Промислові об\'єкти', 'Будівельні конструкції'],
     applicationsEn: ['Industrial facilities', 'Building structures'],
-    image: 'https://images.unsplash.com/photo-1581094271901-8022df4466f9?w=800&q=80',
+    image: '',
   },
   t_beam: {
     name: 'Тавр',
@@ -55,7 +55,7 @@ export const PRODUCT_CATEGORIES: Record<ProductCategory, ProductCategoryInfo> = 
     specificationsEn: 'High strength at low weight',
     applications: ['Промислові об\'єкти', 'Будівельні конструкції'],
     applicationsEn: ['Industrial facilities', 'Building structures'],
-    image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800&q=80',
+    image: '',
   },
   round_bar: {
     name: 'Пруток круглий',
@@ -66,7 +66,7 @@ export const PRODUCT_CATEGORIES: Record<ProductCategory, ProductCategoryInfo> = 
     specificationsEn: 'Various diameters, convenient for machining',
     applications: ['Виробництво деталей', 'Обробка на станках'],
     applicationsEn: ['Parts production', 'Machine processing'],
-    image: 'https://images.unsplash.com/photo-1578489758854-f134a358f08b?w=800&q=80',
+    image: '',
   },
   t_profile: {
     name: 'Т-подібний профіль',
@@ -77,7 +77,7 @@ export const PRODUCT_CATEGORIES: Record<ProductCategory, ProductCategoryInfo> = 
     specificationsEn: 'Standard sizes',
     applications: ['Монтажні рішення', 'Конструкційні системи'],
     applicationsEn: ['Mounting solutions', 'Structural systems'],
-    image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800&q=80',
+    image: '',
   },
   z_profile: {
     name: 'Z-подібний профіль',
@@ -88,7 +88,7 @@ export const PRODUCT_CATEGORIES: Record<ProductCategory, ProductCategoryInfo> = 
     specificationsEn: 'Custom manufacturing available',
     applications: ['Облицювання', 'Будівельні системи'],
     applicationsEn: ['Cladding', 'Building systems'],
-    image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&q=80',
+    image: '',
   },
   tube_round: {
     name: 'Труба кругла',
@@ -99,7 +99,7 @@ export const PRODUCT_CATEGORIES: Record<ProductCategory, ProductCategoryInfo> = 
     specificationsEn: 'Various diameters and wall thickness',
     applications: ['Конструкції', 'Інженерні системи'],
     applicationsEn: ['Structures', 'Engineering systems'],
-    image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800&q=80',
+    image: '',
   },
   square_bar: {
     name: 'Пруток квадратний',
@@ -110,7 +110,7 @@ export const PRODUCT_CATEGORIES: Record<ProductCategory, ProductCategoryInfo> = 
     specificationsEn: 'Standard sizes, cutting to size',
     applications: ['Металоконструкції', 'Виробництво'],
     applicationsEn: ['Metal structures', 'Manufacturing'],
-    image: 'https://images.unsplash.com/photo-1581092335397-9583eb92d232?w=800&q=80',
+    image: '',
   },
   sheet: {
     name: 'Лист',
@@ -121,7 +121,7 @@ export const PRODUCT_CATEGORIES: Record<ProductCategory, ProductCategoryInfo> = 
     specificationsEn: 'Thickness and format on request',
     applications: ['Будівництво', 'Дизайн', 'Виробництво'],
     applicationsEn: ['Construction', 'Design', 'Manufacturing'],
-    image: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?w=800&q=80',
+    image: '',
   },
   threshold: {
     name: 'Поріжок',
@@ -132,7 +132,7 @@ export const PRODUCT_CATEGORIES: Record<ProductCategory, ProductCategoryInfo> = 
     specificationsEn: 'Various shapes and coatings',
     applications: ['Інтер\'єрні рішення'],
     applicationsEn: ['Interior solutions'],
-    image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800&q=80',
+    image: '',
   },
   tube_square: {
     name: 'Труба квадратна',
@@ -143,7 +143,7 @@ export const PRODUCT_CATEGORIES: Record<ProductCategory, ProductCategoryInfo> = 
     specificationsEn: 'Standard sizes, cutting to size',
     applications: ['Каркаси', 'Інженерні системи', 'Виробничі системи'],
     applicationsEn: ['Frames', 'Engineering systems', 'Production systems'],
-    image: 'https://images.unsplash.com/photo-1581092162384-8987c1d64718?w=800&q=80',
+    image: '',
   },
   tube_rectangular: {
     name: 'Труба прямокутна',
@@ -154,7 +154,7 @@ export const PRODUCT_CATEGORIES: Record<ProductCategory, ProductCategoryInfo> = 
     specificationsEn: 'Standard sizes, cutting to size',
     applications: ['Каркаси', 'Інженерні системи', 'Виробничі системи'],
     applicationsEn: ['Frames', 'Engineering systems', 'Production systems'],
-    image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&q=80',
+    image: '',
   },
 };
 

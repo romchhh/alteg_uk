@@ -1,14 +1,7 @@
 import path from "path";
 
-/**
- * Directory for uploaded files. Use UPLOADS_DIR env for production
- * so uploads persist (e.g. /var/data/alteg/uploads) and survive deploys.
- */
+/** Directory for uploaded files — always public/uploads. */
 export function getUploadDir(): string {
-  const fromEnv = process.env.UPLOADS_DIR;
-  if (fromEnv && path.isAbsolute(fromEnv)) {
-    return fromEnv;
-  }
   return path.join(process.cwd(), "public", "uploads");
 }
 

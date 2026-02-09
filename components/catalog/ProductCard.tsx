@@ -10,7 +10,7 @@ import { Modal } from '@/components/shared/Modal';
 import { SuccessAlert } from '@/components/shared/SuccessAlert';
 import { getPricePerMeter } from '@/lib/utils/calculations';
 import { getLengthDiscount } from '@/lib/constants/prices';
-import { getUploadImageSrc } from '@/lib/utils/image';
+import { getUploadImageSrc, isServerUploadUrl } from '@/lib/utils/image';
 
 interface ProductCardProps {
   product: Product;
@@ -23,7 +23,9 @@ const MAX_CUSTOM_LENGTH = 25;
 const DEFAULT_PRODUCT_IMAGE = '/production_1.jpg';
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo }) => {
-  const productImage = product.image || categoryInfo.image || DEFAULT_PRODUCT_IMAGE;
+  const rawImage = product.image || categoryInfo.image;
+  const productImage = isServerUploadUrl(rawImage) ? rawImage : '';
+  const displaySrc = getUploadImageSrc(productImage) || DEFAULT_PRODUCT_IMAGE;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuccessAlertOpen, setIsSuccessAlertOpen] = useState(false);
   const [length, setLength] = useState(product.standardLengths[0]);
@@ -129,11 +131,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
         {/* Product Image */}
         <div className="relative h-48 bg-gray-100">
           <Image
-            src={getUploadImageSrc(productImage)}
+            src={displaySrc}
             alt={product.nameEn}
             fill
             className="object-cover"
-            unoptimized={productImage.startsWith("/uploads") || productImage.startsWith("/api/uploads")}
+            unoptimized={displaySrc.startsWith("/api/uploads")}
             sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
           {product.inStock && (
@@ -199,11 +201,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
         <div className="p-6">
           <div className="relative w-full aspect-square max-h-56 sm:max-h-72 overflow-hidden bg-gray-100 mb-4">
             <Image
-              src={getUploadImageSrc(productImage)}
+              src={displaySrc}
               alt={product.nameEn}
               fill
               className="object-cover"
-              unoptimized={productImage.startsWith("/uploads") || productImage.startsWith("/api/uploads")}
+              unoptimized={displaySrc.startsWith("/api/uploads")}
               sizes="(max-width: 640px) 100vw, 512px"
             />
           </div>

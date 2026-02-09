@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { getUploadImageSrc } from "@/lib/utils/image";
+import { getUploadImageSrc, isServerUploadUrl } from "@/lib/utils/image";
 
 interface Category {
   id: string;
@@ -188,7 +188,7 @@ export default function CategoriesTable() {
                     {productCountByCategory[cat.id] ?? 0}
                   </TableCell>
                   <TableCell className="px-5 py-4 w-20">
-                    {cat.image ? (
+                    {cat.image && isServerUploadUrl(cat.image) ? (
                       <div className="relative h-10 w-10 rounded overflow-hidden bg-gray-100">
                         <Image
                           src={getUploadImageSrc(cat.image)}
@@ -196,7 +196,7 @@ export default function CategoriesTable() {
                           fill
                           className="object-cover"
                           sizes="40px"
-                          unoptimized={cat.image.startsWith("http") || cat.image.startsWith("/uploads")}
+                          unoptimized
                         />
                       </div>
                     ) : (

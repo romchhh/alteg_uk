@@ -1,22 +1,34 @@
 "use client";
 
-import React, { useId, useRef, useState } from "react";
+import React, { useId, useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { getUploadImageSrc } from "@/lib/utils/image";
+import { getUploadImageSrc, isServerUploadUrl } from "@/lib/utils/image";
 
 interface ImageUploadProps {
   value: string;
   onChange: (url: string) => void;
   label?: string;
   hint?: string;
+  /** Notify parent when upload starts/finishes so Save can be disabled during upload */
+  onUploadingChange?: (uploading: boolean) => void;
 }
 
-export function ImageUpload({ value, onChange, label = "Image", hint }: ImageUploadProps) {
+export function ImageUpload({ value, onChange, label = "Image", hint, onUploadingChange }: ImageUploadProps) {
   const fileInputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const [drag, setDrag] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [imageLoadError, setImageLoadError] = useState(false);
+
+  useEffect(() => {
+    onUploadingChange?.(uploading);
+  }, [uploading, onUploadingChange]);
+
+  useEffect(() => {
+    setImageLoadError(false);
+  }, [value]);
+
   const uploadFile = async (file: File) => {
     setError(null);
     setUploading(true);
@@ -59,14 +71,23 @@ export function ImageUpload({ value, onChange, label = "Image", hint }: ImageUpl
       {value ? (
         <div className="space-y-3">
           <div className="relative w-32 h-32 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
-            <Image
-              src={getUploadImageSrc(value)}
-              alt=""
-              fill
-              className="object-cover"
-              sizes="128px"
-              unoptimized={value.startsWith("http") || value.startsWith("/uploads") || value.startsWith("/api/uploads")}
-            />
+            {isServerUploadUrl(value) ? (
+              !imageLoadError ? (
+                <Image
+                  src={getUploadImageSrc(value)}
+                  alt=""
+                  fill
+                  className="object-cover"
+                  sizes="128px"
+                  unoptimized
+                  onError={() => setImageLoadError(true)}
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-xs text-gray-400">Image unavailable</div>
+              )
+            ) : (
+              <div className="flex h-full w-full items-center justify-center text-xs text-gray-500 text-center px-2">Only server uploads. Upload a new image or remove.</div>
+            )}
           </div>
           <p className="text-xs text-gray-600 truncate max-w-full">{value}</p>
           <div className="flex flex-wrap gap-2">

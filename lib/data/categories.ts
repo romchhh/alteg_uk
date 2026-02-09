@@ -1,5 +1,6 @@
 import { getDb } from '@/lib/db/sqlite';
 import type { ProductCategory } from '@/lib/types/product';
+import { PRODUCT_CATEGORIES } from '@/lib/constants/catalog';
 
 export const BUILT_IN_IDS = new Set<string>([
   'angle', 'plate', 'channel', 'i_beam', 't_beam', 'round_bar',
@@ -41,10 +42,11 @@ export function upsertCategoryOverride(
 ): void {
   const database = getDb();
   const existing = getCategoryOverride(id);
-  const name = data.name ?? existing?.name ?? null;
-  const name_en = data.nameEn ?? existing?.name_en ?? null;
-  const description = data.description ?? existing?.description ?? null;
-  const image = data.image ?? existing?.image ?? null;
+  const base = BUILT_IN_IDS.has(id) ? (PRODUCT_CATEGORIES as Record<string, { name: string; nameEn: string; description: string; image?: string }>)[id] : null;
+  const name = data.name ?? existing?.name ?? base?.name ?? null;
+  const name_en = data.nameEn ?? existing?.name_en ?? base?.nameEn ?? null;
+  const description = data.description ?? existing?.description ?? base?.description ?? null;
+  const image = data.image !== undefined ? data.image : (existing?.image ?? base?.image ?? null);
 
   database
     .prepare(

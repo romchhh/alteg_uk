@@ -13,7 +13,7 @@ import {
 import Link from "next/link";
 import { Product, ProductCategory } from "@/lib/types/product";
 import { PRODUCT_CATEGORIES } from "@/lib/constants/catalog";
-import { getUploadImageSrc } from "@/lib/utils/image";
+import { getUploadImageSrc, isServerUploadUrl } from "@/lib/utils/image";
 
 function useProductsListUrl() {
   const router = useRouter();
@@ -410,13 +410,14 @@ export default function ProductsTable() {
               paginatedProducts.map((product) => {
                 const categoryInfo = PRODUCT_CATEGORIES[product.category as ProductCategory];
                 const imageSrc = product.image || categoryInfo?.image;
+                const showImage = imageSrc && isServerUploadUrl(imageSrc);
                 return (
                 <TableRow
                   key={product.id}
                   className="hover:bg-gray-50"
                 >
                   <TableCell className="px-5 py-4 w-20">
-                    {imageSrc ? (
+                    {showImage ? (
                       <div className="relative h-10 w-10 rounded overflow-hidden bg-gray-100">
                         <Image
                           src={getUploadImageSrc(imageSrc)}
@@ -424,7 +425,7 @@ export default function ProductsTable() {
                           fill
                           className="object-cover"
                           sizes="40px"
-                          unoptimized={imageSrc.startsWith("http") || imageSrc.startsWith("/uploads")}
+                          unoptimized
                         />
                       </div>
                     ) : (
