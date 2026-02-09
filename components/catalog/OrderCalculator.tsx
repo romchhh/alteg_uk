@@ -39,6 +39,7 @@ export const OrderCalculator: React.FC = () => {
   // UI State
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const profileDropdownRef = useRef<HTMLDivElement>(null);
+  const step2HeadingRef = useRef<HTMLHeadingElement>(null);
   const [isWholesaleModalOpen, setIsWholesaleModalOpen] = useState(false);
   const [isSuccessAlertOpen, setIsSuccessAlertOpen] = useState(false);
   const [wholesaleFormData, setWholesaleFormData] = useState({
@@ -125,7 +126,20 @@ export const OrderCalculator: React.FC = () => {
     return calculateOrder(selectedProduct, length, quantity, isWholesaleOrder(totalWeight));
   }, [selectedProduct, length, quantity]);
 
-  // Reset when category changes
+  // Scroll to Step 2: Select Profile when category is chosen (with offset so it sits a bit lower)
+  const STEP2_SCROLL_OFFSET_PX = 80;
+  useEffect(() => {
+    if (!selectedCategoryKey) return;
+    const t = setTimeout(() => {
+      const el = step2HeadingRef.current;
+      if (!el) return;
+      const top = el.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: top - STEP2_SCROLL_OFFSET_PX, behavior: 'smooth' });
+    }, 50);
+    return () => clearTimeout(t);
+  }, [selectedCategoryKey]);
+
+  // Reset when category changes and open profile list
   const handleCategorySelect = (categoryKey: string) => {
     setSelectedCategoryKey(categoryKey);
     setSelectedProduct(null);
@@ -135,6 +149,7 @@ export const OrderCalculator: React.FC = () => {
     setQuantityInput('1');
     setFreeCutting(false);
     setAdditionalProcessing(false);
+    setProfileDropdownOpen(true);
   };
 
   // Reset when product changes
@@ -326,7 +341,7 @@ export const OrderCalculator: React.FC = () => {
               {/* Step 2: Product Selection */}
               {selectedCategoryKey && (
                 <div className="mb-8" ref={profileDropdownRef}>
-                  <h3 className="text-lg sm:text-xl font-bold text-[#050544] mb-4">
+                  <h3 ref={step2HeadingRef} className="text-lg sm:text-xl font-bold text-[#050544] mb-4">
                     Step 2: Select Profile
                   </h3>
                   <div className="relative">
@@ -364,48 +379,55 @@ export const OrderCalculator: React.FC = () => {
                     </button>
                     {profileDropdownOpen && (
                       <ul className="absolute z-10 mt-1 w-full max-h-80 overflow-auto border-2 border-gray-200 rounded-lg bg-white shadow-lg py-1">
-                        {availableProducts.map((product) => {
-                          const ppm = getPricePerMeter(product);
-                          const img = getProductImage(product);
-                          return (
-                            <li key={product.id}>
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  handleProductSelect(product.id);
-                                  setProfileDropdownOpen(false);
-                                }}
-                                className={`w-full px-4 py-3 flex items-center gap-3 text-left hover:bg-[#E9EDF4] transition-colors ${
-                                  selectedProduct?.id === product.id ? 'bg-[#E9EDF4]' : ''
-                                }`}
-                              >
-                                {img ? (
-                                  <span className="relative w-12 h-12 shrink-0 rounded overflow-hidden bg-gray-100">
-                                    <Image
-                                      src={getUploadImageSrc(img)}
-                                      alt=""
-                                      fill
-                                      className="object-cover"
-                                      sizes="48px"
-                                      unoptimized={img.startsWith("/uploads") || img.startsWith("/api/uploads")}
-                                    />
+                        {availableProducts.length === 0 ? (
+                          <li className="px-4 py-4 text-center text-gray-600">
+                            <p className="font-medium text-[#050544] mb-1">No products in this category.</p>
+                            <p className="text-sm">Please select another category.</p>
+                          </li>
+                        ) : (
+                          availableProducts.map((product) => {
+                            const ppm = getPricePerMeter(product);
+                            const img = getProductImage(product);
+                            return (
+                              <li key={product.id}>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    handleProductSelect(product.id);
+                                    setProfileDropdownOpen(false);
+                                  }}
+                                  className={`w-full px-4 py-3 flex items-center gap-3 text-left hover:bg-[#E9EDF4] transition-colors ${
+                                    selectedProduct?.id === product.id ? 'bg-[#E9EDF4]' : ''
+                                  }`}
+                                >
+                                  {img ? (
+                                    <span className="relative w-12 h-12 shrink-0 rounded overflow-hidden bg-gray-100">
+                                      <Image
+                                        src={getUploadImageSrc(img)}
+                                        alt=""
+                                        fill
+                                        className="object-cover"
+                                        sizes="48px"
+                                        unoptimized={img.startsWith("/uploads") || img.startsWith("/api/uploads")}
+                                      />
+                                    </span>
+                                  ) : (
+                                    <span className="w-12 h-12 shrink-0 rounded bg-gray-200" />
+                                  )}
+                                  <span className="flex-1 min-w-0">
+                                    <span className="font-medium text-[#050544] block truncate">
+                                      {product.nameEn} ({product.dimensions})
+                                    </span>
+                                    <span className="text-sm text-gray-600">
+                                      £{(ppm ?? product.pricePerKg ?? 0).toFixed(2)}
+                                      {ppm != null ? '/m' : '/kg'}
+                                    </span>
                                   </span>
-                                ) : (
-                                  <span className="w-12 h-12 shrink-0 rounded bg-gray-200" />
-                                )}
-                                <span className="flex-1 min-w-0">
-                                  <span className="font-medium text-[#050544] block truncate">
-                                    {product.nameEn} ({product.dimensions})
-                                  </span>
-                                  <span className="text-sm text-gray-600">
-                                    £{(ppm ?? product.pricePerKg ?? 0).toFixed(2)}
-                                    {ppm != null ? '/m' : '/kg'}
-                                  </span>
-                                </span>
-                              </button>
-                            </li>
-                          );
-                        })}
+                                </button>
+                              </li>
+                            );
+                          })
+                        )}
                       </ul>
                     )}
                   </div>
