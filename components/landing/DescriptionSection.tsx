@@ -8,22 +8,22 @@ export const DescriptionSection: React.FC = () => {
           {/* Left Column - Main Heading */}
           <div className="lg:col-span-4">
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black leading-tight tracking-tight mb-3 sm:mb-4">
-              EXQUISITE BESPOKE<br className="hidden sm:block" />
-              <span className="sm:hidden"> </span>WINDOWS DOORS AND<br className="hidden sm:block" />
-              <span className="sm:hidden"> </span>SCREENS
+              PRECISION ALUMINIUM<br className="hidden sm:block" />
+              <span className="sm:hidden"> </span>PROFILES CUT TO SIZE<br className="hidden sm:block" />
+              <span className="sm:hidden"> </span>RETAIL & WHOLESALE
             </h2>
             <p className="text-base sm:text-lg md:text-xl text-gray-600 font-light italic leading-relaxed">
-              Steel Re-Imagined
+              From factory to your project
             </p>
           </div>
 
           {/* Middle Column - Description Text */}
           <div className="lg:col-span-5 space-y-4 sm:space-y-6 text-gray-700 leading-relaxed text-sm sm:text-base md:text-lg">
             <p>
-              The ALTEG Collection offers exceptional steel look architectural glazing solutions, meticulously designed to transform your living space into something truly extraordinary.
+              ALTEG is a European manufacturer of aluminium profiles supplying angles, tubes, channels, and custom extrusions. We cut to size and deliver across the UK for construction, fabrication, and trade.
             </p>
             <p>
-              From our iconic steel replica range of exterior windows and doors, through to our stunning interior doors and screens, and our versatile Bi-Folding door range, ALTEG offer a unique solution to you and your home.
+              Browse our catalog, use the interactive calculator for instant pricing, or request a quote for volume orders. Retail and wholesale supply with EN standards compliant production.
             </p>
           </div>
 
@@ -41,14 +41,14 @@ export const DescriptionSection: React.FC = () => {
               {/* Horizontal line below ALTEG */}
               <div className="h-px w-20 bg-black mb-4 sm:mb-6 mx-auto lg:mx-0 lg:ml-auto"></div>
               
-              {/* ELITE™ Stylized */}
+              {/* PROFILES Stylized */}
               <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light text-black tracking-tighter mb-3 sm:mb-4 leading-none" style={{ fontFamily: 'sans-serif', letterSpacing: '-0.05em' }}>
-                ELITE<span className="text-xs sm:text-sm align-superscript">™</span>
+                PROFILES
               </div>
               
               {/* Descriptor */}
               <div className="text-xs sm:text-sm md:text-base text-gray-600 font-light italic">
-                – Exterior Steel Look Collection –
+                – European aluminium manufacturer –
               </div>
             </div>
           </div>
