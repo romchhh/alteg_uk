@@ -13,11 +13,6 @@ import { Button } from '@/components/shared/Button';
 import { Modal } from '@/components/shared/Modal';
 import { SuccessAlert } from '@/components/shared/SuccessAlert';
 
-function getProductImage(product: Product): string {
-  const categoryInfo = product.category ? PRODUCT_CATEGORIES[product.category as ProductCategory] : undefined;
-  return product.image || categoryInfo?.image || '';
-}
-
 const MIN_CUSTOM_LENGTH = 0.1;
 const MAX_CUSTOM_LENGTH = 25;
 
@@ -52,20 +47,21 @@ export const OrderCalculator: React.FC = () => {
 
   const addItem = useCartStore((state) => state.addItem);
   const [productsFromApi, setProductsFromApi] = useState<Product[] | null>(null);
-  const [categoriesMap, setCategoriesMap] = useState<Record<string, { image?: string; nameEn?: string }>>({});
+  const [categoriesMap, setCategoriesMap] = useState<Record<string, { image?: string; nameEn?: string; description?: string }>>({});
   const [categoriesList, setCategoriesList] = useState<string[]>([]);
 
   useEffect(() => {
     fetch('/api/categories')
       .then((res) => res.ok ? res.json() : null)
-      .then((list: { id: string; name: string; nameEn: string; image?: string }[] | null) => {
+      .then((list: { id: string; name: string; nameEn: string; description?: string; image?: string }[] | null) => {
         if (!Array.isArray(list)) return;
-        const next: Record<string, { image?: string; nameEn?: string }> = {};
+        const next: Record<string, { image?: string; nameEn?: string; description?: string }> = {};
         list.forEach((c) => {
           const base = PRODUCT_CATEGORIES[c.id as ProductCategory];
           next[c.id] = {
             image: c.image || base?.image || '',
             nameEn: c.nameEn || base?.nameEn || c.name,
+            description: c.description ?? (base as { descriptionEn?: string })?.descriptionEn ?? '',
           };
         });
         setCategoriesMap(next);
@@ -88,6 +84,15 @@ export const OrderCalculator: React.FC = () => {
 
   const getCategoryName = (categoryKey: string): string => {
     return categoriesMap[categoryKey]?.nameEn ?? (PRODUCT_CATEGORIES as Record<string, { nameEn?: string }>)[categoryKey]?.nameEn ?? categoryKey;
+  };
+
+  const getCategoryDescription = (categoryKey: string): string => {
+    return categoriesMap[categoryKey]?.description ?? (PRODUCT_CATEGORIES as Record<string, { descriptionEn?: string }>)[categoryKey]?.descriptionEn ?? '';
+  };
+
+  /** Product image, or category image when product has none */
+  const getProductImage = (product: Product): string => {
+    return product.image || getCategoryImage(product.category || '');
   };
 
   useEffect(() => {
@@ -306,36 +311,45 @@ export const OrderCalculator: React.FC = () => {
                 <h3 className="text-lg sm:text-xl font-bold text-[#050544] mb-4">
                   Step 1: Select Category
                 </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                   {calculatorCategories.map((key) => (
                     <button
                       key={key}
                       onClick={() => handleCategorySelect(key)}
-                      className={`relative overflow-hidden w-full aspect-square border-2 rounded-lg transition-all duration-300 text-sm sm:text-base font-semibold group flex items-center justify-center ${
+                      className={`overflow-hidden w-full aspect-square border-2 rounded-lg transition-all duration-300 text-sm sm:text-base font-semibold group flex flex-col ${
                         selectedCategoryKey === key
                           ? 'border-[#445DFE] shadow-lg scale-105'
                           : 'border-gray-300 hover:border-[#445DFE] hover:shadow-md'
                       }`}
                     >
-                      {/* Background: from API/categories or PRODUCT_CATEGORIES, fallback /production_1.jpg */}
-                      <div className="absolute inset-0 z-0">
-                        <Image
-                          src={getUploadImageSrc(getCategoryImage(key))}
-                          alt={`${getCategoryName(key)} background`}
-                          fill
-                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                          quality={92}
-                          className="object-cover"
-                          unoptimized={getCategoryImage(key).startsWith("/uploads") || getCategoryImage(key).startsWith("/api/uploads")}
-                        />
-                        <div className="absolute inset-0 bg-black/40" />
+                      <div className="relative flex-1 min-h-0 overflow-hidden">
+                        <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-110">
+                          <Image
+                            src={getUploadImageSrc(getCategoryImage(key))}
+                            alt={`${getCategoryName(key)} background`}
+                            fill
+                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                            quality={92}
+                            className="object-cover"
+                            unoptimized={getCategoryImage(key).startsWith("/uploads") || getCategoryImage(key).startsWith("/api/uploads")}
+                          />
+                        </div>
                       </div>
-                      <span className="relative z-10 text-white font-semibold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] px-2 text-center">
-                        {getCategoryName(key)}
-                      </span>
+                      <div className="bg-[#050544] px-2 py-2 flex items-center justify-center min-h-[2.75rem]">
+                        <span className="text-white font-semibold text-center leading-tight">
+                          {getCategoryName(key)}
+                        </span>
+                      </div>
                     </button>
                   ))}
                 </div>
+                {selectedCategoryKey && getCategoryDescription(selectedCategoryKey) && (
+                  <div className="mt-4 p-4 bg-[#E9EDF4] rounded-lg border border-[#050544]/10">
+                    <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+                      {getCategoryDescription(selectedCategoryKey)}
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Step 2: Product Selection */}
@@ -352,18 +366,16 @@ export const OrderCalculator: React.FC = () => {
                     >
                       {selectedProduct ? (
                         <>
-                          {getProductImage(selectedProduct) ? (
-                            <span className="relative w-10 h-10 shrink-0 rounded overflow-hidden bg-gray-100">
-                              <Image
-                                src={getUploadImageSrc(getProductImage(selectedProduct))}
-                                alt=""
-                                fill
-                                className="object-cover"
-                                sizes="40px"
-                                unoptimized={getProductImage(selectedProduct).startsWith("/uploads") || getProductImage(selectedProduct).startsWith("/api/uploads")}
-                              />
-                            </span>
-                          ) : null}
+                          <span className="relative w-10 h-10 shrink-0 rounded overflow-hidden bg-gray-100">
+                            <Image
+                              src={getUploadImageSrc(getProductImage(selectedProduct))}
+                              alt=""
+                              fill
+                              className="object-cover"
+                              sizes="40px"
+                              unoptimized={getProductImage(selectedProduct).startsWith("/uploads") || getProductImage(selectedProduct).startsWith("/api/uploads")}
+                            />
+                          </span>
                           <span className="flex-1 min-w-0 truncate">
                             {selectedProduct.nameEn} ({selectedProduct.dimensions}) — £
                             {(getPricePerMeter(selectedProduct) ?? selectedProduct.pricePerKg ?? 0).toFixed(2)}
@@ -400,20 +412,16 @@ export const OrderCalculator: React.FC = () => {
                                     selectedProduct?.id === product.id ? 'bg-[#E9EDF4]' : ''
                                   }`}
                                 >
-                                  {img ? (
-                                    <span className="relative w-12 h-12 shrink-0 rounded overflow-hidden bg-gray-100">
-                                      <Image
-                                        src={getUploadImageSrc(img)}
-                                        alt=""
-                                        fill
-                                        className="object-cover"
-                                        sizes="48px"
-                                        unoptimized={img.startsWith("/uploads") || img.startsWith("/api/uploads")}
-                                      />
-                                    </span>
-                                  ) : (
-                                    <span className="w-12 h-12 shrink-0 rounded bg-gray-200" />
-                                  )}
+                                  <span className="relative w-12 h-12 shrink-0 rounded overflow-hidden bg-gray-100">
+                                    <Image
+                                      src={getUploadImageSrc(img)}
+                                      alt=""
+                                      fill
+                                      className="object-cover"
+                                      sizes="48px"
+                                      unoptimized={img.startsWith("/uploads") || img.startsWith("/api/uploads")}
+                                    />
+                                  </span>
                                   <span className="flex-1 min-w-0">
                                     <span className="font-medium text-[#050544] block truncate">
                                       {product.nameEn} ({product.dimensions})
@@ -450,24 +458,26 @@ export const OrderCalculator: React.FC = () => {
                       <p className="text-xs text-gray-500 mb-2">
                         Choose a standard length or enter your own below.
                       </p>
-                      <div className="flex gap-2 mb-3">
-                        <span className="text-xs text-gray-500 self-center shrink-0">Quick select:</span>
-                        {selectedProduct.standardLengths.map((stdLength) => (
-                          <button
-                            key={stdLength}
-                            onClick={() => {
-                              setLength(stdLength);
-                              setLengthInput(stdLength.toString());
-                            }}
-                            className={`px-4 py-2 border-2 rounded transition-colors ${
-                              length === stdLength
-                                ? 'bg-[#445DFE] text-white border-[#445DFE]'
-                                : 'bg-white text-[#050544] border-gray-300 hover:border-[#445DFE]'
-                            }`}
-                          >
-                            {stdLength}m
-                          </button>
-                        ))}
+                      <div className="mb-3">
+                        <p className="text-xs text-gray-500 mb-2">Quick select:</p>
+                        <div className="flex flex-wrap gap-2">
+                          {selectedProduct.standardLengths.map((stdLength) => (
+                            <button
+                              key={stdLength}
+                              onClick={() => {
+                                setLength(stdLength);
+                                setLengthInput(stdLength.toString());
+                              }}
+                              className={`px-3 py-1.5 sm:px-4 sm:py-2 text-sm border-2 rounded transition-colors ${
+                                length === stdLength
+                                  ? 'bg-[#445DFE] text-white border-[#445DFE]'
+                                  : 'bg-white text-[#050544] border-gray-300 hover:border-[#445DFE]'
+                              }`}
+                            >
+                              {stdLength}m
+                            </button>
+                          ))}
+                        </div>
                       </div>
                       <label className="block text-sm font-medium text-[#050544] mb-1">
                         Custom length (m)

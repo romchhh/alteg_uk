@@ -8,7 +8,7 @@ function toBase64(str: string): string {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Захист /api/admin/*
+  // Protect /api/admin/*
   if (pathname.startsWith("/api/admin")) {
     const token = request.cookies.get("admin_auth")?.value;
     const validUser = process.env.ADMIN_USER;
@@ -27,7 +27,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Захист /admin (крім /admin/login)
+  // Protect /admin (except /admin/login)
   if (pathname.startsWith("/admin") && !pathname.startsWith("/admin/login")) {
     const token = request.cookies.get("admin_auth")?.value;
     const validUser = process.env.ADMIN_USER;
@@ -46,7 +46,7 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // Якщо вже залогінений і йде на /admin/login — редірект на /admin
+  // If already logged in and visiting /admin/login — redirect to /admin
   if (pathname === "/admin/login") {
     const token = request.cookies.get("admin_auth")?.value;
     const validUser = process.env.ADMIN_USER;

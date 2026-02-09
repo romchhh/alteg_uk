@@ -77,7 +77,7 @@ function initSchema(database: Database.Database) {
 
     INSERT OR IGNORE INTO homepage (key, value) VALUES
       ('heroTitle', 'ALTEG UK - Aluminium Profiles Direct from Factory'),
-      ('heroSubtitle', 'Buy aluminium angles, tubes, sheets directly from manufacturer. Free cutting. UK delivery. Factory prices.');
+      ('heroSubtitle', 'Buy aluminium angles, tubes, sheets directly from manufacturer. UK delivery. Factory prices.');
   `);
   try {
     database.exec('ALTER TABLE products ADD COLUMN hidden INTEGER NOT NULL DEFAULT 0');

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useId, useRef, useState } from "react";
 import Image from "next/image";
 import { getUploadImageSrc } from "@/lib/utils/image";
 
@@ -12,11 +12,11 @@ interface ImageUploadProps {
 }
 
 export function ImageUpload({ value, onChange, label = "Image", hint }: ImageUploadProps) {
+  const fileInputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const [drag, setDrag] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const uploadFile = async (file: File) => {
     setError(null);
     setUploading(true);
@@ -26,11 +26,11 @@ export function ImageUpload({ value, onChange, label = "Image", hint }: ImageUpl
       const res = await fetch("/api/admin/upload", {
         method: "POST",
         body: formData,
+        credentials: "include",
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Upload failed");
-      const url = data.url.startsWith("/uploads/") ? data.url.replace("/uploads/", "/api/uploads/") : data.url;
-      onChange(url);
+      onChange(data.url);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Upload failed");
     } finally {
@@ -45,7 +45,7 @@ export function ImageUpload({ value, onChange, label = "Image", hint }: ImageUpl
     if (file && file.type.startsWith("image/")) uploadFile(file);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) uploadFile(file);
     e.target.value = "";
@@ -56,56 +56,62 @@ export function ImageUpload({ value, onChange, label = "Image", hint }: ImageUpl
       {label && (
         <label className="mb-1.5 block text-sm font-medium text-gray-700">{label}</label>
       )}
-      <div
+      {value ? (
+        <div className="space-y-3">
+          <div className="relative w-32 h-32 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+            <Image
+              src={getUploadImageSrc(value)}
+              alt=""
+              fill
+              className="object-cover"
+              sizes="128px"
+              unoptimized={value.startsWith("http") || value.startsWith("/uploads") || value.startsWith("/api/uploads")}
+            />
+          </div>
+          <p className="text-xs text-gray-600 truncate max-w-full">{value}</p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => onChange("")}
+              className="text-xs text-red-600 hover:underline"
+            >
+              Remove image
+            </button>
+            <span className="text-xs text-gray-400">or replace with file below</span>
+          </div>
+        </div>
+      ) : null}
+      <label
+        htmlFor={fileInputId}
         onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
         onDragLeave={() => setDrag(false)}
         onDrop={handleDrop}
-        onClick={() => inputRef.current?.click()}
         className={`
-          relative border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors
+          relative block border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-colors mt-2
           ${drag ? "border-gray-800 bg-gray-50" : "border-gray-300 hover:border-gray-400"}
           ${uploading ? "pointer-events-none opacity-70" : ""}
         `}
       >
         <input
+          id={fileInputId}
           ref={inputRef}
           type="file"
           accept="image/jpeg,image/png,image/gif,image/webp"
           className="hidden"
-          onChange={handleChange}
+          onChange={handleFileChange}
+          disabled={uploading}
         />
         {uploading ? (
           <p className="text-sm text-gray-500">Uploading...</p>
-        ) : value ? (
-          <div className="space-y-2">
-            <div className="relative mx-auto w-32 h-32 rounded overflow-hidden bg-gray-100">
-              <Image
-                src={getUploadImageSrc(value)}
-                alt=""
-                fill
-                className="object-cover"
-                sizes="128px"
-                unoptimized={value.startsWith("http") || value.startsWith("/uploads") || value.startsWith("/api/uploads")}
-              />
-            </div>
-            <p className="text-xs text-gray-600 truncate max-w-full">{value}</p>
-            <button
-              type="button"
-              onClick={(e) => { e.stopPropagation(); onChange(""); }}
-              className="text-xs text-red-600 hover:underline"
-            >
-              Remove image
-            </button>
-          </div>
         ) : (
           <>
             <p className="text-sm text-gray-600">
-              Drag image here or click to select
+              {value ? "Drop new image or click to replace" : "Drag image here or click to select file"}
             </p>
-            <p className="text-xs text-gray-400 mt-1">JPEG, PNG, GIF, WebP, up to 5 MB</p>
+            <p className="text-xs text-gray-400 mt-1">JPEG, PNG, GIF, WebP, up to 5 MB. Saved as file in /uploads/</p>
           </>
         )}
-      </div>
+      </label>
       {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
       {hint && <p className="mt-1 text-xs text-gray-500">{hint}</p>}
     </div>

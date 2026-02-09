@@ -6,8 +6,8 @@ export interface HomepageSettings {
 }
 
 const DEFAULT_HOMEPAGE: HomepageSettings = {
-  heroTitle: 'ALTEG UK - Aluminium Profiles Direct from Factory',
-  heroSubtitle: 'Buy aluminium angles, tubes, sheets directly from manufacturer. Free cutting. UK delivery. Factory prices.',
+  heroTitle: 'ALTEG — Aluminium Directly from the Factory',
+  heroSubtitle: 'Calculate costs and order online with UK delivery. Direct manufacturer prices.',
 };
 
 import { getDb } from '@/lib/db/sqlite';

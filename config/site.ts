@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     default: 'ALTEG UK - Aluminium Profiles Direct from Factory',
     template: '%s | ALTEG UK',
   },
-  description: 'Buy aluminium angles, tubes, sheets directly from manufacturer. Free cutting. UK delivery. Factory prices.',
+  description: 'Buy aluminium angles, tubes, sheets directly from manufacturer. UK delivery. Factory prices.',
   keywords: [
     'aluminium profiles UK',
     'aluminium angle',

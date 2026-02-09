@@ -204,7 +204,7 @@ export const TrustSection: React.FC = () => {
           ))}
         </div>
 
-        {/* Social Proof — горизонтальний скрол з фото */}
+        {/* Social Proof — horizontal scroll with photos */}
         <div className="mb-12 sm:mb-16">
           <h3 className="text-xl sm:text-2xl font-bold text-white uppercase tracking-wide mb-2 text-center">
             Social Proof

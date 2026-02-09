@@ -8,7 +8,7 @@ export async function POST() {
     return NextResponse.json({
       success: true,
       count: CATALOG_PRODUCTS.length,
-      message: `Імпортовано ${CATALOG_PRODUCTS.length} товарів з каталогу`,
+      message: `Imported ${CATALOG_PRODUCTS.length} products from catalog`,
     });
   } catch (error) {
     console.error("Error importing products:", error);

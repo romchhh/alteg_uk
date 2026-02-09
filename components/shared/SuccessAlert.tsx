@@ -50,7 +50,7 @@ export const SuccessAlert: React.FC<SuccessAlertProps> = ({
               </svg>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">Added to cart</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Added to your order</h3>
               <p className="text-sm text-gray-500">{productName} · {quantity} × {length}m</p>
             </div>
           </div>

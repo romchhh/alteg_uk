@@ -30,22 +30,22 @@ export async function POST(request: NextRequest) {
       const o = orderData;
       const adminOrderUrl = `${env.SITE_URL}/admin/orders/${result.orderId}`;
       const lines: string[] = [
-        '<b>🛒 Новий замовлення</b>',
+        '<b>🛒 New order</b>',
         `ID: <a href="${adminOrderUrl}">${result.orderId}</a>`,
-        `👉 <a href="${adminOrderUrl}">Відкрити в адмін-панелі</a>`,
+        `👉 <a href="${adminOrderUrl}">Open in admin</a>`,
         '',
-        '<b>Клієнт</b>',
-        `Ім'я: ${o.customer.name}`,
-        `Телефон: ${o.customer.phone}`,
+        '<b>Customer</b>',
+        `Name: ${o.customer.name}`,
+        `Phone: ${o.customer.phone}`,
         `Email: ${o.customer.email}`,
-        o.customer.company ? `Компанія: ${o.customer.company}` : '',
+        o.customer.company ? `Company: ${o.customer.company}` : '',
         '',
-        '<b>Доставка</b>',
-        `Поштовий індекс: ${o.delivery.postcode}`,
-        o.delivery.method ? `Спосіб: ${o.delivery.method}` : '',
-        o.delivery.instructions ? `Інструкції: ${o.delivery.instructions}` : '',
+        '<b>Delivery</b>',
+        `Postcode: ${o.delivery.postcode}`,
+        o.delivery.method ? `Method: ${o.delivery.method}` : '',
+        o.delivery.instructions ? `Instructions: ${o.delivery.instructions}` : '',
         '',
-        '<b>Товари</b>',
+        '<b>Items</b>',
         ...o.cart.map((item) => {
           const spec = `${item.length}m × ${item.quantity} = ${(item.length * item.quantity).toFixed(2)}m`;
           const price = `£${item.calculatedPrice.toFixed(2)}`;
@@ -53,13 +53,13 @@ export async function POST(request: NextRequest) {
           return `• ${item.product.nameEn} (${item.product.dimensions}) — ${spec} — ${price} (${weight})`;
         }),
         '',
-        `<b>Підсумок</b>`,
-        `Підсумок: £${o.subtotal.toFixed(2)}`,
-        `Доставка: £${o.deliveryCost.toFixed(2)}`,
-        `Всього: £${o.total.toFixed(2)}`,
-        `Вага: ${o.totalWeight.toFixed(2)} kg`,
-        o.isWholesale ? 'Опт' : '',
-        o.notes ? `Примітка: ${o.notes}` : '',
+        '<b>Summary</b>',
+        `Subtotal: £${o.subtotal.toFixed(2)}`,
+        `Delivery: £${o.deliveryCost.toFixed(2)}`,
+        `Total: £${o.total.toFixed(2)}`,
+        `Weight: ${o.totalWeight.toFixed(2)} kg`,
+        o.isWholesale ? 'Wholesale' : '',
+        o.notes ? `Note: ${o.notes}` : '',
       ].filter(Boolean);
       sendTelegramMessage(lines.join('\n')).catch(() => {});
 

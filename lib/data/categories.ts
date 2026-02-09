@@ -113,3 +113,37 @@ export function deleteCustomCategory(id: string): void {
   const database = getDb();
   database.prepare('DELETE FROM custom_categories WHERE id = ?').run(id);
 }
+
+/** Delete all custom categories (for seed/replace scripts). */
+export function deleteAllCustomCategories(): void {
+  const database = getDb();
+  database.prepare('DELETE FROM custom_categories').run();
+}
+
+/** Delete all category overrides (for seed/replace scripts). */
+export function deleteAllCategoryOverrides(): void {
+  const database = getDb();
+  database.prepare('DELETE FROM category_overrides').run();
+}
+
+/** Insert a custom category by raw SQL (allows any id, including built-in ids). Use for full replace. */
+export function insertCustomCategoryRaw(data: {
+  id: string;
+  name: string;
+  nameEn: string;
+  description?: string | null;
+  image?: string | null;
+}): void {
+  const database = getDb();
+  database
+    .prepare(
+      `INSERT INTO custom_categories (id, name, name_en, description, image) VALUES (?, ?, ?, ?, ?)`
+    )
+    .run(
+      data.id,
+      data.name,
+      data.nameEn,
+      data.description ?? null,
+      data.image ?? null
+    );
+}

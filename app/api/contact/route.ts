@@ -41,10 +41,10 @@ export async function POST(request: NextRequest) {
       }
 
       const lines = [
-        '<b>📩 Заявка з форми контакту</b>',
-        `Ім'я: ${data.name}`,
-        `Телефон: ${data.phone}`,
-        `Що цікавить: ${data.interest}`,
+        '<b>📩 Contact form submission</b>',
+        `Name: ${data.name}`,
+        `Phone: ${data.phone}`,
+        `Interest: ${data.interest}`,
       ];
       sendTelegramMessage(lines.join('\n')).catch(() => {});
 
@@ -59,10 +59,10 @@ export async function POST(request: NextRequest) {
     } catch (error) {
       console.error('Bitrix24 error:', error);
       const lines = [
-        '<b>📩 Заявка з форми контакту</b>',
-        `Ім'я: ${data.name}`,
-        `Телефон: ${data.phone}`,
-        `Що цікавить: ${data.interest}`,
+        '<b>📩 Contact form submission</b>',
+        `Name: ${data.name}`,
+        `Phone: ${data.phone}`,
+        `Interest: ${data.interest}`,
       ];
       sendTelegramMessage(lines.join('\n')).catch(() => {});
       return NextResponse.json(

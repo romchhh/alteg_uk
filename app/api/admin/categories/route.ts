@@ -33,6 +33,19 @@ function getMergedList(): { id: string; name: string; nameEn: string; descriptio
 
 export async function GET() {
   try {
+    const custom = getCustomCategories();
+    if (custom.length > 0) {
+      return NextResponse.json(
+        custom.map((c) => ({
+          id: c.id,
+          name: c.name,
+          nameEn: c.name_en,
+          description: c.description ?? '',
+          image: c.image ?? '',
+          isCustom: true,
+        }))
+      );
+    }
     const categories = getMergedList();
     return NextResponse.json(categories);
   } catch (error) {

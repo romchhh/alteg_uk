@@ -3,10 +3,24 @@ import { PRODUCT_CATEGORIES } from '@/lib/constants/catalog';
 import { getCategoryOverrides, getCustomCategories } from '@/lib/data/categories';
 
 /**
- * Public API: returns categories (built-in with overrides + custom) for catalog, checkout, etc.
+ * Public API: returns categories for catalog, checkout, etc.
+ * If custom categories exist in DB, returns only those (full replace). Otherwise returns built-in + overrides + custom.
  */
 export async function GET() {
   try {
+    const custom = getCustomCategories();
+    if (custom.length > 0) {
+      return NextResponse.json(
+        custom.map((c) => ({
+          id: c.id,
+          name: c.name,
+          nameEn: c.name_en,
+          description: c.description ?? '',
+          image: c.image ?? '',
+        }))
+      );
+    }
+
     const overrides = getCategoryOverrides();
     const overrideMap = new Map(overrides.map((o) => [o.id, o]));
 
@@ -20,14 +34,7 @@ export async function GET() {
         image: ov?.image ?? val.image,
       };
     });
-    const custom = getCustomCategories().map((c) => ({
-      id: c.id,
-      name: c.name,
-      nameEn: c.name_en,
-      description: c.description ?? '',
-      image: c.image ?? '',
-    }));
-    return NextResponse.json([...builtIn, ...custom]);
+    return NextResponse.json([...builtIn]);
   } catch (error) {
     console.error('Error fetching categories:', error);
     return NextResponse.json(

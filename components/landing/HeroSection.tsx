@@ -15,7 +15,7 @@ interface HeroSectionProps {
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
-  heroTitle = 'ALTEG — ALUMINIUM PROFILES DIRECTLY FROM FACTORY',
+  heroTitle = 'ALTEG — Aluminium Directly from the Factory',
   heroSubtitle = 'Calculate costs and order online with UK delivery. Direct manufacturer prices.',
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -60,11 +60,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   return (
     <section className="relative min-h-[100vh] md:min-h-[90vh] lg:min-h-[85vh] flex items-center justify-center overflow-hidden mt-16 md:mt-20">
-      {/* Background Image */}
+      {/* Background Image - modern production facility */}
       <div className="absolute inset-0">
         <Image
           src="/hero.jpg"
-          alt="ALTEG Aluminium Profiles Factory Background"
+          alt="ALTEG production facility"
           fill
           className="object-cover"
           priority
@@ -74,6 +74,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="absolute inset-0 bg-black/40"></div>
         {/* Gradient overlay - darker at the bottom */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+        {/* Caption */}
+        <p className="absolute bottom-4 left-4 right-4 sm:left-6 sm:right-auto text-white/80 text-sm sm:text-base">
+          Our production
+        </p>
       </div>
 
       {/* Content Overlay - Grid Layout */}
@@ -174,24 +178,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {/* CTA Buttons Block - Centered */}
         <div className="w-full flex justify-center mt-8 lg:mt-12">
           <div className="flex flex-col gap-4 sm:gap-5 lg:gap-5 w-full max-w-2xl">
-            {/* Button 1: Free Cutting Service */}
+            {/* Button 1: Free metal cutting */}
             <Link href="/checkout" className="w-full">
               <button className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-3 sm:py-4 lg:py-4 xl:py-5 bg-[#050544] hover:bg-[#445DFE] text-white font-semibold text-base sm:text-lg lg:text-lg xl:text-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center rounded-none">
-                Order Now & Get Free Metal Cutting to Your Sizes
+                Order now and get free metal cutting to your sizes
               </button>
             </Link>
 
-            {/* Button 2: Individual Discount */}
+            {/* Button 2: Individual discount */}
             <Link href="#catalog" className="w-full">
               <button className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-3 sm:py-4 lg:py-4 xl:py-5 bg-white hover:bg-gray-100 text-[#050544] font-semibold text-base sm:text-lg lg:text-lg xl:text-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center rounded-none">
-                Order Now & Get Individual Discount
+                Order now and get an individual discount
               </button>
             </Link>
 
-            {/* Button 3: Wholesale Calculation */}
+            {/* Button 3: Wholesale quote */}
             <Link href="/wholesale" className="w-full">
               <button className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-3 sm:py-4 lg:py-4 xl:py-5 border-2 border-white hover:bg-white/10 text-white font-semibold text-base sm:text-lg lg:text-lg xl:text-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center rounded-none">
-                Wholesale Order — Get Quote
+                Wholesale order — get a quote
               </button>
             </Link>
           </div>

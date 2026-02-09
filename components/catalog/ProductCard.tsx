@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Product, ProductCategoryInfo } from '@/lib/types/product';
 import { Button } from '@/components/shared/Button';
 import { useCartStore } from '@/store/cart';
@@ -19,9 +20,11 @@ interface ProductCardProps {
 const MIN_CUSTOM_LENGTH = 0.1;
 const MAX_CUSTOM_LENGTH = 25;
 
+const DEFAULT_PRODUCT_IMAGE = '/production_1.jpg';
+
 export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo }) => {
+  const productImage = product.image || categoryInfo.image || DEFAULT_PRODUCT_IMAGE;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [isSuccessAlertOpen, setIsSuccessAlertOpen] = useState(false);
   const [length, setLength] = useState(product.standardLengths[0]);
   const [lengthInput, setLengthInput] = useState(product.standardLengths[0].toString());
@@ -126,11 +129,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
         {/* Product Image */}
         <div className="relative h-48 bg-gray-100">
           <Image
-            src={getUploadImageSrc(product.image || categoryInfo.image || "")}
+            src={getUploadImageSrc(productImage)}
             alt={product.nameEn}
             fill
             className="object-cover"
-            unoptimized={(product.image || categoryInfo.image || "").startsWith("/uploads") || (product.image || categoryInfo.image || "").startsWith("/api/uploads")}
+            unoptimized={productImage.startsWith("/uploads") || productImage.startsWith("/api/uploads")}
             sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
           {product.inStock && (
@@ -172,40 +175,38 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
           </div>
 
           {/* Buttons - Fifth Row */}
-          <div className="mt-auto flex gap-2">
-            <Button
-              onClick={() => setIsDetailModalOpen(true)}
-              variant="outline"
-              className="flex-1 border-[#445DFE] text-[#445DFE] hover:bg-[#445DFE] hover:text-white py-2 px-3 text-xs sm:text-sm transition-colors duration-300"
-            >
-              Learn More
-            </Button>
+          <div className="mt-auto flex flex-col gap-2">
             <Button
               onClick={() => setIsModalOpen(true)}
               variant="primary"
-              className="flex-1 bg-[#445DFE] hover:bg-[#050544] text-white py-2 px-3 text-xs sm:text-sm transition-colors duration-300"
+              className="w-full bg-[#445DFE] hover:bg-[#050544] text-white py-2 px-3 text-xs sm:text-sm transition-colors duration-300"
             >
-              Add to Cart
+              Add to Order
             </Button>
+            <Link
+              href="/wholesale"
+              className="flex flex-1 flex-col items-center justify-center rounded-lg border-2 border-[#445DFE] py-2 px-3 text-center text-xs sm:text-sm text-[#445DFE] transition-colors duration-300 hover:bg-[#445DFE] hover:text-white"
+            >
+              <span>Request wholesale price</span>
+              <span className="mt-0.5 block text-[10px] sm:text-xs opacity-90">(Available for orders 500kg+)</span>
+            </Link>
           </div>
         </div>
       </div>
 
-      {/* Add to Cart Modal */}
+      {/* Add to Order Modal */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className="p-6">
-          {(product.image || categoryInfo.image) && (
-            <div className="relative w-full aspect-square max-h-56 sm:max-h-72 overflow-hidden bg-gray-100 mb-4">
-              <Image
-                src={getUploadImageSrc(product.image || categoryInfo.image || '')}
-                alt={product.nameEn}
-                fill
-                className="object-cover"
-                unoptimized={(product.image || categoryInfo.image || "").startsWith("/uploads") || (product.image || categoryInfo.image || "").startsWith("/api/uploads")}
-                sizes="(max-width: 640px) 100vw, 512px"
-              />
-            </div>
-          )}
+          <div className="relative w-full aspect-square max-h-56 sm:max-h-72 overflow-hidden bg-gray-100 mb-4">
+            <Image
+              src={getUploadImageSrc(productImage)}
+              alt={product.nameEn}
+              fill
+              className="object-cover"
+              unoptimized={productImage.startsWith("/uploads") || productImage.startsWith("/api/uploads")}
+              sizes="(max-width: 640px) 100vw, 512px"
+            />
+          </div>
           <h2 className="text-2xl font-bold text-[#050544] mb-4">{product.nameEn}</h2>
           <p className="text-gray-900 mb-6">{product.dimensions}</p>
 
@@ -342,107 +343,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
                 variant="primary"
                 className="flex-1 bg-[#445DFE] hover:bg-[#050544] text-white"
               >
-                Add to Cart
+                Add to Order
               </Button>
             </div>
-          </div>
-        </div>
-      </Modal>
-
-      {/* Detail Modal - Full Product Information */}
-      <Modal isOpen={isDetailModalOpen} onClose={() => setIsDetailModalOpen(false)} size="lg">
-        <div className="space-y-4 sm:space-y-6">
-          {(product.image || categoryInfo.image) && (
-            <div className="relative w-full aspect-square max-h-56 sm:max-h-72 overflow-hidden bg-gray-100 mb-4">
-              <Image
-                src={getUploadImageSrc(product.image || categoryInfo.image || '')}
-                alt={product.nameEn}
-                fill
-                className="object-cover"
-                unoptimized={(product.image || categoryInfo.image || "").startsWith("/uploads") || (product.image || categoryInfo.image || "").startsWith("/api/uploads")}
-                sizes="(max-width: 640px) 100vw, 576px"
-              />
-            </div>
-          )}
-          <h2 className="text-xl sm:text-2xl font-bold text-[#050544]">{product.nameEn}</h2>
-          <p className="text-base sm:text-lg text-gray-900 font-semibold">{product.dimensions}</p>
-
-          {/* Full Description */}
-          <div>
-            <h3 className="text-base sm:text-lg font-semibold text-[#050544] mb-2">Description</h3>
-            <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
-              {product.descriptionEn || categoryInfo.descriptionEn}
-            </p>
-          </div>
-
-          {/* Full Specifications */}
-          <div>
-            <h3 className="text-base sm:text-lg font-semibold text-[#050544] mb-2">Specifications</h3>
-            <div className="space-y-2">
-              <p className="text-sm sm:text-base text-gray-700">
-                <strong>Material:</strong> {product.material}
-              </p>
-              <p className="text-sm sm:text-base text-gray-700">
-                <strong>Weight:</strong> {product.weightPerMeter} kg/m
-              </p>
-              <p className="text-sm sm:text-base text-gray-700">
-                <strong>Standard Lengths:</strong> {product.standardLengths.join(', ')}m
-              </p>
-              {product.finish && (
-                <p className="text-sm sm:text-base text-gray-700">
-                  <strong>Finish:</strong> {product.finish}
-                </p>
-              )}
-            </div>
-          </div>
-
-          {/* Full Applications */}
-          {categoryInfo.applicationsEn && categoryInfo.applicationsEn.length > 0 && (
-            <div>
-              <h3 className="text-base sm:text-lg font-semibold text-[#050544] mb-2">Applications</h3>
-              <div className="flex flex-wrap gap-2">
-                {categoryInfo.applicationsEn.map((app, index) => (
-                  <span
-                    key={index}
-                    className="text-xs sm:text-sm bg-[#E9EDF4] text-[#050544] px-2 sm:px-3 py-1 rounded"
-                  >
-                    {app}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Price */}
-          <div className="p-4 bg-[#E9EDF4] rounded-lg">
-            <p className="text-base sm:text-lg text-gray-700 mb-1">
-              Price:
-            </p>
-            <p className="text-xl sm:text-2xl font-bold text-[#445DFE]">
-              £{(pricePerMeter ?? product.pricePerKg ?? 0).toFixed(2)}
-              {pricePerMeter != null ? '/m' : '/kg'}
-            </p>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 pt-2">
-            <Button
-              onClick={() => setIsDetailModalOpen(false)}
-              variant="outline"
-              className="flex-1 border-gray-300 text-gray-900 hover:bg-gray-100"
-            >
-              Close
-            </Button>
-            <Button
-              onClick={() => {
-                setIsDetailModalOpen(false);
-                setIsModalOpen(true);
-              }}
-              variant="primary"
-              className="flex-1 bg-[#445DFE] hover:bg-[#050544] text-white"
-            >
-              Add to Cart
-            </Button>
           </div>
         </div>
       </Modal>

@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
 
     if (!validUser || !validPass) {
       return NextResponse.json(
-        { message: "Сервер не налаштовано. Встановіть ADMIN_USER та ADMIN_PASS у .env" },
+        { message: "Server not configured. Set ADMIN_USER and ADMIN_PASS in .env" },
         { status: 500 }
       );
     }
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
-        maxAge: 60 * 60 * 24 * 7, // 7 днів
+        maxAge: 60 * 60 * 24 * 7, // 7 days
         path: "/",
       });
 
@@ -32,12 +32,12 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { message: "Невірний логін або пароль" },
+      { message: "Invalid username or password" },
       { status: 401 }
     );
   } catch {
     return NextResponse.json(
-      { message: "Помилка сервера" },
+      { message: "Server error" },
       { status: 500 }
     );
   }

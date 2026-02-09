@@ -28,13 +28,13 @@ export async function POST(request: NextRequest) {
     if (result.success) {
       const q = quoteData;
       const lines = [
-        '<b>📋 Запит на розрахунок (quote)</b>',
-        `Клієнт: ${q.customer.name}`,
-        `Телефон: ${q.customer.phone}`,
+        '<b>📋 Quote request</b>',
+        `Customer: ${q.customer.name}`,
+        `Phone: ${q.customer.phone}`,
         `Email: ${q.customer.email}`,
-        `Вага: ${q.totalWeight} kg`,
-        q.estimatedTotal != null ? `Орієнтовна сума: £${q.estimatedTotal.toFixed(2)}` : '',
-        q.notes ? `Примітка: ${q.notes}` : '',
+        `Weight: ${q.totalWeight} kg`,
+        q.estimatedTotal != null ? `Estimated total: £${q.estimatedTotal.toFixed(2)}` : '',
+        q.notes ? `Note: ${q.notes}` : '',
       ].filter(Boolean);
       sendTelegramMessage(lines.join('\n')).catch(() => {});
 

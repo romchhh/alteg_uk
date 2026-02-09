@@ -24,11 +24,13 @@ export default async function HomePage() {
         heroSubtitle={homepageSettings.heroSubtitle}
       />
       
-      {/* Block 2: Features (Dark section with 4 features) */}
+      {/* Block 2: Features (Dark section with 4 features) - commented out
       <FeaturesSection />
+      */}
       
-      {/* Block 2.1: Description Section (About ALTEG) */}
+      {/* Block 2.1: Description Section (About ALTEG) - commented out
       <DescriptionSection />
+      */}
       
       {/* Block 2.2: Interactive Calculator and Order Builder */}
       <OrderCalculator />

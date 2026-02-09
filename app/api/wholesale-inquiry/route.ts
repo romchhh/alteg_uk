@@ -43,15 +43,15 @@ export async function POST(request: NextRequest) {
       }
 
       const lines = [
-        '<b>🏢 Заявка оптом (wholesale)</b>',
-        `Компанія: ${data.company}`,
-        `Контакт: ${data.contactName}`,
+        '<b>🏢 Wholesale inquiry</b>',
+        `Company: ${data.company}`,
+        `Contact: ${data.contactName}`,
         `Email: ${data.email}`,
-        `Телефон: ${data.phone}`,
-        data.annualVolume ? `Обʼєм/рік: ${data.annualVolume}` : '',
-        data.productInterests?.length ? `Продукція: ${data.productInterests.join(', ')}` : '',
-        data.message ? `Повідомлення: ${data.message}` : '',
-        data.attachmentUrl ? `Файл: ${data.attachmentUrl}` : '',
+        `Phone: ${data.phone}`,
+        data.annualVolume ? `Annual volume: ${data.annualVolume}` : '',
+        data.productInterests?.length ? `Products: ${data.productInterests.join(', ')}` : '',
+        data.message ? `Message: ${data.message}` : '',
+        data.attachmentUrl ? `Attachment: ${data.attachmentUrl}` : '',
       ].filter(Boolean);
       sendTelegramMessage(lines.join('\n')).catch(() => {});
 
@@ -66,15 +66,15 @@ export async function POST(request: NextRequest) {
     } catch (error) {
       console.error('Bitrix24 error:', error);
       const lines = [
-        '<b>🏢 Заявка оптом (wholesale)</b>',
-        `Компанія: ${data.company}`,
-        `Контакт: ${data.contactName}`,
+        '<b>🏢 Wholesale inquiry</b>',
+        `Company: ${data.company}`,
+        `Contact: ${data.contactName}`,
         `Email: ${data.email}`,
-        `Телефон: ${data.phone}`,
-        data.annualVolume ? `Обʼєм/рік: ${data.annualVolume}` : '',
-        data.productInterests?.length ? `Продукція: ${data.productInterests.join(', ')}` : '',
-        data.message ? `Повідомлення: ${data.message}` : '',
-        data.attachmentUrl ? `Файл: ${data.attachmentUrl}` : '',
+        `Phone: ${data.phone}`,
+        data.annualVolume ? `Annual volume: ${data.annualVolume}` : '',
+        data.productInterests?.length ? `Products: ${data.productInterests.join(', ')}` : '',
+        data.message ? `Message: ${data.message}` : '',
+        data.attachmentUrl ? `Attachment: ${data.attachmentUrl}` : '',
       ].filter(Boolean);
       sendTelegramMessage(lines.join('\n')).catch(() => {});
       return NextResponse.json(

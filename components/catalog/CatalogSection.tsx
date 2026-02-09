@@ -6,6 +6,7 @@ import { PRODUCT_CATEGORIES, CATALOG_PRODUCTS } from '@/lib/constants/catalog';
 import { Product, ProductCategory, ProductCategoryInfo } from '@/lib/types/product';
 import { Button } from '@/components/shared/Button';
 import { useContactModalStore } from '@/store/contactModal';
+import { getUploadImageSrc } from '@/lib/utils/image';
 
 const INITIAL_PRODUCTS = 20; // 5 rows on desktop (4 columns x 5 rows = 20 products)
 const PRODUCTS_PER_PAGE = 20; // Load 20 more products each time (5 more rows)
@@ -143,26 +144,27 @@ export const CatalogSection: React.FC = () => {
             </span>
           </div>
 
-          <div className="overflow-x-auto scrollbar-hide px-4 sm:px-0 py-3">
+          <div className="overflow-x-auto scrollbar-hide px-4 sm:px-0 py-3 snap-x snap-mandatory">
             <div className="flex gap-3 sm:gap-4">
               {/* All Products Category */}
               <button
                 onClick={() => setSelectedCategory('all')}
-                className={`flex-shrink-0 relative h-36 w-52 rounded-lg overflow-hidden group transition-all duration-300 border-2 ${
+                className={`flex-shrink-0 snap-center flex flex-col h-36 w-[calc((100vw-3.5rem)/3)] sm:w-52 rounded-lg overflow-hidden group transition-all duration-300 border-2 ${
                   selectedCategory === 'all'
                     ? 'border-[#445DFE] shadow-lg scale-105'
                     : 'border-transparent shadow-md hover:shadow-lg'
                 }`}
               >
-                <div
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-110"
-                  style={{
-                    backgroundImage: 'url(https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=800&q=80)',
-                  }}
-                />
-                <div className="absolute inset-0 bg-black/40" />
-                <div className="absolute inset-0 flex items-center justify-center p-3">
-                  <h3 className="text-white font-bold text-center text-sm sm:text-base leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+                <div className="relative flex-1 min-h-0 overflow-hidden">
+                  <div
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-110"
+                    style={{
+                      backgroundImage: `url(${getUploadImageSrc('/production_1.jpg')})`,
+                    }}
+                  />
+                </div>
+                <div className="bg-[#050544] px-3 py-2 flex items-center justify-center min-h-[2.75rem]">
+                  <h3 className="text-white font-bold text-center text-sm sm:text-base leading-tight">
                     All Products
                   </h3>
                 </div>
@@ -173,21 +175,22 @@ export const CatalogSection: React.FC = () => {
                 <button
                   key={key}
                   onClick={() => setSelectedCategory(key)}
-                  className={`flex-shrink-0 relative h-36 w-52 rounded-lg overflow-hidden group transition-all duration-300 border-2 ${
+                  className={`flex-shrink-0 snap-center flex flex-col h-36 w-[calc((100vw-3.5rem)/3)] sm:w-52 rounded-lg overflow-hidden group transition-all duration-300 border-2 ${
                     selectedCategory === key
                       ? 'border-[#445DFE] shadow-lg scale-105'
                       : 'border-transparent shadow-md hover:shadow-lg'
                   }`}
                 >
-                  <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-110"
-                    style={{
-                      backgroundImage: `url(${info.image})`,
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-black/40" />
-                  <div className="absolute inset-0 flex items-center justify-center p-3">
-                    <h3 className="text-white font-bold text-center text-sm sm:text-base leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+                  <div className="relative flex-1 min-h-0 overflow-hidden">
+                    <div
+                      className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-110"
+                      style={{
+                        backgroundImage: `url(${getUploadImageSrc(info.image || '/production_1.jpg')})`,
+                      }}
+                    />
+                  </div>
+                  <div className="bg-[#050544] px-3 py-2 flex items-center justify-center min-h-[2.75rem]">
+                    <h3 className="text-white font-bold text-center text-sm sm:text-base leading-tight">
                       {info.nameEn}
                     </h3>
                   </div>
@@ -205,6 +208,15 @@ export const CatalogSection: React.FC = () => {
               Scroll horizontally to see all categories
             </span>
           </div>
+
+          {/* Selected category description */}
+          {selectedCategory !== 'all' && categoriesMap?.[selectedCategory]?.descriptionEn && (
+            <div className="mt-4 p-4 bg-[#E9EDF4] rounded-lg border border-[#050544]/10">
+              <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+                {categoriesMap[selectedCategory].descriptionEn}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Products Grid - 2 columns on mobile, 2 on small tablets, 3 on tablets, 4 on desktop */}
@@ -213,7 +225,11 @@ export const CatalogSection: React.FC = () => {
             <ProductCard
               key={product.id}
               product={product}
-              categoryInfo={(categoriesMap ?? (PRODUCT_CATEGORIES as Record<string, ProductCategoryInfo>))[product.category] ?? (PRODUCT_CATEGORIES as Record<string, ProductCategoryInfo>)[product.category] ?? { name: '', nameEn: product.category, description: '', descriptionEn: '', specifications: '', specificationsEn: '', applications: [], applicationsEn: [], image: '' }}
+              categoryInfo={(() => {
+                const cat = (categoriesMap ?? (PRODUCT_CATEGORIES as Record<string, ProductCategoryInfo>))[product.category] ?? (PRODUCT_CATEGORIES as Record<string, ProductCategoryInfo>)[product.category] ?? { name: '', nameEn: product.category, description: '', descriptionEn: '', specifications: '', specificationsEn: '', applications: [], applicationsEn: [], image: '' };
+                const categoryImage = (PRODUCT_CATEGORIES as Record<string, { image?: string }>)[product.category]?.image;
+                return { ...cat, image: cat.image || categoryImage || '' };
+              })()}
             />
           ))}
         </div>

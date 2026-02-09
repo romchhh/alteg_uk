@@ -113,7 +113,7 @@ export default function WholesalePage() {
       <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-white to-[#E9EDF4]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto space-y-14">
-            {/* Discount table — та сама ширина, що й блок форми */}
+            {/* Discount table — same width as form block */}
             <div className="overflow-hidden rounded-2xl border-2 border-gray-100 bg-white shadow-lg transition-all duration-300 hover:border-[#445DFE]/30 hover:shadow-xl">
               <div className="px-8 sm:px-10 md:px-12 py-6 sm:py-8 border-b border-gray-100 bg-gradient-to-r from-[#050544] to-[#445DFE]">
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white uppercase tracking-wide">

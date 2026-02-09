@@ -36,19 +36,18 @@ export default function EditCategoryPage() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch("/api/admin/categories");
-        if (!res.ok) throw new Error("Failed to fetch");
-        const list: CategoryDisplay[] = await res.json();
-        const cat = list.find((c) => c.id === id);
-        if (!cat) {
-          setError("Category not found");
+        const res = await fetch(`/api/admin/categories/${id}`);
+        if (!res.ok) {
+          if (res.status === 404) setError("Category not found");
+          else setError("Failed to fetch");
           setFetchLoading(false);
           return;
         }
+        const cat: CategoryDisplay = await res.json();
         setName(cat.name || "");
         setNameEn(cat.nameEn || "");
         setDescription(cat.description || "");
-        setImage(cat.image || "");
+        setImage(cat.image ?? "");
       } catch {
         setError("Failed to load category");
       } finally {
@@ -72,11 +71,13 @@ export default function EditCategoryPage() {
           name: name || undefined,
           nameEn: nameEn || undefined,
           description: description || undefined,
-          image: image || undefined,
+          image: image.trim() || undefined,
         }),
       });
 
       if (!res.ok) throw new Error("Failed to save");
+      const updated: CategoryDisplay = await res.json();
+      setImage(updated.image ?? "");
       setSuccess("Changes saved");
       toast.show("Changes saved", "success");
     } catch {
