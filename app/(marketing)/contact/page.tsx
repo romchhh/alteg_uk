@@ -156,8 +156,7 @@ export default function ContactPage() {
                     <MapPinIcon className="w-6 h-6 text-gray-700 flex-shrink-0 mt-0.5" />
                     <div>
                       <h3 className="text-lg font-semibold text-[#050544] mb-1">Warehouse & Office</h3>
-                      <a href={siteConfig.links.mapUrl} target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-[#445DFE] transition-colors text-base block">
-                        ALTEG UK LTD<br />
+                      <a href={siteConfig.links.mapUrl} target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-[#445DFE] transition-colors text-base block whitespace-pre-line">
                         {siteConfig.links.address}
                       </a>
                       <p className="text-sm text-gray-500 mt-0.5">
@@ -278,7 +277,7 @@ export default function ContactPage() {
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="ALTEG UK - Bridge Rd, Wick, Littlehampton"
+                  title="ALTEG UK - Unit A3, Riverside Industrial Estate, Littlehampton"
                 />
               </div>
               <p className="text-center text-gray-600 mt-4 text-sm">

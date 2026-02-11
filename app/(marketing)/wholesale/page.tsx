@@ -177,7 +177,7 @@ export default function WholesalePage() {
                   <li><strong className="text-[#050544]">Order lead time:</strong> 1–14 days, depending on order complexity.</li>
                   <li><strong className="text-[#050544]">B2B payment terms:</strong> 100% advance payment; alternatively, 50% before shipment and 50% after delivery.</li>
                   <li><strong className="text-[#050544]">Packaging:</strong> Standard.</li>
-                  <li><strong className="text-[#050544]">Delivery / warehouse address:</strong> {siteConfig.links.address}</li>
+                  <li><strong className="text-[#050544]">Delivery / warehouse address:</strong> <span className="whitespace-pre-line">{siteConfig.links.address}</span></li>
                 </ul>
               </div>
             </div>

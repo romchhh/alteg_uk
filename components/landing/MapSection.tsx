@@ -17,7 +17,7 @@ export const MapSection: React.FC = () => {
             allowFullScreen
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            title="ALTEG UK - Bridge Rd, Wick, Littlehampton"
+            title="ALTEG UK - Unit A3, Riverside Industrial Estate, Littlehampton"
           />
         </div>
         <p className="text-center text-gray-600 mt-4 text-sm">
@@ -30,7 +30,7 @@ export const MapSection: React.FC = () => {
             Open in Google Maps
           </a>
           {' — '}
-          {siteConfig.links.address}
+          <span className="whitespace-pre-line">{siteConfig.links.address}</span>
         </p>
       </div>
     </section>

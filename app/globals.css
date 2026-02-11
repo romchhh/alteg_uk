@@ -84,6 +84,24 @@ body {
   0% {
     transform: translateX(0);
   }
+  15% {
+    transform: translateX(-10%);
+  }
+  30% {
+    transform: translateX(-25%);
+  }
+  45% {
+    transform: translateX(-35%);
+  }
+  60% {
+    transform: translateX(-42%);
+  }
+  75% {
+    transform: translateX(-47%);
+  }
+  90% {
+    transform: translateX(-49%);
+  }
   100% {
     transform: translateX(-50%);
   }
@@ -94,7 +112,7 @@ body {
 }
 
 .animate-marquee {
-  animation: marquee-left 25s linear infinite;
+  animation: marquee-left 35s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
