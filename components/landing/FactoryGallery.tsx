@@ -26,6 +26,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
   { src: '/gallery/DSC04928.jpg', alt: 'ALTEG factory', type: 'image' },
   { src: '/gallery/DSC04960.jpg', alt: 'ALTEG production', type: 'image' },
   { src: '/gallery/FILE%202026-02-11%2011_38_28.webm', alt: 'ALTEG factory video', type: 'video' },
+  { src: '/gallery/DSC04586.jpg', alt: 'ALTEG production facility', type: 'image' },
 ];
 
 // Bento-style layout for first 10 images only
@@ -153,15 +154,22 @@ export const FactoryGallery: React.FC = () => {
           </div>
 
           {/* Remaining items: one row on desktop (4 cols), two rows of 2 on mobile */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mt-2 sm:mt-3 md:mt-4 auto-rows-[120px] sm:auto-rows-[140px] md:auto-rows-[160px] lg:auto-rows-[180px]">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mt-2 sm:mt-3 md:mt-4 mb-20 sm:mb-16 md:mb-16 lg:mb-0 auto-rows-[120px] sm:auto-rows-[140px] md:auto-rows-[160px] lg:auto-rows-[180px]">
             {GALLERY_ITEMS.slice(BENTO_COUNT).map((item, i) => {
               const index = BENTO_COUNT + i;
+              // DSC04586.jpg: hidden on mobile, visible on desktop
+              const isDSC04586 = item.src.includes('DSC04586');
+              // Video and DSC04586.jpg: full width on mobile (col-span-2), half width + double height on desktop (col-span-2 row-span-2)
+              const isLargeItem = item.type === 'video' || isDSC04586;
+              const videoSpan = isLargeItem ? 'col-span-2 lg:row-span-2' : '';
+              // Video height: larger on mobile, double on desktop. DSC04586.jpg: only on desktop
+              const videoHeight = item.type === 'video' ? 'min-h-[240px] sm:min-h-[280px] md:min-h-[320px] lg:min-h-[360px]' : isDSC04586 ? 'min-h-0 lg:min-h-[360px]' : 'min-h-[120px] sm:min-h-[140px] md:min-h-[160px] lg:min-h-[180px]';
               return (
                 <button
                   key={item.src}
                   type="button"
                   onClick={() => openLightbox(index)}
-                  className="relative overflow-hidden group min-h-[120px] sm:min-h-[140px] md:min-h-[160px] lg:min-h-[180px] bg-black"
+                  className={`relative overflow-hidden group ${videoHeight} bg-black ${videoSpan} ${isDSC04586 ? 'hidden lg:block' : ''}`}
                   aria-label={`View ${item.alt}`}
                 >
                   {item.type === 'video' ? (

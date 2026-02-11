@@ -23,9 +23,15 @@ const MAX_CUSTOM_LENGTH = 25;
 const DEFAULT_PRODUCT_IMAGE = '/production_1.jpg';
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo }) => {
-  const rawImage = product.image || categoryInfo.image;
-  const productImage = isServerUploadUrl(rawImage) ? rawImage : '';
-  const displaySrc = getUploadImageSrc(productImage) || DEFAULT_PRODUCT_IMAGE;
+  // Try product image first (if it's a server upload), then category image (if it's a server upload), then default
+  let rawImage: string | null = null;
+  if (product.image && isServerUploadUrl(product.image)) {
+    rawImage = product.image;
+  } else if (categoryInfo.image && isServerUploadUrl(categoryInfo.image)) {
+    rawImage = categoryInfo.image;
+  }
+  // Use direct /uploads/ path for Next.js Image optimization (auto WebP conversion)
+  const displaySrc = rawImage ? getUploadImageSrc(rawImage, true) : DEFAULT_PRODUCT_IMAGE;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuccessAlertOpen, setIsSuccessAlertOpen] = useState(false);
   const [length, setLength] = useState(product.standardLengths[0]);
@@ -135,8 +141,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
             alt={product.nameEn}
             fill
             className="object-cover"
-            unoptimized={displaySrc.startsWith("/api/uploads")}
             sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            priority={false}
           />
           {product.inStock && (
             <div className="absolute top-2 right-2 bg-white/95 backdrop-blur-sm text-emerald-700 text-xs font-semibold px-2.5 py-1 rounded-md shadow-sm border border-emerald-200/80">
@@ -205,7 +211,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryInfo 
               alt={product.nameEn}
               fill
               className="object-cover"
-              unoptimized={displaySrc.startsWith("/api/uploads")}
               sizes="(max-width: 640px) 100vw, 512px"
             />
           </div>

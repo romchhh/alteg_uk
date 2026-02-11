@@ -60,9 +60,16 @@ export function middleware(request: NextRequest) {
     }
   }
 
+  // Cache static images from /uploads/ directory
+  if (pathname.startsWith("/uploads/") && /\.(jpg|jpeg|png|webp|gif)$/i.test(pathname)) {
+    const response = NextResponse.next();
+    response.headers.set("Cache-Control", "public, max-age=31536000, immutable, stale-while-revalidate=86400");
+    return response;
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  matcher: ["/admin/:path*", "/api/admin/:path*", "/uploads/:path*"],
 };

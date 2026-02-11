@@ -62,9 +62,6 @@ export default async function HomePage() {
 
       {/* Block 8: Find Us on the Map (above footer) */}
       <MapSection />
-
-      {/* Shopping Cart */}
-      <ShoppingCart />
     </main>
   );
 }

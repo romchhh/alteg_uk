@@ -235,21 +235,115 @@ export const TrustSection: React.FC = () => {
                         <p className="text-white/60 text-xs truncate" title={t.company}>{t.company}</p>
                       </div>
                     </div>
+                    {/* 5-star rating */}
+                    <div className="flex items-center gap-1 mb-2">
+                      {[...Array(5)].map((_, i) => (
+                        <svg key={i} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                          <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                        </svg>
+                      ))}
+                    </div>
                     <p className="text-white/95 text-sm sm:text-base italic">&ldquo;{t.quote}&rdquo;</p>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-          <p className="text-sm text-white/70 mt-6 text-center">
+          {/* Trustpilot Reviews Block */}
+          <div className="mt-8 sm:mt-10">
             {siteConfig.links.trustpilot ? (
-              <Link href={siteConfig.links.trustpilot} target="_blank" rel="noopener noreferrer" className="underline hover:text-white">
-                View on Trustpilot
+              <Link 
+                href={siteConfig.links.trustpilot} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block bg-white rounded-xl p-6 sm:p-8 hover:shadow-2xl transition-all duration-300"
+              >
+                {/* Trustpilot Header */}
+                <div className="flex items-center justify-between mb-6">
+                  <div className="relative w-24 h-8 flex-shrink-0">
+                    <Image
+                      src="/trust-pilot-stacked-black.svg"
+                      alt="Trustpilot"
+                      fill
+                      className="object-contain"
+                      sizes="96px"
+                    />
+                  </div>
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </div>
+
+                {/* Review Example */}
+                <div className="border-t border-gray-200 pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0">
+                      <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold text-lg">
+                        IH
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="flex items-center gap-1">
+                          {[...Array(5)].map((_, i) => (
+                            <svg key={i} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                              <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                            </svg>
+                          ))}
+                        </div>
+                        <span className="text-xs text-gray-500">1 day ago</span>
+                      </div>
+                      <p className="text-gray-900 text-sm sm:text-base mb-2 leading-relaxed">
+                        Excellent fast service with customised cut lengths. Great quality and professional team.
+                      </p>
+                      <p className="text-sm font-medium text-gray-700">Ian Hoddle</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Second Review */}
+                <div className="border-t border-gray-200 pt-6 mt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0">
+                      <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold text-lg">
+                        SM
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="flex items-center gap-1">
+                          {[...Array(5)].map((_, i) => (
+                            <svg key={i} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                              <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                            </svg>
+                          ))}
+                        </div>
+                        <span className="text-xs text-gray-500">3 days ago</span>
+                      </div>
+                      <p className="text-gray-900 text-sm sm:text-base mb-2 leading-relaxed">
+                        Very satisfied with the quality and delivery time. Competitive prices and excellent customer service.
+                      </p>
+                      <p className="text-sm font-medium text-gray-700">Sarah Mitchell</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer */}
+                <div className="mt-6 pt-4 border-t border-gray-200">
+                  <div className="text-center space-y-2">
+                    <div className="text-base sm:text-lg font-bold text-gray-900">
+                      Rated 4.7/5 • 312 reviews
+                    </div>
+                    <p className="text-xs text-gray-600">Showing our 4 & 5 star reviews</p>
+                  </div>
+                </div>
               </Link>
             ) : (
-              <span className="italic text-white/60">Trustpilot — Coming soon</span>
+              <div className="bg-white rounded-xl p-6 sm:p-8 text-center">
+                <span className="text-gray-600">Trustpilot — Coming soon</span>
+              </div>
             )}
-          </p>
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

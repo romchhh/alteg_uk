@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { metadata as siteMetadata } from "@/config/site";
+import { ShoppingCart } from "@/components/cart/ShoppingCart";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -26,6 +27,8 @@ export default function RootLayout({
         className={`${montserrat.variable} font-sans antialiased`}
       >
         {children}
+        {/* WhatsApp button - visible on all pages */}
+        <ShoppingCart />
       </body>
     </html>
   );

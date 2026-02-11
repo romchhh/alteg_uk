@@ -7,7 +7,7 @@ import { Product, ProductCategory } from '@/lib/types/product';
 import { CATALOG_PRODUCTS, PRODUCT_CATEGORIES } from '@/lib/constants/catalog';
 import { useCartStore } from '@/store/cart';
 import { calculateOrder, getPricePerMeter } from '@/lib/utils/calculations';
-import { getUploadImageSrc } from '@/lib/utils/image';
+import { getUploadImageSrc, isServerUploadUrl } from '@/lib/utils/image';
 import { Button } from '@/components/shared/Button';
 import { Modal } from '@/components/shared/Modal';
 import { SuccessAlert } from '@/components/shared/SuccessAlert';
@@ -75,10 +75,10 @@ export const OrderCalculator: React.FC = () => {
 
   const getCategoryImage = (categoryKey: string): string => {
     const fromApi = categoriesMap[categoryKey]?.image;
-    if (fromApi) return fromApi;
+    if (fromApi && isServerUploadUrl(fromApi)) return fromApi;
     const fromCatalog = (PRODUCT_CATEGORIES as Record<string, { image?: string }>)[categoryKey]?.image;
-    if (fromCatalog) return fromCatalog;
-    return '/production_1.jpg';
+    if (fromCatalog && isServerUploadUrl(fromCatalog)) return fromCatalog;
+    return '';
   };
 
   const getCategoryName = (categoryKey: string): string => {
@@ -89,9 +89,19 @@ export const OrderCalculator: React.FC = () => {
     return categoriesMap[categoryKey]?.description ?? (PRODUCT_CATEGORIES as Record<string, { descriptionEn?: string }>)[categoryKey]?.descriptionEn ?? '';
   };
 
-  /** Product image, or category image when product has none */
+  /** Product image, or category image when product has none (only server uploads) */
   const getProductImage = (product: Product): string => {
-    return product.image || getCategoryImage(product.category || '');
+    // Try product image if it's a server upload
+    if (product.image && isServerUploadUrl(product.image)) {
+      return product.image;
+    }
+    // Fallback to category image if it's a server upload
+    const catImage = getCategoryImage(product.category || '');
+    if (catImage) {
+      return catImage;
+    }
+    // Default fallback
+    return '/production_1.jpg';
   };
 
   useEffect(() => {
@@ -323,13 +333,12 @@ export const OrderCalculator: React.FC = () => {
                       <div className="relative flex-1 min-h-0 overflow-hidden">
                         <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-110">
                           <Image
-                            src={getUploadImageSrc(getCategoryImage(key))}
+                            src={getCategoryImage(key) ? getUploadImageSrc(getCategoryImage(key), true) : '/production_1.jpg'}
                             alt={`${getCategoryName(key)} background`}
                             fill
                             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                             quality={92}
                             className="object-cover"
-                            unoptimized={getCategoryImage(key).startsWith("/uploads") || getCategoryImage(key).startsWith("/api/uploads")}
                           />
                         </div>
                       </div>
@@ -366,12 +375,14 @@ export const OrderCalculator: React.FC = () => {
                         <>
                           <span className="relative w-10 h-10 shrink-0 rounded overflow-hidden bg-gray-100">
                             <Image
-                              src={getUploadImageSrc(getProductImage(selectedProduct))}
+                              src={(() => {
+                                const img = getProductImage(selectedProduct);
+                                return isServerUploadUrl(img) ? getUploadImageSrc(img, true) : img;
+                              })()}
                               alt=""
                               fill
                               className="object-cover"
                               sizes="40px"
-                              unoptimized={getProductImage(selectedProduct).startsWith("/uploads") || getProductImage(selectedProduct).startsWith("/api/uploads")}
                             />
                           </span>
                           <span className="flex-1 min-w-0 truncate">
@@ -398,6 +409,7 @@ export const OrderCalculator: React.FC = () => {
                           availableProducts.map((product) => {
                             const ppm = getPricePerMeter(product);
                             const img = getProductImage(product);
+                            const imgSrc = isServerUploadUrl(img) ? getUploadImageSrc(img, true) : img;
                             return (
                               <li key={product.id}>
                                 <button
@@ -412,12 +424,11 @@ export const OrderCalculator: React.FC = () => {
                                 >
                                   <span className="relative w-12 h-12 shrink-0 rounded overflow-hidden bg-gray-100">
                                     <Image
-                                      src={getUploadImageSrc(img)}
+                                      src={imgSrc}
                                       alt=""
                                       fill
                                       className="object-cover"
                                       sizes="48px"
-                                      unoptimized={img.startsWith("/uploads") || img.startsWith("/api/uploads")}
                                     />
                                   </span>
                                   <span className="flex-1 min-w-0">

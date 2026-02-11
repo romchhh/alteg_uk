@@ -121,7 +121,7 @@ export default function CheckoutPage() {
                           <div className="flex items-center gap-3">
                             {productImage ? (
                               <div className="relative w-11 h-11 rounded-lg overflow-hidden bg-gray-100 shrink-0">
-                                <Image src={getUploadImageSrc(productImage)} alt={item.productName} fill className="object-cover" sizes="44px" unoptimized={productImage.startsWith("/uploads") || productImage.startsWith("/api/uploads")} />
+                                <Image src={getUploadImageSrc(productImage, true)} alt={item.productName} fill className="object-cover" sizes="44px" />
                               </div>
                             ) : (
                               <div className="w-11 h-11 rounded-lg bg-gray-200 shrink-0 flex items-center justify-center text-gray-400">
@@ -226,7 +226,7 @@ export default function CheckoutPage() {
                 {items.map((item) => {
                   const categoryImage = categoriesMap?.[item.product.category]?.image ?? (PRODUCT_CATEGORIES as Record<string, { image?: string }>)[item.product.category]?.image;
                   const productImage = item.product.image || categoryImage || '/favicon.png';
-                  const displaySrc = (productImage && (productImage.startsWith("/uploads") || productImage.startsWith("/api/uploads"))) ? getUploadImageSrc(productImage) : productImage || '/favicon.png';
+                  const displaySrc = (productImage && (productImage.startsWith("/uploads") || productImage.startsWith("/api/uploads"))) ? getUploadImageSrc(productImage, true) : productImage || '/favicon.png';
 
                   return (
                     <div key={item.id} className="flex flex-wrap items-start gap-4 border-b border-gray-200 pb-4">
@@ -238,7 +238,6 @@ export default function CheckoutPage() {
                           fill
                           className="object-cover"
                           sizes="80px"
-                          unoptimized={displaySrc.startsWith("/api/uploads")}
                         />
                       </div>
 

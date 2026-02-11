@@ -13,7 +13,7 @@ export const siteConfig = {
     address: 'Bridge Rd, Wick, Littlehampton BN17 5DF',
     mapUrl: 'https://www.google.com/maps/place/Bridge+Rd,+Wick,+Littlehampton+BN17+5DF,+UK/@50.813068,-0.5551703,17z',
     mapEmbedUrl: 'https://www.google.com/maps?q=50.813068,-0.5551703&z=17&output=embed',
-    trustpilot: (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_TRUSTPILOT_URL) || 'https://www.trustpilot.com/',
+    trustpilot: (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_TRUSTPILOT_URL) || 'https://www.trustpilot.com/review/alteg.co.uk',
   },
 } as const;
 

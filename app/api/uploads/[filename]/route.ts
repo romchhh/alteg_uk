@@ -31,7 +31,9 @@ export async function GET(
     return new NextResponse(buffer, {
       headers: {
         "Content-Type": contentType,
-        "Cache-Control": "public, max-age=31536000, immutable",
+        "Cache-Control": "public, max-age=31536000, immutable, stale-while-revalidate=86400",
+        "ETag": `"${basename}-${buffer.length}"`,
+        "Vary": "Accept",
       },
     });
   } catch (err: unknown) {

@@ -420,12 +420,11 @@ export default function ProductsTable() {
                     {showImage ? (
                       <div className="relative h-10 w-10 rounded overflow-hidden bg-gray-100">
                         <Image
-                          src={getUploadImageSrc(imageSrc)}
+                          src={getUploadImageSrc(imageSrc, true)}
                           alt=""
                           fill
                           className="object-cover"
                           sizes="40px"
-                          unoptimized
                         />
                       </div>
                     ) : (
