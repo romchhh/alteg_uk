@@ -7,8 +7,8 @@ export const siteConfig = {
   ogImage: '/og-image.jpg',
   links: {
     email: 'info@alteg.co.uk',
-    phone: '+447771656297',
-    phoneDisplay: '+44 7771 656297',
+    phone: '+447441429829',
+    phoneDisplay: '+44 7441 429829',
     whatsApp: 'https://wa.me/447771656297',
     address: 'ALTEG UK LTD\nUnit A3, Riverside Industrial Estate,\nLittlehampton, West Sussex, BN17 5DF',
     mapUrl: 'https://www.google.com/maps/place/Bridge+Rd,+Wick,+Littlehampton+BN17+5DF,+UK/@50.813068,-0.5551703,17z',

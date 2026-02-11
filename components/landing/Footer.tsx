@@ -134,7 +134,7 @@ export const Footer: React.FC = () => {
               <li className="flex items-start gap-3 justify-center sm:justify-start">
                 <PhoneIcon className="w-5 h-5 text-[#445DFE] flex-shrink-0 mt-0.5" />
                 <div>
-                  <a href="tel:+447441429829" className="text-white hover:text-[#B7D2FF] transition-colors">+44 7441 429829</a>
+                  <a href={`tel:${siteConfig.links.phone}`} className="text-white hover:text-[#B7D2FF] transition-colors">{siteConfig.links.phoneDisplay}</a>
                   <div className="text-xs">Mon-Fri: 9AM-6PM</div>
                 </div>
               </li>
