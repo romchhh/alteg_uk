@@ -158,7 +158,7 @@ export default function OrdersList() {
         <div className="px-5 py-4 border-b border-gray-100">
           <h2 className="text-lg font-semibold text-gray-900">Website orders</h2>
           <p className="mt-1 text-sm text-gray-500">
-            Orders are stored in the database and sent to Bitrix24 CRM. Email: info@alteg-uk.co.uk
+            Orders are stored in the database and sent to Bitrix24 CRM. Email: info@alteg.co.uk
           </p>
         </div>
 

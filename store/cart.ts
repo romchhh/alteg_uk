@@ -3,7 +3,6 @@ import { persist } from 'zustand/middleware';
 import { CartItem } from '@/lib/types/order';
 import { Product } from '@/lib/types/product';
 import { calculateOrder, calculateCartTotal } from '@/lib/utils/calculations';
-import { isWholesaleOrder } from '@/lib/constants/prices';
 
 interface CartStore {
   items: CartItem[];
@@ -40,7 +39,7 @@ export const useCartStore = create<CartStore>()(
       // Update existing item
       const existingItem = get().items[existingItemIndex];
       const newQuantity = existingItem.quantity + quantity;
-      const calculation = calculateOrder(product, length, newQuantity, isWholesaleOrder(get().getTotalWeight()));
+      const calculation = calculateOrder(product, length, newQuantity);
       
       const updatedItems = [...get().items];
       updatedItems[existingItemIndex] = {
@@ -53,8 +52,7 @@ export const useCartStore = create<CartStore>()(
       set({ items: updatedItems });
     } else {
       // Add new item
-      const totalWeight = get().getTotalWeight();
-      const calculation = calculateOrder(product, length, quantity, isWholesaleOrder(totalWeight));
+      const calculation = calculateOrder(product, length, quantity);
       
       const newItem: CartItem = {
         id,
@@ -80,12 +78,10 @@ export const useCartStore = create<CartStore>()(
     if (!item) return;
     
     const updatedItem = { ...item, ...updates };
-    const totalWeight = get().getTotalWeight();
     const calculation = calculateOrder(
       item.product,
       updatedItem.length,
-      updatedItem.quantity,
-      isWholesaleOrder(totalWeight)
+      updatedItem.quantity
     );
     
     updatedItem.calculatedPrice = calculation.finalPrice;
@@ -103,32 +99,28 @@ export const useCartStore = create<CartStore>()(
   getTotal: () => {
     const items = get().items;
     if (items.length === 0) return 0;
-    const totalWeight = items.reduce((sum, item) => sum + item.calculatedWeight, 0);
-    const result = calculateCartTotal(items, isWholesaleOrder(totalWeight));
+    const result = calculateCartTotal(items);
     return result.total;
   },
 
   getSubtotal: () => {
     const items = get().items;
     if (items.length === 0) return 0;
-    const totalWeight = items.reduce((sum, item) => sum + item.calculatedWeight, 0);
-    const result = calculateCartTotal(items, isWholesaleOrder(totalWeight));
+    const result = calculateCartTotal(items);
     return result.subtotal;
   },
 
   getDiscountAmount: () => {
     const items = get().items;
     if (items.length === 0) return 0;
-    const totalWeight = items.reduce((sum, item) => sum + item.calculatedWeight, 0);
-    const result = calculateCartTotal(items, isWholesaleOrder(totalWeight));
+    const result = calculateCartTotal(items);
     return result.discountAmount;
   },
 
   getDiscountPercent: () => {
     const items = get().items;
     if (items.length === 0) return 0;
-    const totalWeight = items.reduce((sum, item) => sum + item.calculatedWeight, 0);
-    const result = calculateCartTotal(items, isWholesaleOrder(totalWeight));
+    const result = calculateCartTotal(items);
     return result.discount * 100;
   },
 

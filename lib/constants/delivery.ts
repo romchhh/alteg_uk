@@ -19,7 +19,7 @@ export function calculateDeliveryCost(
   orderTotal: number,
   deliveryMethod: string = 'standard'
 ): number {
-  const FREE_DELIVERY_THRESHOLD = 30;
+  const FREE_DELIVERY_THRESHOLD = 77; // £77 ex. VAT (Mainland UK)
 
   // Free delivery for orders over threshold (except collection)
   if (orderTotal >= FREE_DELIVERY_THRESHOLD && deliveryMethod !== 'collection') {

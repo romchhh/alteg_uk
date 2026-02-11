@@ -8,7 +8,6 @@ import { CATALOG_PRODUCTS, PRODUCT_CATEGORIES } from '@/lib/constants/catalog';
 import { useCartStore } from '@/store/cart';
 import { calculateOrder, getPricePerMeter } from '@/lib/utils/calculations';
 import { getUploadImageSrc } from '@/lib/utils/image';
-import { isWholesaleOrder } from '@/lib/constants/prices';
 import { Button } from '@/components/shared/Button';
 import { Modal } from '@/components/shared/Modal';
 import { SuccessAlert } from '@/components/shared/SuccessAlert';
@@ -127,8 +126,7 @@ export const OrderCalculator: React.FC = () => {
   // Calculate order details
   const calculation = useMemo(() => {
     if (!selectedProduct) return null;
-    const totalWeight = selectedProduct.weightPerMeter * length * quantity;
-    return calculateOrder(selectedProduct, length, quantity, isWholesaleOrder(totalWeight));
+    return calculateOrder(selectedProduct, length, quantity);
   }, [selectedProduct, length, quantity]);
 
   // Scroll to Step 2: Select Profile when category is chosen (with offset so it sits a bit lower)

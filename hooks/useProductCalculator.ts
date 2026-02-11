@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Product } from '@/lib/types/product';
 import { calculateOrder, CalculationResult } from '@/lib/utils/calculations';
-import { isWholesaleOrder } from '@/lib/constants/prices';
 
 interface UseProductCalculatorProps {
   product: Product;
@@ -15,8 +14,8 @@ export function useProductCalculator({ product, isWholesale = false }: UseProduc
   const [additionalProcessing, setAdditionalProcessing] = useState<string>('');
 
   const calculation: CalculationResult = useMemo(() => {
-    return calculateOrder(product, length, quantity, isWholesale);
-  }, [product, length, quantity, isWholesale]);
+    return calculateOrder(product, length, quantity);
+  }, [product, length, quantity]);
 
   const reset = () => {
     setLength(product.standardLengths[0] || 1);

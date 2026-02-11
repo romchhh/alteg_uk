@@ -116,7 +116,7 @@ export const Footer: React.FC = () => {
                 <a href="#delivery" className="hover:text-white transition-colors">Custom Processing</a>
               </li>
               <li>
-                <a href="#delivery" className="hover:text-white transition-colors">UK Delivery</a>
+                <Link href="/delivery" className="hover:text-white transition-colors">UK Delivery</Link>
               </li>
               <li>
                 <Link href="#catalog" className="hover:text-white transition-colors">Wholesale Supply</Link>
@@ -141,8 +141,8 @@ export const Footer: React.FC = () => {
               <li className="flex items-start gap-3 justify-center sm:justify-start">
                 <MailIcon className="w-5 h-5 text-[#445DFE] flex-shrink-0 mt-0.5" />
                 <div>
-                  <a href="mailto:info@alteg-uk.co.uk" className="text-white hover:text-[#B7D2FF] transition-colors">
-                    info@alteg-uk.co.uk
+                  <a href="mailto:info@alteg.co.uk" className="text-white hover:text-[#B7D2FF] transition-colors">
+                    info@alteg.co.uk
                   </a>
                 </div>
               </li>

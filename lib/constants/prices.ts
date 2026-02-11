@@ -1,10 +1,13 @@
-// Wholesale discount tiers based on total weight (kg)
-export const WHOLESALE_DISCOUNT_TIERS = [
-  { minWeight: 0, maxWeight: 99, discount: 0 },
-  { minWeight: 100, maxWeight: 499, discount: 0.05 }, // 5%
-  { minWeight: 500, maxWeight: 999, discount: 0.10 }, // 10%
-  { minWeight: 1000, maxWeight: 4999, discount: 0.15 }, // 15%
-  { minWeight: 5000, maxWeight: Infinity, discount: 0.20 }, // 20%
+// Volume discount tiers: applied to cart total (ex. VAT) in £
+export const VOLUME_DISCOUNT_TIERS = [
+  { minCartTotal: 0, maxCartTotal: 99.99, discount: 0 },
+  { minCartTotal: 100, maxCartTotal: 399.99, discount: 0.05 },   // 5%
+  { minCartTotal: 400, maxCartTotal: 799.99, discount: 0.10 },  // 10%
+  { minCartTotal: 800, maxCartTotal: 1499.99, discount: 0.15 }, // 15%
+  { minCartTotal: 1500, maxCartTotal: 1999.99, discount: 0.20 }, // 20%
+  { minCartTotal: 2000, maxCartTotal: 3999.99, discount: 0.225 }, // 22.5%
+  { minCartTotal: 4000, maxCartTotal: 9999.99, discount: 0.25 },  // 25%
+  { minCartTotal: 10000, maxCartTotal: Infinity, discount: 0.272 }, // 27.2%
 ] as const;
 
 // Length discount: from 6m 3%, from 18m 5% (by total length per line: length * quantity)
@@ -14,13 +17,14 @@ export const LENGTH_DISCOUNT_TIERS = [
   { minLength: 18, maxLength: Infinity, discount: 0.05 }, // 5%
 ] as const;
 
-export const FREE_DELIVERY_THRESHOLD = 30; // £30
+export const FREE_DELIVERY_THRESHOLD = 77; // £77 ex. VAT (Mainland UK)
 
 export const BASE_DELIVERY_RATE = 15; // £15
 
-export function getWholesaleDiscount(totalWeight: number): number {
-  const tier = WHOLESALE_DISCOUNT_TIERS.find(
-    (t) => totalWeight >= t.minWeight && totalWeight <= t.maxWeight
+/** Volume discount rate (0–1) by cart total ex. VAT in £. Applied to cart total. */
+export function getVolumeDiscountByCartTotal(cartTotalExVat: number): number {
+  const tier = VOLUME_DISCOUNT_TIERS.find(
+    (t) => cartTotalExVat >= t.minCartTotal && cartTotalExVat <= t.maxCartTotal
   );
   return tier?.discount ?? 0;
 }
@@ -32,6 +36,7 @@ export function getLengthDiscount(totalLengthMeters: number): number {
   return tier?.discount ?? 0;
 }
 
-export function isWholesaleOrder(totalWeight: number): boolean {
-  return totalWeight >= WHOLESALE_DISCOUNT_TIERS[1].minWeight; // 100kg+
+/** True when cart total (ex. VAT) qualifies for volume discount (≥ £100). */
+export function isWholesaleOrder(cartTotalExVat: number): boolean {
+  return cartTotalExVat >= 100;
 }

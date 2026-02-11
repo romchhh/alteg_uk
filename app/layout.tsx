@@ -19,6 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="trustpilot-one-time-domain-verification-id" content="329f36ce-3444-40ad-a751-f8736efedd12" />
+      </head>
       <body
         className={`${montserrat.variable} font-sans antialiased`}
       >

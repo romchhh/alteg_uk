@@ -110,8 +110,8 @@ export const CatalogSection: React.FC = () => {
           {/* Advantages */}
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-12">
             <div className="bg-transparent border border-black rounded-lg p-3 sm:p-4">
-              <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">£30+</div>
-              <div className="text-xs sm:text-sm text-black leading-tight">Free UK Delivery</div>
+              <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">£77+</div>
+              <div className="text-xs sm:text-sm text-black leading-tight">Free UK Delivery (ex. VAT)</div>
             </div>
             <div className="bg-transparent border border-black rounded-lg p-3 sm:p-4">
               <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">Direct</div>

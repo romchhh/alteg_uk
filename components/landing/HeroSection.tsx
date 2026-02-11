@@ -59,14 +59,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   };
 
   return (
-    <section className="relative min-h-[100vh] md:min-h-[90vh] lg:min-h-[85vh] flex items-center justify-center overflow-hidden mt-16 md:mt-20">
+    <section className="relative min-h-[100vh] md:min-h-[90vh] lg:min-h-[85vh] flex items-center lg:items-end justify-center overflow-hidden mt-16 md:mt-20 pb-0 lg:pb-0">
       {/* Background Image - modern production facility */}
       <div className="absolute inset-0">
         <Image
           src="/hero.jpg"
           alt="ALTEG production facility"
           fill
-          className="object-cover"
+          className="object-cover object-center lg:object-[center_25%]"
           priority
           sizes="100vw"
         />
@@ -80,9 +80,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         </p>
       </div>
 
-      {/* Content Overlay - Grid Layout */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20 md:py-24 lg:py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start min-h-[calc(100vh-4rem)] md:min-h-[calc(90vh-5rem)] lg:min-h-[calc(85vh-5rem)]">
+      {/* Content Overlay - Grid Layout. On desktop aligned to bottom so buttons sit lower and more photo shows above */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20 md:py-24 lg:pt-24 lg:pb-8 xl:pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start min-h-[calc(100vh-4rem)] md:min-h-[calc(90vh-5rem)] lg:min-h-0">
           {/* Left Side - Content */}
           <div className="w-full flex flex-col items-start text-left">
             {/* Main Heading */}
@@ -175,18 +175,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </div>
 
-        {/* CTA Buttons Block - Centered */}
-        <div className="w-full flex justify-center mt-8 lg:mt-12">
+        {/* CTA Buttons Block - Centered; on desktop section uses items-end so this sits near bottom */}
+        <div className="w-full flex justify-center mt-8 lg:mt-10">
           <div className="flex flex-col gap-4 sm:gap-5 lg:gap-5 w-full max-w-2xl">
-            {/* Button 1: Free metal cutting */}
-            <Link href="/checkout" className="w-full">
+            {/* Button 1: Free metal cutting — go to catalog to add products first */}
+            <Link href="/#catalog" className="w-full">
               <button className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-3 sm:py-4 lg:py-4 xl:py-5 bg-[#050544] hover:bg-[#445DFE] text-white font-semibold text-base sm:text-lg lg:text-lg xl:text-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center rounded-none">
                 Order now and get free metal cutting to your sizes
               </button>
             </Link>
 
-            {/* Button 2: Individual discount */}
-            <Link href="#catalog" className="w-full">
+            {/* Button 2: Individual discount — go to catalog to add products first */}
+            <Link href="/#catalog" className="w-full">
               <button className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-3 sm:py-4 lg:py-4 xl:py-5 bg-white hover:bg-gray-100 text-[#050544] font-semibold text-base sm:text-lg lg:text-lg xl:text-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center rounded-none">
                 Order now and get an individual discount
               </button>

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { orderSchema, OrderFormData } from '@/lib/utils/validators';
@@ -230,6 +231,18 @@ export const OrderForm: React.FC<OrderFormProps> = ({ onSuccess, onError }) => {
             <CardTitle>Delivery Options</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="rounded-lg border border-[#445DFE]/30 bg-[#E9EDF4]/50 p-4 text-sm text-gray-800">
+              <p className="mb-2">
+                Fast & convenient delivery — <strong>FREE DELIVERY</strong> on orders over <strong>£77</strong> (ex. VAT) to Mainland UK.
+              </p>
+              <p className="mb-0">
+                <strong>GUARANTEED SAME & NEXT DAY</strong> delivery available —{' '}
+                <Link href="/delivery" className="text-[#445DFE] hover:text-[#050544] font-semibold underline">
+                  see our delivery page
+                </Link>{' '}
+                for info.
+              </p>
+            </div>
             <div>
               <label className="block text-sm font-medium text-gray-900 mb-2">
                 Delivery Postcode

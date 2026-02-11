@@ -278,7 +278,7 @@ export default function ContactPage() {
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="ALTEG UK - Unit A3, Riverside Industrial Estate, Littlehampton"
+                  title="ALTEG UK - Bridge Rd, Wick, Littlehampton"
                 />
               </div>
               <p className="text-center text-gray-600 mt-4 text-sm">

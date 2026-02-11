@@ -140,7 +140,7 @@ const trustPoints = [
           </li>
           <li className="flex items-start gap-2">
             <span className="text-white mt-1">✓</span>
-            <span>Free delivery from £30</span>
+            <span>Free delivery over £77 (ex. VAT)</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-white mt-1">✓</span>

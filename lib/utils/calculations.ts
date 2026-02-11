@@ -1,5 +1,5 @@
 import { Product } from '@/lib/types/product';
-import { getWholesaleDiscount, getLengthDiscount } from '@/lib/constants/prices';
+import { getVolumeDiscountByCartTotal, getLengthDiscount } from '@/lib/constants/prices';
 
 /** Price per meter = price per kg × weight per meter (density). */
 export function getPricePerMeter(product: Product): number | undefined {
@@ -20,11 +20,11 @@ export interface CalculationResult {
   finalPrice: number;
 }
 
+/** Line total: material cost with length discount only. Volume discount is applied at cart level. */
 export function calculateOrder(
   product: Product,
   length: number,
-  quantity: number,
-  isWholesale: boolean = false
+  quantity: number
 ): CalculationResult {
   const totalLength = length * quantity;
   const totalWeight = product.weightPerMeter * totalLength;
@@ -38,22 +38,19 @@ export function calculateOrder(
   const lengthDiscountAmount = materialCost * lengthDiscount;
   const afterLengthDiscount = materialCost - lengthDiscountAmount;
 
-  const wholesaleDiscount = isWholesale ? getWholesaleDiscount(totalWeight) : 0;
-  const discountAmount = afterLengthDiscount * wholesaleDiscount;
-  const finalPrice = afterLengthDiscount - discountAmount;
-
   return {
     totalLength,
     totalWeight,
     materialCost,
     lengthDiscount,
     lengthDiscountAmount,
-    discount: wholesaleDiscount,
-    discountAmount,
-    finalPrice,
+    discount: 0,
+    discountAmount: 0,
+    finalPrice: afterLengthDiscount,
   };
 }
 
+/** Cart total with volume discount applied to subtotal (ex. VAT). */
 export function calculateCartTotal(
   items: Array<{
     product: Product;
@@ -61,8 +58,7 @@ export function calculateCartTotal(
     quantity: number;
     calculatedPrice: number;
     calculatedWeight: number;
-  }>,
-  isWholesale: boolean = false
+  }>
 ): {
   subtotal: number;
   totalWeight: number;
@@ -72,7 +68,7 @@ export function calculateCartTotal(
 } {
   const subtotal = items.reduce((sum, item) => sum + item.calculatedPrice, 0);
   const totalWeight = items.reduce((sum, item) => sum + item.calculatedWeight, 0);
-  const discount = isWholesale ? getWholesaleDiscount(totalWeight) : 0;
+  const discount = getVolumeDiscountByCartTotal(subtotal);
   const discountAmount = subtotal * discount;
   const total = subtotal - discountAmount;
   return {

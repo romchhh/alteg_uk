@@ -7,6 +7,7 @@ import { OrderCalculator } from '@/components/catalog/OrderCalculator';
 import { CatalogSection } from '@/components/catalog/CatalogSection';
 import { FactoryGallery } from '@/components/landing/FactoryGallery';
 import { TrustSection } from '@/components/landing/TrustSection';
+import { AnimatedPromoBanners } from '@/components/landing/AnimatedPromoBanners';
 import { PromoBanners } from '@/components/landing/PromoBanners';
 import { HowToOrderSection } from '@/components/landing/HowToOrderSection';
 import { FAQSection } from '@/components/landing/FAQSection';
@@ -43,8 +44,11 @@ export default async function HomePage() {
       
       {/* Block 3: Trust, Production & Logistics */}
       <TrustSection />
+
+      {/* Dynamic marketing strips (animated) — above the 4 promo cards */}
+      <AnimatedPromoBanners />
       
-      {/* Block 4: Promotions & Incentives */}
+      {/* Block 4: Promotions & Incentives (4 banners) */}
       <PromoBanners />
       
       {/* Block 5: How to Order (3 Steps) */}

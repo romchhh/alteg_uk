@@ -11,7 +11,7 @@ const steps = [
   {
     number: '2',
     title: 'Place Order Online',
-    description: 'Complete your order online or send a wholesale inquiry for volumes over 500kg. Get a quote within 24 hours.',
+    description: 'Complete your order online or send a wholesale inquiry. Get a quote within 24 hours.',
   },
   {
     number: '3',

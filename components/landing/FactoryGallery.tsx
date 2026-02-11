@@ -4,21 +4,28 @@ import React, { useState, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import { lockBodyScroll, unlockBodyScroll } from '@/lib/utils/bodyScrollLock';
 
-const GALLERY_IMAGES = [
-  { src: '/gallery/factory-01.jpg', alt: 'ALTEG factory production' },
-  { src: '/gallery/factory-02.jpg', alt: 'Aluminium profiles manufacturing' },
-  { src: '/gallery/factory-03.jpg', alt: 'Factory facility' },
-  { src: '/gallery/factory-04.jpg', alt: 'Production line' },
-  { src: '/gallery/factory-05.jpg', alt: 'Aluminium extrusion' },
-  { src: '/gallery/factory-06.jpg', alt: 'Warehouse and equipment' },
-  { src: '/gallery/factory-07.jpg', alt: 'Quality control' },
-  { src: '/gallery/factory-08.jpg', alt: 'Factory floor' },
-  { src: '/gallery/factory-09.jpg', alt: 'Aluminium stock' },
-  { src: '/gallery/factory-10.jpg', alt: 'Production area' },
-  { src: '/gallery/factory-11.jpg', alt: 'Manufacturing process' },
-  { src: '/gallery/factory-12.jpg', alt: 'ALTEG UK facility' },
-  { src: '/gallery/DSC04928.jpg', alt: 'ALTEG factory' },
-  { src: '/gallery/DSC04960.jpg', alt: 'ALTEG production' },
+type GalleryItem = { src: string; alt: string; type: 'image' | 'video' };
+
+const GALLERY_ITEMS: GalleryItem[] = [
+  { src: '/gallery/factory-01.jpg', alt: 'ALTEG factory production', type: 'image' },
+  { src: '/gallery/factory-02.jpg', alt: 'Aluminium profiles manufacturing', type: 'image' },
+  { src: '/gallery/factory-03.jpg', alt: 'Factory facility', type: 'image' },
+  { src: '/gallery/factory-04.jpg', alt: 'Production line', type: 'image' },
+  { src: '/gallery/C0206_08_48_01_11.jpg', alt: 'ALTEG production', type: 'image' },
+  { src: '/gallery/C0210_08_48_42_14.jpg', alt: 'Factory facility', type: 'image' },
+  { src: '/gallery/C0221_08_50_09_11.jpg', alt: 'Aluminium manufacturing', type: 'image' },
+  { src: '/gallery/C0255_07_30_40_20.jpg', alt: 'Production area', type: 'image' },
+  { src: '/gallery/C0265_07_32_56_18.jpg', alt: 'ALTEG factory', type: 'image' },
+  { src: '/gallery/C0273_07_34_34_15.jpg', alt: 'Manufacturing process', type: 'image' },
+  { src: '/gallery/factory-05.jpg', alt: 'Aluminium extrusion', type: 'image' },
+  { src: '/gallery/factory-07.jpg', alt: 'Quality control', type: 'image' },
+  { src: '/gallery/factory-09.jpg', alt: 'Aluminium stock', type: 'image' },
+  { src: '/gallery/factory-10.jpg', alt: 'Production area', type: 'image' },
+  { src: '/gallery/factory-11.jpg', alt: 'Manufacturing process', type: 'image' },
+  { src: '/gallery/factory-12.jpg', alt: 'ALTEG UK facility', type: 'image' },
+  { src: '/gallery/DSC04928.jpg', alt: 'ALTEG factory', type: 'image' },
+  { src: '/gallery/DSC04960.jpg', alt: 'ALTEG production', type: 'image' },
+  { src: '/gallery/FILE%202026-02-11%2011_38_28.webm', alt: 'ALTEG factory video', type: 'video' },
 ];
 
 // Bento-style layout for first 10 images only
@@ -54,12 +61,12 @@ export const FactoryGallery: React.FC = () => {
 
   const goPrev = useCallback(() => {
     if (lightboxIndex === null) return;
-    setLightboxIndex((lightboxIndex - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length);
+    setLightboxIndex((lightboxIndex - 1 + GALLERY_ITEMS.length) % GALLERY_ITEMS.length);
   }, [lightboxIndex]);
 
   const goNext = useCallback(() => {
     if (lightboxIndex === null) return;
-    setLightboxIndex((lightboxIndex + 1) % GALLERY_IMAGES.length);
+    setLightboxIndex((lightboxIndex + 1) % GALLERY_ITEMS.length);
   }, [lightboxIndex]);
 
   // Keyboard: Arrow Left/Right to scroll, Escape to close; lock body scroll
@@ -100,50 +107,90 @@ export const FactoryGallery: React.FC = () => {
             </p>
           </div>
 
-          {/* Bento-style grid — first 10 photos */}
+          {/* Bento-style grid — first 10 items */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 auto-rows-[120px] sm:auto-rows-[140px] md:auto-rows-[160px] lg:auto-rows-[180px] grid-flow-dense">
-            {GALLERY_IMAGES.slice(0, BENTO_COUNT).map((img, index) => {
+            {GALLERY_ITEMS.slice(0, BENTO_COUNT).map((item, index) => {
               const layout = BENTO_LAYOUT[index] || '';
               return (
                 <button
-                  key={img.src}
+                  key={item.src}
                   type="button"
                   onClick={() => openLightbox(index)}
-                  className={`relative overflow-hidden group ${layout} min-h-[120px] sm:min-h-[140px] md:min-h-[160px] lg:min-h-[180px]`}
-                  aria-label={`View ${img.alt}`}
+                  className={`relative overflow-hidden group ${layout} min-h-[120px] sm:min-h-[140px] md:min-h-[160px] lg:min-h-[180px] bg-black`}
+                  aria-label={`View ${item.alt}`}
                 >
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  />
+                  {item.type === 'video' ? (
+                    <>
+                      <video
+                        src={item.src}
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/30 pointer-events-none">
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white/90 flex items-center justify-center">
+                          <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#050544] ml-1" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <Image
+                      src={item.src}
+                      alt={item.alt}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
                 </button>
               );
             })}
           </div>
 
-          {/* Last 4 photos: one row on desktop (4 cols), two rows of 2 on mobile */}
+          {/* Remaining items: one row on desktop (4 cols), two rows of 2 on mobile */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mt-2 sm:mt-3 md:mt-4 auto-rows-[120px] sm:auto-rows-[140px] md:auto-rows-[160px] lg:auto-rows-[180px]">
-            {GALLERY_IMAGES.slice(BENTO_COUNT).map((img, i) => {
+            {GALLERY_ITEMS.slice(BENTO_COUNT).map((item, i) => {
               const index = BENTO_COUNT + i;
               return (
                 <button
-                  key={img.src}
+                  key={item.src}
                   type="button"
                   onClick={() => openLightbox(index)}
-                  className="relative overflow-hidden group min-h-[120px] sm:min-h-[140px] md:min-h-[160px] lg:min-h-[180px]"
-                  aria-label={`View ${img.alt}`}
+                  className="relative overflow-hidden group min-h-[120px] sm:min-h-[140px] md:min-h-[160px] lg:min-h-[180px] bg-black"
+                  aria-label={`View ${item.alt}`}
                 >
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                    sizes="(max-width: 1024px) 50vw, 25vw"
-                  />
+                  {item.type === 'video' ? (
+                    <>
+                      <video
+                        src={item.src}
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/30 pointer-events-none">
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white/90 flex items-center justify-center">
+                          <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#050544] ml-1" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <Image
+                      src={item.src}
+                      alt={item.alt}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      sizes="(max-width: 1024px) 50vw, 25vw"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
                 </button>
               );
@@ -169,15 +216,25 @@ export const FactoryGallery: React.FC = () => {
                 >
                   <ChevronLeftIcon className="w-6 h-6 sm:w-8 sm:h-8" />
                 </button>
-                {/* Image */}
-                <div className="relative w-full max-w-5xl aspect-[4/3] flex-shrink-0 max-h-[90vh]">
-                  <Image
-                    src={GALLERY_IMAGES[lightboxIndex].src}
-                    alt={GALLERY_IMAGES[lightboxIndex].alt}
-                    fill
-                    className="object-contain"
-                    sizes="(max-width: 1024px) 100vw, 1024px"
-                  />
+                {/* Media: image or video */}
+                <div className="relative w-full max-w-5xl aspect-video flex-shrink-0 max-h-[90vh]">
+                  {GALLERY_ITEMS[lightboxIndex].type === 'video' ? (
+                    <video
+                      src={GALLERY_ITEMS[lightboxIndex].src}
+                      controls
+                      autoPlay
+                      playsInline
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <Image
+                      src={GALLERY_ITEMS[lightboxIndex].src}
+                      alt={GALLERY_ITEMS[lightboxIndex].alt}
+                      fill
+                      className="object-contain"
+                      sizes="(max-width: 1024px) 100vw, 1024px"
+                    />
+                  )}
                 </div>
                 {/* Right arrow */}
                 <button
@@ -202,7 +259,7 @@ export const FactoryGallery: React.FC = () => {
               </button>
               {/* Counter */}
               <span className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/90 text-sm font-medium pointer-events-none">
-                {lightboxIndex + 1} / {GALLERY_IMAGES.length}
+                {lightboxIndex + 1} / {GALLERY_ITEMS.length}
               </span>
             </div>
           )}

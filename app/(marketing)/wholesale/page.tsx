@@ -6,15 +6,19 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { wholesaleFormSchema, WholesaleFormData } from '@/lib/utils/validators';
 import { Button } from '@/components/shared/Button';
+import { siteConfig } from '@/config/site';
 
 const HOMEPAGE_SECTION_IDS = ['catalog', 'advantages', 'how-to-order', 'faq', 'trust', 'features', 'about', 'calculator', 'customer-segments'];
 
+// Volume discounts applied to cart total (ex. VAT)
 const DISCOUNT_ROWS = [
-  { range: '100 — 1,000 kg', discount: '5%', highlight: false },
-  { range: '500 — 2,000 kg', discount: '10%', highlight: false },
-  { range: '1,000 — 2,000 kg', discount: '12%', highlight: false },
-  { range: '2,000 kg and above', discount: 'Individual quote', highlight: true },
-  { range: '5,000 kg and above', discount: 'Individual quote', highlight: true },
+  { range: '£100 — £399', discount: '5%', highlight: false },
+  { range: '£400 — £799', discount: '10%', highlight: false },
+  { range: '£800 — £1,499', discount: '15%', highlight: false },
+  { range: '£1,500 — £1,999', discount: '20%', highlight: false },
+  { range: '£2,000 — £3,999', discount: '22.5%', highlight: false },
+  { range: '£4,000 — £9,999', discount: '25%', highlight: false },
+  { range: '£10,000+', discount: '27.2%', highlight: true },
 ];
 
 export default function WholesalePage() {
@@ -97,7 +101,7 @@ export default function WholesalePage() {
         <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <p className="text-sm sm:text-base font-semibold uppercase tracking-[0.2em] text-white/80 mb-4">
-              Volume pricing from 100 kg
+              Volume discounts on cart total (ex. VAT)
             </p>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-5 leading-tight tracking-tight">
               Wholesale from ALTEG Factory
@@ -117,10 +121,10 @@ export default function WholesalePage() {
             <div className="overflow-hidden rounded-2xl border-2 border-gray-100 bg-white shadow-lg transition-all duration-300 hover:border-[#445DFE]/30 hover:shadow-xl">
               <div className="px-8 sm:px-10 md:px-12 py-6 sm:py-8 border-b border-gray-100 bg-gradient-to-r from-[#050544] to-[#445DFE]">
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white uppercase tracking-wide">
-                  Volume discount tiers
+                  Volume discounts (applied to cart total ex. VAT)
                 </h2>
                 <p className="mt-2 text-base sm:text-lg text-white/80">
-                  Order quantity (kg) — discount or individual quote
+                  Cart total (ex. VAT) — discount %
                 </p>
               </div>
               <div className="overflow-x-auto">
@@ -128,7 +132,7 @@ export default function WholesalePage() {
                   <thead>
                     <tr className="bg-gray-50/80 border-b-2 border-gray-200">
                       <th className="px-6 sm:px-8 md:px-10 py-4 sm:py-5 text-left text-sm sm:text-base font-semibold text-gray-600 uppercase tracking-wider">
-                        Order volume
+                        Cart total (ex. VAT)
                       </th>
                       <th className="px-6 sm:px-8 md:px-10 py-4 sm:py-5 text-left text-sm sm:text-base font-semibold text-gray-600 uppercase tracking-wider">
                         Discount
@@ -156,6 +160,25 @@ export default function WholesalePage() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+            </div>
+
+            {/* Key Commercial Terms */}
+            <div className="overflow-hidden rounded-2xl border-2 border-gray-100 bg-white shadow-lg transition-all duration-300 hover:border-[#445DFE]/30 hover:shadow-xl">
+              <div className="px-8 sm:px-10 md:px-12 py-6 sm:py-8 border-b border-gray-100 bg-gradient-to-r from-[#050544] to-[#445DFE]">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white uppercase tracking-wide">
+                  Key commercial terms
+                </h2>
+              </div>
+              <div className="px-8 sm:px-10 md:px-12 py-6 sm:py-8">
+                <ul className="space-y-3 text-gray-700 text-base sm:text-lg">
+                  <li><strong className="text-[#050544]">Free delivery (Mainland UK):</strong> For orders over £77 (ex. VAT).</li>
+                  <li><strong className="text-[#050544]">VAT:</strong> All listed prices are exclusive of VAT. VAT will be added at checkout at the standard rate of 20%.</li>
+                  <li><strong className="text-[#050544]">Order lead time:</strong> 1–14 days, depending on order complexity.</li>
+                  <li><strong className="text-[#050544]">B2B payment terms:</strong> 100% advance payment; alternatively, 50% before shipment and 50% after delivery.</li>
+                  <li><strong className="text-[#050544]">Packaging:</strong> Standard.</li>
+                  <li><strong className="text-[#050544]">Delivery / warehouse address:</strong> {siteConfig.links.address}</li>
+                </ul>
               </div>
             </div>
 

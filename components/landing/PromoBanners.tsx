@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 
 const banners = [
   {
@@ -8,14 +7,14 @@ const banners = [
     subtitle: 'Free Cutting Service',
     description: 'Free metal cutting to your sizes with every order.',
     cta: 'Order Now',
-    href: '/checkout',
+    href: '/#catalog',
     bgImage: '/gallery/factory-01.jpg',
   },
   {
     id: 2,
     title: 'Free UK Delivery',
-    subtitle: 'From £30',
-    description: 'Free standard delivery on all orders over £30. Fast and reliable UK-wide delivery.',
+    subtitle: 'Over £77',
+    description: 'Free standard delivery on orders over £77 (ex. VAT). Fast and reliable UK-wide delivery.',
     cta: 'Shop Now',
     href: '/#catalog',
     bgImage: '/gallery/factory-03.jpg',
@@ -27,7 +26,7 @@ const banners = [
     description: "Can't find the profile you need? Send us a drawing or description — we'll manufacture to order.",
     cta: 'Request Quote',
     href: '/#catalog',
-    bgImage: '/gallery/factory-06.jpg',
+    bgImage: '/gallery/C0221_08_50_09_11.jpg',
   },
   {
     id: 4,
@@ -54,7 +53,7 @@ export const PromoBanners: React.FC = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {banners.map((banner) => (
-            <Link 
+            <a
               key={banner.id}
               href={banner.href}
               className="group block h-full"
@@ -92,7 +91,7 @@ export const PromoBanners: React.FC = () => {
                   </button>
                 </div>
               </div>
-            </Link>
+            </a>
           ))}
         </div>
       </div>

@@ -63,23 +63,26 @@ export const Header: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation - section links go to home so they work from any page */}
-          <nav className="hidden lg:flex items-center gap-8">
-            <a href="/#catalog" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
+          <nav className="hidden lg:flex items-center gap-4 xl:gap-5">
+            <a href="/#catalog" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-sm uppercase tracking-wide">
               Products
             </a>
-            <a href="/#advantages" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
+            <a href="/#advantages" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-sm uppercase tracking-wide">
               Advantages
             </a>
-            <a href="/#how-to-order" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
+            <a href="/#how-to-order" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-sm uppercase tracking-wide">
               How to Order
             </a>
-            <a href="/#faq" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
+            <a href="/#faq" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-sm uppercase tracking-wide">
               FAQ
             </a>
-            <Link href="/contact" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
+            <Link href="/contact" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-sm uppercase tracking-wide">
               Contact
             </Link>
-            <Link href="/wholesale" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-base uppercase tracking-wide">
+            <Link href="/delivery" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-sm uppercase tracking-wide">
+              Delivery
+            </Link>
+            <Link href="/wholesale" className="text-[#050544] hover:text-[#445DFE] font-bold transition-colors text-sm uppercase tracking-wide">
               Wholesale
             </Link>
           </nav>
@@ -87,13 +90,13 @@ export const Header: React.FC = () => {
           {/* Right side - CTA & Burger Menu */}
           <div className="flex items-center gap-4">
             {/* Desktop Phone */}
-            <a href={`tel:${siteConfig.links.phone}`} className="hidden lg:block text-[#050544] hover:text-[#445DFE] transition-colors p-2">
-              <PhoneIcon className="w-7 h-7" />
+            <a href={`tel:${siteConfig.links.phone}`} className="hidden lg:block text-[#050544] hover:text-[#445DFE] transition-colors p-1.5">
+              <PhoneIcon className="w-6 h-6" />
             </a>
 
             {/* Desktop Cart */}
-            <Link href="/checkout" className="hidden lg:block relative text-[#050544] hover:text-[#445DFE] transition-colors p-2">
-              <CartIcon className="w-7 h-7" />
+            <Link href="/checkout" className="hidden lg:block relative text-[#050544] hover:text-[#445DFE] transition-colors p-1.5">
+              <CartIcon className="w-6 h-6" />
               {itemCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-[#445DFE] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                   {itemCount > 9 ? '9+' : itemCount}
@@ -103,7 +106,7 @@ export const Header: React.FC = () => {
 
             {/* Desktop CTA Button */}
             <Link href="/#catalog" className="hidden lg:block">
-              <button className="px-6 py-2.5 bg-black hover:bg-[#050544] text-white font-bold transition-all duration-300 text-sm rounded-none uppercase tracking-wide">
+              <button className="px-4 py-2 bg-black hover:bg-[#050544] text-white font-bold transition-all duration-300 text-xs rounded-none uppercase tracking-wide">
                 MAKE AN ENQUIRY
               </button>
             </Link>
@@ -175,6 +178,13 @@ export const Header: React.FC = () => {
                   className="w-full text-center text-white hover:text-[#B7D2FF] font-semibold transition-colors text-base md:text-lg uppercase tracking-wide py-2"
                 >
                   Contact
+                </Link>
+                <Link 
+                  href="/delivery" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center text-white hover:text-[#B7D2FF] font-semibold transition-colors text-base md:text-lg uppercase tracking-wide py-2"
+                >
+                  Delivery
                 </Link>
                 <Link 
                   href="/wholesale" 
