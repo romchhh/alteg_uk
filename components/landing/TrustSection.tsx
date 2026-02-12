@@ -150,6 +150,39 @@ const trustPoints = [
       </div>
     ),
   },
+  {
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    ),
+    title: 'SOCIAL RESPONSIBILITY',
+    content: (
+      <div>
+        <p className="text-white/90 mb-3 leading-relaxed">
+          Committed to sustainable manufacturing practices, environmental stewardship, and ethical business operations.
+        </p>
+        <ul className="space-y-2 text-white/80 text-sm">
+          <li className="flex items-start gap-2">
+            <span className="text-white mt-1">✓</span>
+            <span>Recyclable aluminium production</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-white mt-1">✓</span>
+            <span>Energy-efficient manufacturing processes</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-white mt-1">✓</span>
+            <span>Waste reduction and material optimization</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-white mt-1">✓</span>
+            <span>Ethical supply chain and fair labor practices</span>
+          </li>
+        </ul>
+      </div>
+    ),
+  },
 ];
 
 const TESTIMONIALS = [
