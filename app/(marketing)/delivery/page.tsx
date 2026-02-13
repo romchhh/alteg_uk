@@ -5,6 +5,11 @@ import { DELIVERY_METHODS } from '@/lib/constants/delivery';
 export const metadata = {
   title: 'Delivery',
   description: 'Delivery options and information for ALTEG UK — free delivery over £77 (ex. VAT), same day and next day available.',
+  openGraph: {
+    title: 'Delivery | ALTEG UK',
+    description: 'Free delivery over £77 (ex. VAT). Fast delivery across England, Wales and Scotland.',
+    url: '/delivery',
+  },
 };
 
 export default function DeliveryPage() {

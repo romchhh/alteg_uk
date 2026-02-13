@@ -69,6 +69,12 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  referrer: 'origin-when-cross-origin',
+  formatDetection: {
+    telephone: true,
+    email: true,
+    address: true,
+  },
   icons: {
     icon: [
       { url: '/favicon.png', sizes: 'any' },

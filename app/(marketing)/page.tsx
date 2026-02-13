@@ -13,12 +13,13 @@ import { HowToOrderSection } from '@/components/landing/HowToOrderSection';
 import { FAQSection } from '@/components/landing/FAQSection';
 import { CustomerSegments } from '@/components/landing/CustomerSegments';
 import { MapSection } from '@/components/landing/MapSection';
-import { ShoppingCart } from '@/components/cart/ShoppingCart';
+import { FaqJsonLd } from '@/components/seo/FaqJsonLd';
 
 export default async function HomePage() {
   const homepageSettings = await getHomepageSettings();
   return (
     <main className="min-h-screen">
+      <FaqJsonLd />
       {/* Block 1: Hero Banner */}
       <HeroSection
         heroTitle={homepageSettings.heroTitle}

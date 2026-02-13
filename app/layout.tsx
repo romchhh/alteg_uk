@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { metadata as siteMetadata } from "@/config/site";
 import { ShoppingCart } from "@/components/cart/ShoppingCart";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -13,6 +14,10 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = siteMetadata;
 
+export const viewport: Viewport = {
+  themeColor: "#050544",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -22,6 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="trustpilot-one-time-domain-verification-id" content="329f36ce-3444-40ad-a751-f8736efedd12" />
+        <JsonLd />
       </head>
       <body
         className={`${montserrat.variable} font-sans antialiased`}
