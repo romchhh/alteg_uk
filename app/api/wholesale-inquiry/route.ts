@@ -19,17 +19,17 @@ export async function POST(request: NextRequest) {
 
     const data = validationResult.data;
 
-    // Create lead in Bitrix24
+    // Create lead in Bitrix24 — Lead web B2B, phone + name in title, form type in comments
     const attachmentLine = data.attachmentUrl ? `\nAttachment: ${data.attachmentUrl}` : '';
     const leadData = {
-      TITLE: `ALTEG UK Wholesale Inquiry - ${data.company}`,
+      TITLE: `Lead web B2B — ${data.contactName} — ${data.phone}`,
       NAME: data.contactName,
       COMPANY_TITLE: data.company,
       EMAIL: [{ VALUE: data.email, VALUE_TYPE: 'WORK' }],
       PHONE: [{ VALUE: data.phone, VALUE_TYPE: 'WORK' }],
-      COMMENTS: `Wholesale Inquiry\n\nCompany: ${data.company}\nContact: ${data.contactName}\nAnnual Volume: ${data.annualVolume || 'Not specified'}\nProduct Interests: ${data.productInterests?.join(', ') || 'Not specified'}\n\nMessage:\n${data.message || 'No message provided'}${attachmentLine}`,
+      COMMENTS: `Form type: Wholesale order - get a quote\n\nCompany: ${data.company}\nContact: ${data.contactName}\nPhone: ${data.phone}\nAnnual Volume: ${data.annualVolume || 'Not specified'}\nProduct Interests: ${data.productInterests?.join(', ') || 'Not specified'}\n\nMessage:\n${data.message || 'No message provided'}${attachmentLine}`,
       SOURCE_ID: 'WEB',
-      SOURCE_DESCRIPTION: 'Website Wholesale Inquiry',
+      SOURCE_DESCRIPTION: 'Lead web B2B',
     };
 
     try {

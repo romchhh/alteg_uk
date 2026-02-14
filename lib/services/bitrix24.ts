@@ -286,8 +286,15 @@ export async function createLead(data: Bitrix24Lead): Promise<Bitrix24Response> 
 }
 
 export async function createOrderLead(order: Order): Promise<Bitrix24Response> {
+  const orderDetails = formatOrderDetails({
+    cart: order.cart,
+    customer: order.customer,
+    total: order.total,
+    totalWeight: order.totalWeight,
+    notes: order.notes,
+  });
   const leadData: Bitrix24Lead = {
-    TITLE: `ALTEG UK Order - ${order.customer.name}`,
+    TITLE: `Lead web B2C — ${order.customer.name} — ${order.customer.phone}`,
     NAME: order.customer.name,
     COMPANY_TITLE: order.customer.company,
     EMAIL: [{ VALUE: order.customer.email, VALUE_TYPE: 'WORK' }],
@@ -295,15 +302,9 @@ export async function createOrderLead(order: Order): Promise<Bitrix24Response> {
     ADDRESS: order.customer.address?.street,
     ADDRESS_CITY: order.customer.address?.city,
     ADDRESS_POSTAL_CODE: order.customer.address?.postcode,
-    COMMENTS: formatOrderDetails({
-      cart: order.cart,
-      customer: order.customer,
-      total: order.total,
-      totalWeight: order.totalWeight,
-      notes: order.notes,
-    }),
+    COMMENTS: `Form type: Website Order\n\n${orderDetails}`,
     SOURCE_ID: BITRIX_SOURCE_WEB,
-    SOURCE_DESCRIPTION: 'Website Order',
+    SOURCE_DESCRIPTION: 'Lead web B2C',
     ASSIGNED_BY_ID: defaultAssignedById(),
     OPPORTUNITY: Number(order.total.toFixed(2)), // Сума замовлення для поля "Сумма і валюта" (число)
     // CURRENCY_ID тимчасово прибрано через помилку "Currency is incorrect"
@@ -320,15 +321,16 @@ export async function createOrderLead(order: Order): Promise<Bitrix24Response> {
 }
 
 export async function createQuoteLead(quote: QuoteRequest): Promise<Bitrix24Response> {
+  const quoteBody = `Wholesale: ${quote.isWholesale ? 'Yes' : 'No'}\nTotal Weight: ${quote.totalWeight.toFixed(2)}kg\n\nProducts:\n${quote.products.map((item) => `${item.product.name} (${item.product.dimensions}) - ${item.length}m x ${item.quantity}`).join('\n')}\n\n${quote.notes || ''}`;
   const leadData: Bitrix24Lead = {
-    TITLE: `ALTEG UK Quote Request - ${quote.customer.name}`,
+    TITLE: `Lead web B2B — ${quote.customer.name} — ${quote.customer.phone}`,
     NAME: quote.customer.name,
     COMPANY_TITLE: quote.customer.company,
     EMAIL: [{ VALUE: quote.customer.email, VALUE_TYPE: 'WORK' }],
     PHONE: [{ VALUE: quote.customer.phone, VALUE_TYPE: 'WORK' }],
-    COMMENTS: `Quote Request - Wholesale: ${quote.isWholesale ? 'Yes' : 'No'}\nTotal Weight: ${quote.totalWeight.toFixed(2)}kg\n\nProducts:\n${quote.products.map((item) => `${item.product.name} (${item.product.dimensions}) - ${item.length}m x ${item.quantity}`).join('\n')}\n\n${quote.notes || ''}`,
+    COMMENTS: `Form type: Request a quote\n\n${quoteBody}`,
     SOURCE_ID: BITRIX_SOURCE_WEB,
-    SOURCE_DESCRIPTION: 'Website Quote Request',
+    SOURCE_DESCRIPTION: 'Lead web B2B',
     ASSIGNED_BY_ID: defaultAssignedById(),
     UF_CRM_ORDER_WEIGHT: quote.totalWeight.toFixed(2),
   };

@@ -18,16 +18,19 @@ export async function POST(request: NextRequest) {
     }
 
     const data = validationResult.data;
+    const formType = (body as { formType?: string }).formType === 'request_individual_quote' ? 'Request individual quote' : 'Contact Form';
+    const isB2B = formType === 'Request individual quote';
+    const leadTitle = isB2B ? `Lead web B2B — ${data.name} — ${data.phone}` : `Lead web B2C — ${data.name} — ${data.phone}`;
 
     // Create lead in Bitrix24
     const leadData: Bitrix24Lead = {
-      TITLE: `ALTEG UK Contact Form - ${data.name}`,
+      TITLE: leadTitle,
       NAME: data.name,
       EMAIL: [],
       PHONE: [{ VALUE: data.phone, VALUE_TYPE: 'WORK' }],
-      COMMENTS: `Contact Form Inquiry\n\nName: ${data.name}\nPhone: ${data.phone}\n\nWhat interests them:\n${data.interest}`,
+      COMMENTS: `Form type: ${formType}\n\nName: ${data.name}\nPhone: ${data.phone}\n\nWhat interests them:\n${data.interest}`,
       SOURCE_ID: 'WEB',
-      SOURCE_DESCRIPTION: 'Website Contact Form',
+      SOURCE_DESCRIPTION: isB2B ? 'Lead web B2B' : 'Lead web B2C',
     };
 
     try {

@@ -28,7 +28,10 @@ export const ContactModal: React.FC = () => {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          formType: variant === 'quote' ? 'request_individual_quote' : undefined,
+        }),
       });
       const result = await response.json();
       if (result.success) {
