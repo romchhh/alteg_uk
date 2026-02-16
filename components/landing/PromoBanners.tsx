@@ -3,7 +3,7 @@ import React from 'react';
 const banners = [
   {
     id: 1,
-    title: 'Today Only!',
+    title: 'Today!',
     subtitle: 'Free Cutting Service',
     description: 'Free metal cutting to your sizes with every order.',
     cta: 'Order Now',
@@ -30,8 +30,8 @@ const banners = [
   },
   {
     id: 4,
-    title: 'Today Only!',
-    subtitle: 'Individual Discount',
+    title: 'Today!',
+    subtitle: '5% off on larger orders',
     description: 'Order now and receive an individual discount tailored to your needs.',
     cta: 'Get Discount',
     href: '/#catalog',

@@ -11,8 +11,10 @@ export const siteConfig = {
     phoneDisplay: '+44 7441 429829',
     whatsApp: 'https://wa.me/447771656297',
     address: 'ALTEG UK LTD\nUnit A3, Riverside Industrial Estate,\nLittlehampton, West Sussex, BN17 5DF',
-    mapUrl: 'https://www.google.com/maps/place/Bridge+Rd,+Wick,+Littlehampton+BN17+5DF,+UK/@50.813068,-0.5551703,17z',
-    mapEmbedUrl: 'https://www.google.com/maps?q=50.813068,-0.5551703&z=17&output=embed',
+    // Open in new tab: exact place with marker (coordinates + zoom)
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=50.813068,-0.5551703',
+    // Embed: address query so the map shows a marker pin
+    mapEmbedUrl: 'https://www.google.com/maps?q=Unit+A3+Riverside+Industrial+Estate+Littlehampton+West+Sussex+BN17+5DF+UK&z=17&output=embed',
     trustpilot: (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_TRUSTPILOT_URL) || 'https://www.trustpilot.com/review/alteg.co.uk',
   },
 } as const;
@@ -20,7 +22,7 @@ export const siteConfig = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: 'ALTEG UK - Aluminium Profiles Direct from Factory',
+    default: 'ALTEG UK Aluminium Profiles Direct from Manufacturer',
     template: '%s | ALTEG UK',
   },
   description: 'Buy aluminium angles, tubes, sheets directly from manufacturer. UK delivery. Factory prices.',

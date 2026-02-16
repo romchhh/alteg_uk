@@ -51,7 +51,7 @@ export const CustomerSegments: React.FC = () => {
             Who ALTEG Products Are For
           </h2>
           <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed px-2">
-            ALTEG factory works with different customer types — from retail to wholesale. Find your solution.
+          ALTEG works with a variety of clients-from retail to wholesale. Find your solution.
           </p>
         </div>
 
@@ -81,7 +81,7 @@ export const CustomerSegments: React.FC = () => {
         </div>
 
         <div className="text-center">
-          <Link href="/#catalog">
+          <Link href="/#contact">
             <Button 
               variant="primary" 
               size="lg"

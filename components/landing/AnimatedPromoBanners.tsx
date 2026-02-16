@@ -3,7 +3,7 @@
 import React from 'react';
 
 const marqueeText1 = '★ Volume discount from £100 ★ Get 5% off ★ Order now ★ ';
-const marqueeText2 = '★ Maximum discount from £10,000 ★ Get 27.2% off ★ Order now ★ ';
+const marqueeText2 = '★ Maximum discount from £10,000 ★ Get 25% off ★ Order now ★ ';
 
 export const AnimatedPromoBanners: React.FC = () => {
   return (
@@ -45,7 +45,7 @@ export const AnimatedPromoBanners: React.FC = () => {
             className="flex-shrink-0 flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2 sm:py-2.5 bg-white rounded-lg hover:bg-emerald-50 transition-colors"
           >
             <span className="text-[#0a3d0a] font-semibold text-sm sm:text-base">From £10,000</span>
-            <span className="animate-pulse-glow text-emerald-600 font-bold text-lg sm:text-xl">27.2% off</span>
+            <span className="animate-pulse-glow text-emerald-600 font-bold text-lg sm:text-xl">25% off</span>
           </a>
         </div>
       </section>

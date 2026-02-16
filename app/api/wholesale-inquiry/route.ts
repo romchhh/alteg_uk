@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       COMPANY_TITLE: data.company,
       EMAIL: [{ VALUE: data.email, VALUE_TYPE: 'WORK' }],
       PHONE: [{ VALUE: data.phone, VALUE_TYPE: 'WORK' }],
-      COMMENTS: `Form type: Wholesale order - get a quote\n\nCompany: ${data.company}\nContact: ${data.contactName}\nPhone: ${data.phone}\nAnnual Volume: ${data.annualVolume || 'Not specified'}\nProduct Interests: ${data.productInterests?.join(', ') || 'Not specified'}\n\nMessage:\n${data.message || 'No message provided'}${attachmentLine}`,
+      COMMENTS: `Form type: Wholesale order - receive a quote\n\nCompany: ${data.company}\nContact: ${data.contactName}\nPhone: ${data.phone}\nAnnual Volume: ${data.annualVolume || 'Not specified'}\nProduct Interests: ${data.productInterests?.join(', ') || 'Not specified'}\n\nMessage:\n${data.message || 'No message provided'}${attachmentLine}`,
       SOURCE_ID: 'WEB',
       SOURCE_DESCRIPTION: 'Lead web B2B',
     };

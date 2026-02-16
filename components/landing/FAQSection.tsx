@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { FAQ_ITEMS } from '@/lib/constants/faq';
+import { siteConfig } from '@/config/site';
 
 const faqs = FAQ_ITEMS;
 
@@ -55,7 +57,21 @@ export const FAQSection: React.FC = () => {
               </button>
               {openIndex === index && (
                 <div className="px-4 sm:px-6 py-3 sm:py-4 bg-black border-t border-gray-800">
-                  <p className="text-gray-300 text-sm sm:text-base leading-relaxed">{faq.answer}</p>
+                  {index === 0 ? (
+                    <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+                      Can&apos;t find the answer you need? Contact us directly:{' '}
+                      <Link href="/contact" className="text-white underline hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-white/50 rounded">
+                        contact page (address &amp; details)
+                      </Link>
+                      {' or call '}
+                      <a href={`tel:${siteConfig.links.phone}`} className="text-white underline hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-white/50 rounded">
+                        {siteConfig.links.phoneDisplay}
+                      </a>
+                      .
+                    </p>
+                  ) : (
+                    <p className="text-gray-300 text-sm sm:text-base leading-relaxed">{faq.answer}</p>
+                  )}
                 </div>
               )}
               {/* Divider line */}

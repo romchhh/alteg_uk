@@ -76,7 +76,7 @@ function initSchema(database: Database.Database) {
     );
 
     INSERT OR IGNORE INTO homepage (key, value) VALUES
-      ('heroTitle', 'ALTEG UK - Aluminium Profiles Direct from Factory'),
+      ('heroTitle', 'ALTEG UK Aluminium Profiles Direct from Manufacturer'),
       ('heroSubtitle', 'Buy aluminium angles, tubes, sheets directly from manufacturer. UK delivery. Factory prices.');
   `);
   try {

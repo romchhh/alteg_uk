@@ -123,7 +123,7 @@ export default function ContactPage() {
                   Contact Information
                 </h2>
                 <p className="text-lg text-gray-600 mb-8">
-                  Reach out to us through any of the following channels. Our team is ready to assist you with your aluminium profile requirements.
+                  Reach out to us through any of the channels below. Our team is ready to assist you with your aluminium profile requirements.
                 </p>
 
                 <div className="bg-gray-50 rounded-xl p-6 sm:p-8 border border-gray-100">

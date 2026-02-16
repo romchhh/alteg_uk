@@ -5,17 +5,17 @@ import Link from 'next/link';
 const steps = [
   {
     number: '1',
-    title: 'Calculate on Calculator',
+    title: 'Calculate',
     description: 'Use our interactive calculator to select profiles, configure dimensions, and get instant pricing.',
   },
   {
     number: '2',
     title: 'Place Order Online',
-    description: 'Complete your order online or send a wholesale inquiry. Get a quote within 24 hours.',
+    description: 'Complete your order online or send a wholesale inquiry. Receive a quote within 24 hours.',
   },
   {
     number: '3',
-    title: 'Receive Your Order',
+    title: 'Have your order delivered',
     description: 'Get your order delivered to any UK location or collect from our warehouse. Fast and reliable logistics.',
   },
 ];
@@ -23,6 +23,7 @@ const steps = [
 export const HowToOrderSection: React.FC = () => {
   return (
     <section id="how-to-order" className="pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-12 sm:pb-16 md:pb-20 lg:pb-24 bg-gradient-to-b from-white to-[#E9EDF4]">
+      <span id="delivery" className="block scroll-mt-24 -translate-y-20" aria-hidden="true" />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#050544] mb-4 sm:mb-5 leading-tight tracking-tight">

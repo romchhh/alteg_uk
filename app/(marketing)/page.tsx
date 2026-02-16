@@ -1,5 +1,4 @@
 import React from 'react';
-import { getHomepageSettings } from '@/lib/data/homepage';
 import { HeroSection } from '@/components/landing/HeroSection';
 import { FeaturesSection } from '@/components/landing/FeaturesSection';
 import { DescriptionSection } from '@/components/landing/DescriptionSection';
@@ -15,16 +14,12 @@ import { CustomerSegments } from '@/components/landing/CustomerSegments';
 import { MapSection } from '@/components/landing/MapSection';
 import { FaqJsonLd } from '@/components/seo/FaqJsonLd';
 
-export default async function HomePage() {
-  const homepageSettings = await getHomepageSettings();
+export default function HomePage() {
   return (
     <main className="min-h-screen">
       <FaqJsonLd />
       {/* Block 1: Hero Banner */}
-      <HeroSection
-        heroTitle={homepageSettings.heroTitle}
-        heroSubtitle={homepageSettings.heroSubtitle}
-      />
+      <HeroSection />
       
       {/* Block 2: Features (Dark section with 4 features) - commented out
       <FeaturesSection />

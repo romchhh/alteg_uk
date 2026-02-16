@@ -101,7 +101,7 @@ export const FactoryGallery: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#050544] mb-3 sm:mb-4 leading-tight tracking-tight">
-              Our Factory
+              Our Manufacturer
             </h2>
             <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
               See our modern production facilities where we manufacture high-quality aluminium profiles

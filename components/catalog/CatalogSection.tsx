@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ProductCard } from '@/components/catalog/ProductCard';
 import { PRODUCT_CATEGORIES, CATALOG_PRODUCTS } from '@/lib/constants/catalog';
 import { Product, ProductCategory, ProductCategoryInfo } from '@/lib/types/product';
@@ -26,7 +26,7 @@ function CustomQuoteCTA() {
         variant="primary"
         className="bg-[#050544] hover:bg-[#445DFE] text-white px-8 py-4 text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
       >
-        Request individual quote
+        Contact us!
       </Button>
     </div>
   );
@@ -85,23 +85,48 @@ export const CatalogSection: React.FC = () => {
   const displayedProducts = filteredProducts.slice(0, displayCount);
   const hasMore = displayCount < filteredProducts.length;
   const categories = Object.entries(categoriesMap ?? PRODUCT_CATEGORIES);
+  const categoriesRef = useRef(categories);
+  categoriesRef.current = categories;
 
   // Reset display count when category changes
   useEffect(() => {
     setDisplayCount(INITIAL_PRODUCTS);
   }, [selectedCategory]);
 
+  // Sync selected category from hash only on mount and on hashchange (not every render), so user can change category by clicking
+  useEffect(() => {
+    const syncFromHash = () => {
+      if (typeof window === 'undefined') return;
+      const hash = window.location.hash.slice(1);
+      if (!hash.startsWith('category-')) return;
+      const cat = hash.replace('category-', '');
+      const cats = categoriesRef.current;
+      if (cats.some(([key]) => key === cat)) {
+        setSelectedCategory(cat);
+        const id = `category-${cat}`;
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          });
+        });
+      }
+    };
+    syncFromHash();
+    window.addEventListener('hashchange', syncFromHash);
+    return () => window.removeEventListener('hashchange', syncFromHash);
+  }, []);
+
   const handleShowMore = () => {
     setDisplayCount((prev) => prev + PRODUCTS_PER_PAGE);
   };
 
   return (
-    <section id="catalog" className="pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-12 sm:pb-16 md:pb-20 lg:pb-24 bg-white">
+    <section id="catalog" className="scroll-mt-20 md:scroll-mt-24 pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-12 sm:pb-16 md:pb-20 lg:pb-24 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="max-w-4xl mx-auto text-center mb-6 sm:mb-8">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#050544] mb-2 sm:mb-3 leading-tight tracking-tight px-2">
-            Aluminium Products Directly from the ALTEG Factory
+          Aluminium Products Direct from ALTEG
           </h2>
           <p className="text-base sm:text-lg text-gray-600 mb-4 max-w-2xl mx-auto leading-relaxed px-2">
             Standard aluminium profiles in stock. Cutting to size. Retail and wholesale supply across the UK.
@@ -114,16 +139,16 @@ export const CatalogSection: React.FC = () => {
               <div className="text-xs sm:text-sm text-black leading-tight">Free UK Delivery (ex. VAT)</div>
             </div>
             <div className="bg-transparent border border-black rounded-lg p-3 sm:p-4">
-              <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">Direct</div>
-              <div className="text-xs sm:text-sm text-black leading-tight">Factory Prices</div>
+              <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">Competitive</div>
+              <div className="text-xs sm:text-sm text-black leading-tight">Pricing</div>
             </div>
             <div className="bg-transparent border border-black rounded-lg p-3 sm:p-4">
               <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">Free</div>
               <div className="text-xs sm:text-sm text-black leading-tight">Cutting to Size</div>
             </div>
             <div className="bg-transparent border border-black rounded-lg p-3 sm:p-4">
-              <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">Custom</div>
-              <div className="text-xs sm:text-sm text-black leading-tight">Processing Available</div>
+              <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">All items</div>
+              <div className="text-xs sm:text-sm text-black leading-tight">cut to preferred size upon request</div>
             </div>
           </div>
         </div>
@@ -148,8 +173,9 @@ export const CatalogSection: React.FC = () => {
             <div className="flex gap-3 sm:gap-4">
               {/* All Products Category */}
               <button
+                id="category-all"
                 onClick={() => setSelectedCategory('all')}
-                className={`flex-shrink-0 snap-center flex flex-col h-36 w-[calc((100vw-3.5rem)/3)] sm:w-52 rounded-lg overflow-hidden group transition-all duration-300 border-2 ${
+                className={`flex-shrink-0 snap-center flex flex-col h-36 w-[calc((100vw-3.5rem)/3)] sm:w-52 rounded-lg overflow-hidden group transition-all duration-300 border-2 scroll-mt-24 ${
                   selectedCategory === 'all'
                     ? 'border-[#445DFE] shadow-lg scale-105'
                     : 'border-transparent shadow-md hover:shadow-lg'
@@ -174,8 +200,9 @@ export const CatalogSection: React.FC = () => {
               {categories.map(([key, info]) => (
                 <button
                   key={key}
+                  id={`category-${key}`}
                   onClick={() => setSelectedCategory(key)}
-                  className={`flex-shrink-0 snap-center flex flex-col h-36 w-[calc((100vw-3.5rem)/3)] sm:w-52 rounded-lg overflow-hidden group transition-all duration-300 border-2 ${
+                  className={`flex-shrink-0 snap-center flex flex-col h-36 w-[calc((100vw-3.5rem)/3)] sm:w-52 rounded-lg overflow-hidden group transition-all duration-300 border-2 scroll-mt-24 ${
                     selectedCategory === key
                       ? 'border-[#445DFE] shadow-lg scale-105'
                       : 'border-transparent shadow-md hover:shadow-lg'

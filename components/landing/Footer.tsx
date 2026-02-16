@@ -50,7 +50,7 @@ export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer id="contact" className="bg-[#141414] text-white">
+    <footer id="footer" className="bg-[#141414] text-white">
       {/* Main Footer */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-12">
@@ -83,46 +83,46 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Products */}
+          {/* Products — scroll to catalog / category on home */}
           <div className="text-center sm:text-left">
             <h3 className="text-lg font-semibold mb-4 text-white">Products</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
-                <a href="#products" className="hover:text-white transition-colors">Aluminium Angles</a>
+                <a href="/#category-angle" className="hover:text-white transition-colors">Aluminium Angles</a>
               </li>
               <li>
-                <a href="#products" className="hover:text-white transition-colors">Tubes & Pipes</a>
+                <a href="/#category-angle" className="hover:text-white transition-colors">Tubes & Pipes</a>
               </li>
               <li>
-                <a href="#products" className="hover:text-white transition-colors">Channels</a>
+                <a href="/#category-channel" className="hover:text-white transition-colors">Channels</a>
               </li>
               <li>
-                <a href="#products" className="hover:text-white transition-colors">Sheets & Plates</a>
+                <a href="/#category-sheet" className="hover:text-white transition-colors">Sheets & Plates</a>
               </li>
               <li>
-                <a href="#products" className="hover:text-white transition-colors">Custom Profiles</a>
+                <a href="/#catalog" className="hover:text-white transition-colors">Custom Profiles</a>
               </li>
             </ul>
           </div>
 
-          {/* Services */}
+          {/* Services — scroll to matching blocks on home */}
           <div className="text-center sm:text-left">
             <h3 className="text-lg font-semibold mb-4 text-white">Services</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
-                <a href="#delivery" className="hover:text-white transition-colors">Free Cutting to Size</a>
+                <a href="/#advantages" className="hover:text-white transition-colors">Free Cutting to Size</a>
               </li>
               <li>
-                <a href="#delivery" className="hover:text-white transition-colors">Custom Processing</a>
+                <a href="/#advantages" className="hover:text-white transition-colors">Custom Processing</a>
               </li>
               <li>
-                <Link href="/delivery" className="hover:text-white transition-colors">UK Delivery</Link>
+                <a href="/#delivery" className="hover:text-white transition-colors">UK Delivery</a>
               </li>
               <li>
-                <Link href="#catalog" className="hover:text-white transition-colors">Wholesale Supply</Link>
+                <a href="/#catalog" className="hover:text-white transition-colors">Wholesale Supply</a>
               </li>
               <li>
-                <a href="#contact" className="hover:text-white transition-colors">Technical Support</a>
+                <a href="/#contact" className="hover:text-white transition-colors">Technical Support</a>
               </li>
             </ul>
           </div>
@@ -157,7 +157,7 @@ export const Footer: React.FC = () => {
               <li className="flex items-start gap-3 justify-center sm:justify-start">
                 <MapPinIcon className="w-5 h-5 text-[#445DFE] flex-shrink-0 mt-0.5" />
                 <div className="text-white">
-                  <a href="https://goo.gl/maps/h5iBbC38PnGJpkUc9" target="_blank" rel="noopener noreferrer" className="hover:text-[#B7D2FF] transition-colors">
+                  <a href={siteConfig.links.mapUrl} target="_blank" rel="noopener noreferrer" className="hover:text-[#B7D2FF] transition-colors">
                     ALTEG UK LTD<br />
                     Unit A3, Riverside Industrial Estate,<br />
                     Littlehampton, West Sussex, BN17 5DF

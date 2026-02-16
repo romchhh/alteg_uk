@@ -1,6 +1,10 @@
 /** FAQ items shared between FAQSection UI and FAQPage schema (SEO). */
 export const FAQ_ITEMS = [
   {
+    question: "Can't find the answer you need?",
+    answer: "Can't find the answer you need? Contact us directly—by phone or via our contact page for address and details.",
+  },
+  {
     question: 'Do you cut aluminium to size?',
     answer: 'Yes, we offer a free cutting service for every order, so you receive exactly the lengths you need with no waste. Simply tell us the required lengths when you place your order, and we will cut each piece to your specifications. This service is included at no extra cost and is part of our standard offering. We cut to millimetre accuracy, which helps with project planning and reduces material handling on your side. Whether you need a few pieces or hundreds of lengths, cutting to size is always included. Many of our customers choose us specifically for this convenience and the savings it brings.',
   },

@@ -9,15 +9,15 @@ import { contactFormSchema, ContactFormData } from '@/lib/utils/validators';
 import { Input } from '@/components/shared/Input';
 import { Button } from '@/components/shared/Button';
 
-interface HeroSectionProps {
-  heroTitle?: string;
-  heroSubtitle?: string;
-}
+const HERO_BULLETS = [
+  '70 years of experience',
+  'family run business',
+  'established company',
+  'aluminium angles, tubes and sheets available',
+  'factory prices',
+];
 
-export const HeroSection: React.FC<HeroSectionProps> = ({
-  heroTitle = 'ALTEG — Aluminium Directly from the Factory',
-  heroSubtitle = 'Calculate costs and order online with UK delivery. Direct manufacturer prices.',
-}) => {
+export const HeroSection: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -95,21 +95,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-start min-h-[calc(100vh-4rem)] md:min-h-[calc(90vh-5rem)] lg:min-h-0">
           {/* Left Side - Content */}
           <div className="w-full flex flex-col items-start text-left">
-            {/* Main Heading */}
-            <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold text-white mb-8 sm:mb-6 leading-tight tracking-tight">
-              {heroTitle}
+            <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold text-white mb-6 sm:mb-5 leading-tight tracking-tight max-w-3xl">
+            ALTEG UK Aluminium Profiles Direct from Manufacturer
             </h1>
-            
-            {/* Subtitle */}
-            <p className="text-2xl sm:text-2xl md:text-xl lg:text-xl xl:text-2xl text-white/90 mb-8 sm:mb-6 md:mb-8 max-w-3xl leading-relaxed">
-              {heroSubtitle}
-            </p>
+            <ul className="text-lg sm:text-xl md:text-xl lg:text-xl xl:text-2xl text-white/90 space-y-2 sm:space-y-2.5 max-w-2xl list-none pl-0">
+              {HERO_BULLETS.map((item) => (
+                <li key={item} className="flex items-start gap-2">
+                  <span className="text-white shrink-0 mt-0.5">*</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
           </div>
 
           {/* Right Side - Contact Form */}
           <div id="contact" className="w-full scroll-mt-20 md:scroll-mt-24 flex justify-center -mt-4 sm:mt-0">
             <form onSubmit={handleSubmit(onSubmit)} className="bg-white/95 backdrop-blur-sm rounded-none p-4 sm:p-5 md:p-6 lg:p-6 xl:p-7 space-y-2 sm:space-y-3 lg:space-y-4 xl:space-y-4 w-full max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl">
-              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-3xl font-bold text-black mb-2 sm:mb-3 lg:mb-4 xl:mb-4">Order Development</h2>
+              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-3xl font-bold text-black mb-2 sm:mb-3 lg:mb-4 xl:mb-4">Place a quote</h2>
               
               <div className="w-full space-y-1 sm:space-y-1.5 lg:space-y-2">
                 <label className="block text-xs sm:text-sm font-medium text-[#050544] mb-0.5 sm:mb-1 lg:mb-1.5">
@@ -191,21 +193,21 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             {/* Button 1: Free metal cutting — go to catalog to add products first (transparent) */}
             <a href="/#catalog" className="w-full">
               <button className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-3 sm:py-4 lg:py-4 xl:py-5 border-2 border-white hover:bg-white/10 text-white font-semibold text-base sm:text-lg lg:text-lg xl:text-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center rounded-none">
-                Order now and get free metal cutting to your sizes
+              Order now, cutting included within the price
               </button>
             </a>
 
             {/* Button 2: Individual discount — go to catalog to add products first */}
             <a href="/#catalog" className="w-full">
               <button className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-3 sm:py-4 lg:py-4 xl:py-5 bg-white hover:bg-gray-100 text-[#050544] font-semibold text-base sm:text-lg lg:text-lg xl:text-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center rounded-none">
-                Order now and get an individual discount
+              From 5% off on larger orders
               </button>
             </a>
 
             {/* Button 3: Wholesale quote (blue) */}
             <Link href="/wholesale" className="w-full">
               <button className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-3 sm:py-4 lg:py-4 xl:py-5 bg-[#050544] hover:bg-[#445DFE] text-white font-semibold text-base sm:text-lg lg:text-lg xl:text-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center rounded-none">
-                Wholesale order — get a quote
+                Wholesale order — receive a quote
               </button>
             </Link>
           </div>

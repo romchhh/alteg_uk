@@ -308,7 +308,7 @@ export const OrderCalculator: React.FC = () => {
                 Interactive Order Calculator
               </h2>
               <p className="text-base sm:text-lg text-gray-600 mb-4 max-w-2xl mx-auto leading-relaxed">
-                Calculate costs and configure your order step by step. Select profile, set parameters, and get instant pricing.
+                Calculate costs and configure your order step by step. Select profile, set parameters and get instant pricing.
               </p>
             </div>
 

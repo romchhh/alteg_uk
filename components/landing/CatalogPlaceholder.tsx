@@ -7,7 +7,7 @@ export const CatalogPlaceholder: React.FC = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#050544] mb-3 sm:mb-4 leading-tight tracking-tight px-2">
-            Aluminium Products Directly from the ALTEG Factory
+          Aluminium Products Direct from ALTEG
           </h2>
           <p className="text-base sm:text-lg text-gray-600 mb-8 sm:mb-12 max-w-2xl mx-auto leading-relaxed px-2">
             Standard aluminium profiles in stock. Cutting to size. Retail and wholesale supply across the UK.
@@ -20,16 +20,16 @@ export const CatalogPlaceholder: React.FC = () => {
               <div className="text-xs sm:text-sm text-gray-700 leading-tight">Free UK Delivery (ex. VAT)</div>
             </div>
             <div className="bg-transparent border border-black rounded-lg p-3 sm:p-4">
-              <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">Direct</div>
-              <div className="text-xs sm:text-sm text-gray-700 leading-tight">Factory Prices</div>
+              <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">Competitive</div>
+              <div className="text-xs sm:text-sm text-gray-700 leading-tight">Pricing</div>
             </div>
             <div className="bg-transparent border border-black rounded-lg p-3 sm:p-4">
               <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">Free</div>
               <div className="text-xs sm:text-sm text-gray-700 leading-tight">Cutting to Size</div>
             </div>
             <div className="bg-transparent border border-black rounded-lg p-3 sm:p-4">
-              <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">Custom</div>
-              <div className="text-xs sm:text-sm text-gray-700 leading-tight">Processing Available</div>
+              <div className="text-xl sm:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2">All items</div>
+              <div className="text-xs sm:text-sm text-gray-700 leading-tight">cut to preferred size upon request</div>
             </div>
           </div>
 

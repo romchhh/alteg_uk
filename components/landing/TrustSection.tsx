@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Button } from '@/components/shared/Button';
 import Link from 'next/link';
 import { siteConfig } from '@/config/site';
+import { TrustpilotReviews } from '@/components/landing/TrustpilotReviews';
 
 const trustPoints = [
   {
@@ -40,7 +41,7 @@ const trustPoints = [
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
     ),
-    title: 'FACTORY PRICE',
+    title: 'COMPETITIVE PRICING',
     content: (
       <div>
         <p className="text-white/90 mb-3 leading-relaxed">
@@ -107,7 +108,7 @@ const trustPoints = [
           </li>
           <li className="flex items-start gap-2">
             <span className="text-white mt-1">✓</span>
-            <span>Custom processing available</span>
+            <span>All items cut to preferred size upon request</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-white mt-1">✓</span>
@@ -202,7 +203,7 @@ const TESTIMONIALS = [
 
 export const TrustSection: React.FC = () => {
   return (
-    <section id="advantages" className="pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-12 sm:pb-16 md:pb-20 lg:pb-24 bg-[#141414] text-white">
+    <section id="advantages" className="scroll-mt-20 md:scroll-mt-24 pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-12 sm:pb-16 md:pb-20 lg:pb-24 bg-[#141414] text-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 sm:mb-12">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4 leading-tight tracking-tight">
@@ -237,10 +238,10 @@ export const TrustSection: React.FC = () => {
           ))}
         </div>
 
-        {/* Social Proof — horizontal scroll with photos */}
+        {/* Customer Reviews — horizontal scroll with photos */}
         <div className="mb-12 sm:mb-16">
           <h3 className="text-xl sm:text-2xl font-bold text-white uppercase tracking-wide mb-2 text-center">
-            Social Proof
+          Customer Reviews
           </h3>
           <p className="text-white/80 italic text-center mb-6 text-sm sm:text-base">
             Trusted by customers across the UK
@@ -282,100 +283,9 @@ export const TrustSection: React.FC = () => {
               </div>
             </div>
           </div>
-          {/* Trustpilot Reviews Block */}
+          {/* Trustpilot Reviews Block — real data from API when TRUSTPILOT_API_KEY is set */}
           <div className="mt-8 sm:mt-10">
-            {siteConfig.links.trustpilot ? (
-              <Link 
-                href={siteConfig.links.trustpilot} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="block bg-white rounded-xl p-6 sm:p-8 hover:shadow-2xl transition-all duration-300"
-              >
-                {/* Trustpilot Header */}
-                <div className="flex items-center justify-between mb-6">
-                  <div className="relative w-24 h-8 flex-shrink-0">
-                    <Image
-                      src="/trust-pilot-stacked-black.svg"
-                      alt="Trustpilot"
-                      fill
-                      className="object-contain"
-                      sizes="96px"
-                    />
-                  </div>
-                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                </div>
-
-                {/* Review Example */}
-                <div className="border-t border-gray-200 pt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0">
-                      <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold text-lg">
-                        IH
-                      </div>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="flex items-center gap-1">
-                          {[...Array(5)].map((_, i) => (
-                            <svg key={i} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                              <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                            </svg>
-                          ))}
-                        </div>
-                        <span className="text-xs text-gray-500">1 day ago</span>
-                      </div>
-                      <p className="text-gray-900 text-sm sm:text-base mb-2 leading-relaxed">
-                        Excellent fast service with customised cut lengths. Great quality and professional team.
-                      </p>
-                      <p className="text-sm font-medium text-gray-700">Ian Hoddle</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Second Review */}
-                <div className="border-t border-gray-200 pt-6 mt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0">
-                      <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold text-lg">
-                        SM
-                      </div>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="flex items-center gap-1">
-                          {[...Array(5)].map((_, i) => (
-                            <svg key={i} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                              <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                            </svg>
-                          ))}
-                        </div>
-                        <span className="text-xs text-gray-500">3 days ago</span>
-                      </div>
-                      <p className="text-gray-900 text-sm sm:text-base mb-2 leading-relaxed">
-                        Very satisfied with the quality and delivery time. Competitive prices and excellent customer service.
-                      </p>
-                      <p className="text-sm font-medium text-gray-700">Sarah Mitchell</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Footer */}
-                <div className="mt-6 pt-4 border-t border-gray-200">
-                  <div className="text-center space-y-2">
-                    <div className="text-base sm:text-lg font-bold text-gray-900">
-                      Rated 4.7/5 • 312 reviews
-                    </div>
-                    <p className="text-xs text-gray-600">Showing our 4 & 5 star reviews</p>
-                  </div>
-                </div>
-              </Link>
-            ) : (
-              <div className="bg-white rounded-xl p-6 sm:p-8 text-center">
-                <span className="text-gray-600">Trustpilot — Coming soon</span>
-              </div>
-            )}
+            <TrustpilotReviews />
           </div>
         </div>
 
@@ -395,7 +305,7 @@ export const TrustSection: React.FC = () => {
               size="lg"
               className="w-full sm:w-auto border-2 border-white text-white hover:bg-white hover:text-[#050544] px-8 py-4 text-base md:text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl rounded-none"
             >
-              Contact factory
+              Contact us
             </Button>
           </Link>
         </div>

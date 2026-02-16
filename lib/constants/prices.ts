@@ -1,13 +1,11 @@
 // Volume discount tiers: applied to cart total (ex. VAT) in £
 export const VOLUME_DISCOUNT_TIERS = [
   { minCartTotal: 0, maxCartTotal: 99.99, discount: 0 },
-  { minCartTotal: 100, maxCartTotal: 399.99, discount: 0.05 },   // 5%
-  { minCartTotal: 400, maxCartTotal: 799.99, discount: 0.10 },  // 10%
-  { minCartTotal: 800, maxCartTotal: 1499.99, discount: 0.15 }, // 15%
-  { minCartTotal: 1500, maxCartTotal: 1999.99, discount: 0.20 }, // 20%
-  { minCartTotal: 2000, maxCartTotal: 3999.99, discount: 0.225 }, // 22.5%
-  { minCartTotal: 4000, maxCartTotal: 9999.99, discount: 0.25 },  // 25%
-  { minCartTotal: 10000, maxCartTotal: Infinity, discount: 0.272 }, // 27.2%
+  { minCartTotal: 100, maxCartTotal: 999.99, discount: 0.05 },    // 5%
+  { minCartTotal: 1000, maxCartTotal: 3999.99, discount: 0.10 },  // 10%
+  { minCartTotal: 4000, maxCartTotal: 6999.99, discount: 0.15 },  // 15%
+  { minCartTotal: 7000, maxCartTotal: 9999.99, discount: 0.20 }, // 20%
+  { minCartTotal: 10000, maxCartTotal: Infinity, discount: 0.25 }, // 25%
 ] as const;
 
 // Length discount: from 6m 3%, from 18m 5% (by total length per line: length * quantity)

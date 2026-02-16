@@ -12,13 +12,11 @@ const HOMEPAGE_SECTION_IDS = ['catalog', 'advantages', 'how-to-order', 'faq', 't
 
 // Volume discounts applied to cart total (ex. VAT)
 const DISCOUNT_ROWS = [
-  { range: '£100 — £399', discount: '5%', highlight: false },
-  { range: '£400 — £799', discount: '10%', highlight: false },
-  { range: '£800 — £1,499', discount: '15%', highlight: false },
-  { range: '£1,500 — £1,999', discount: '20%', highlight: false },
-  { range: '£2,000 — £3,999', discount: '22.5%', highlight: false },
-  { range: '£4,000 — £9,999', discount: '25%', highlight: false },
-  { range: '£10,000+', discount: '27.2%', highlight: true },
+  { range: '£100 — £999', discount: '5%', highlight: false },
+  { range: '£1,000 — £3,999', discount: '10%', highlight: false },
+  { range: '£4,000 — £6,999', discount: '15%', highlight: false },
+  { range: '£7,000 — £9,999', discount: '20%', highlight: false },
+  { range: '£10,000+', discount: '25%', highlight: true },
 ];
 
 export default function WholesalePage() {
@@ -174,8 +172,8 @@ export default function WholesalePage() {
                 <ul className="space-y-3 text-gray-700 text-base sm:text-lg">
                   <li><strong className="text-[#050544]">Free delivery (Mainland UK):</strong> For orders over £77 (ex. VAT).</li>
                   <li><strong className="text-[#050544]">VAT:</strong> All listed prices are exclusive of VAT. VAT will be added at checkout at the standard rate of 20%.</li>
-                  <li><strong className="text-[#050544]">Order lead time:</strong> 1–14 days, depending on order complexity.</li>
-                  <li><strong className="text-[#050544]">B2B payment terms:</strong> 100% advance payment; alternatively, 50% before shipment and 50% after delivery.</li>
+                  <li><strong className="text-[#050544]">Please allow extra days for orders cut to size.</strong></li>
+                  <li><strong className="text-[#050544]">B2b-Flexible payment available, please contact us.</strong></li>
                   <li><strong className="text-[#050544]">Packaging:</strong> Standard.</li>
                   <li><strong className="text-[#050544]">Delivery / warehouse address:</strong> <span className="whitespace-pre-line">{siteConfig.links.address}</span></li>
                 </ul>
@@ -296,7 +294,7 @@ export default function WholesalePage() {
                   variant="primary"
                   className="w-full sm:w-auto bg-[#050544] hover:bg-[#445DFE] text-white py-3.5 px-8 text-base font-semibold uppercase tracking-wide rounded-none transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
-                  {isSubmitting ? 'Sending...' : 'Get commercial proposal'}
+                  {isSubmitting ? 'Sending...' : 'Get a commercial quote'}
                 </Button>
               </form>
             </div>
