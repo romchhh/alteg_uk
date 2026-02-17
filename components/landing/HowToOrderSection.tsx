@@ -10,7 +10,7 @@ const steps = [
   },
   {
     number: '2',
-    title: 'Place Order Online',
+    title: 'Place an Order Online',
     description: 'Complete your order online or send a wholesale inquiry. Receive a quote within 24 hours.',
   },
   {

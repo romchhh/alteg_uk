@@ -22,7 +22,7 @@ export const siteConfig = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: 'ALTEG UK Aluminium Profiles Direct from Manufacturer',
+    default: 'ALTEG UK Aluminium Profiles Direct from the Manufacturer',
     template: '%s | ALTEG UK',
   },
   description: 'Buy aluminium angles, tubes, sheets directly from manufacturer. UK delivery. Factory prices.',

@@ -1,10 +1,6 @@
 /** FAQ items shared between FAQSection UI and FAQPage schema (SEO). */
 export const FAQ_ITEMS = [
   {
-    question: "Can't find the answer you need?",
-    answer: "Can't find the answer you need? Contact us directly—by phone or via our contact page for address and details.",
-  },
-  {
     question: 'Do you cut aluminium to size?',
     answer: 'Yes, we offer a free cutting service for every order, so you receive exactly the lengths you need with no waste. Simply tell us the required lengths when you place your order, and we will cut each piece to your specifications. This service is included at no extra cost and is part of our standard offering. We cut to millimetre accuracy, which helps with project planning and reduces material handling on your side. Whether you need a few pieces or hundreds of lengths, cutting to size is always included. Many of our customers choose us specifically for this convenience and the savings it brings.',
   },
@@ -27,5 +23,9 @@ export const FAQ_ITEMS = [
   {
     question: 'Can I order non-standard profiles?',
     answer: 'Yes. We manufacture custom aluminium profiles to order, so if you cannot find what you need in our standard range, we can produce a profile to your specification. Send us a drawing, sketch, or a clear description of the cross-section, dimensions, alloy, and any special requirements (e.g. tolerances, finish, or packaging), and we will review it and come back with a quote and an indication of lead time. Custom solutions are a core part of our business: we work with engineers, designers, and fabricators who need bespoke extrusions for one-off projects or ongoing production. Once we have agreed the details and the order is confirmed, we will keep you updated on progress and deliver to the agreed schedule. Whether you need a small batch for a prototype or larger volumes for production, we are here to help.',
+  },
+  {
+    question: "Can't find the answer you need?",
+    answer: "Can't find the answer you need? Contact us directly—by phone or via our contact page for address and details.",
   },
 ] as const;

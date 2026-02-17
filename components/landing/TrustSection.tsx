@@ -213,7 +213,7 @@ export const TrustSection: React.FC = () => {
             Why choose ALTEG? We are not just a supplier — we are a manufacturer with complete control over production and quality.
           </p>
           <p className="text-sm sm:text-base text-white/60 max-w-2xl mx-auto leading-relaxed px-2">
-            Confirm ALTEG's status as a real manufacturer. Answer key questions about logistics and standards.
+            Confirm ALTEG's status as a manufacturer. Answer key questions about logistics and standards.
           </p>
         </div>
 

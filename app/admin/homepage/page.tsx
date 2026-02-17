@@ -75,7 +75,7 @@ export default function HomepageAdminPage() {
               <Input
                 value={heroTitle}
                 onChange={(e) => setHeroTitle(e.target.value)}
-                placeholder="ALTEG UK Aluminium Profiles Direct from Manufacturer"
+                placeholder="ALTEG UK Aluminium Profiles Direct from the Manufacturer"
               />
             </div>
             <div>

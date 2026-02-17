@@ -92,11 +92,11 @@ export const HeroSection: React.FC = () => {
 
       {/* Content Overlay - Grid Layout. On desktop aligned to bottom so buttons sit lower and more photo shows above */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-20 md:py-24 lg:pt-24 lg:pb-8 xl:pb-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-start min-h-[calc(100vh-4rem)] md:min-h-[calc(90vh-5rem)] lg:min-h-0">
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-start min-h-[calc(100vh-4rem)] md:min-h-[calc(90vh-5rem)] lg:min-h-0">
           {/* Left Side - Content */}
-          <div className="w-full flex flex-col items-start text-left">
+          <div className="w-full flex flex-col items-start text-left order-1 lg:order-1">
             <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold text-white mb-6 sm:mb-5 leading-tight tracking-tight max-w-3xl">
-            ALTEG UK Aluminium Profiles Direct from Manufacturer
+            ALTEG UK Aluminium Profiles Direct from the Manufacturer
             </h1>
             <ul className="text-lg sm:text-xl md:text-xl lg:text-xl xl:text-2xl text-white/90 space-y-2 sm:space-y-2.5 max-w-2xl list-none pl-0">
               {HERO_BULLETS.map((item) => (
@@ -108,8 +108,34 @@ export const HeroSection: React.FC = () => {
             </ul>
           </div>
 
+          {/* CTA Buttons Block - On mobile: between content and form; on desktop: after grid */}
+          <div className="w-full flex justify-center mt-6 sm:mt-8 lg:mt-0 lg:col-span-2 lg:mt-20 xl:mt-24 order-2 lg:order-3">
+            <div className="flex flex-col gap-4 sm:gap-5 lg:gap-5 w-full max-w-2xl">
+              {/* Button 1: Free metal cutting — go to catalog to add products first (transparent) */}
+              <a href="/#catalog" className="w-full">
+                <button className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-3 sm:py-4 lg:py-4 xl:py-5 border-2 border-white hover:bg-white/10 text-white font-semibold text-base sm:text-lg lg:text-lg xl:text-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center rounded-none">
+                Order now, cutting included within the price
+                </button>
+              </a>
+
+              {/* Button 2: Individual discount — go to catalog to add products first */}
+              <a href="/#catalog" className="w-full">
+                <button className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-3 sm:py-4 lg:py-4 xl:py-5 bg-white hover:bg-gray-100 text-[#050544] font-semibold text-base sm:text-lg lg:text-lg xl:text-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center rounded-none">
+                From 5% off on larger orders
+                </button>
+              </a>
+
+              {/* Button 3: Wholesale quote (blue) */}
+              <Link href="/wholesale" className="w-full">
+                <button className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-3 sm:py-4 lg:py-4 xl:py-5 bg-[#050544] hover:bg-[#445DFE] text-white font-semibold text-base sm:text-lg lg:text-lg xl:text-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center rounded-none">
+                  Wholesale order — receive a quote
+                </button>
+              </Link>
+            </div>
+          </div>
+
           {/* Right Side - Contact Form */}
-          <div id="contact" className="w-full scroll-mt-20 md:scroll-mt-24 flex justify-center -mt-4 sm:mt-0">
+          <div id="contact" className="w-full scroll-mt-20 md:scroll-mt-24 flex justify-center mt-16 sm:mt-8 md:mt-0 order-3 lg:order-2">
             <form onSubmit={handleSubmit(onSubmit)} className="bg-white/95 backdrop-blur-sm rounded-none p-4 sm:p-5 md:p-6 lg:p-6 xl:p-7 space-y-2 sm:space-y-3 lg:space-y-4 xl:space-y-4 w-full max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl">
               <h2 className="text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-3xl font-bold text-black mb-2 sm:mb-3 lg:mb-4 xl:mb-4">Place a quote</h2>
               
@@ -184,32 +210,6 @@ export const HeroSection: React.FC = () => {
                 {isSubmitting ? 'Sending...' : 'Submit Request'}
               </button>
             </form>
-          </div>
-        </div>
-
-        {/* CTA Buttons Block - Centered; on desktop section uses items-end so this sits near bottom */}
-        <div className="w-full flex justify-center mt-12 sm:mt-10 lg:mt-20 xl:mt-24">
-          <div className="flex flex-col gap-4 sm:gap-5 lg:gap-5 w-full max-w-2xl">
-            {/* Button 1: Free metal cutting — go to catalog to add products first (transparent) */}
-            <a href="/#catalog" className="w-full">
-              <button className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-3 sm:py-4 lg:py-4 xl:py-5 border-2 border-white hover:bg-white/10 text-white font-semibold text-base sm:text-lg lg:text-lg xl:text-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center rounded-none">
-              Order now, cutting included within the price
-              </button>
-            </a>
-
-            {/* Button 2: Individual discount — go to catalog to add products first */}
-            <a href="/#catalog" className="w-full">
-              <button className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-3 sm:py-4 lg:py-4 xl:py-5 bg-white hover:bg-gray-100 text-[#050544] font-semibold text-base sm:text-lg lg:text-lg xl:text-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center rounded-none">
-              From 5% off on larger orders
-              </button>
-            </a>
-
-            {/* Button 3: Wholesale quote (blue) */}
-            <Link href="/wholesale" className="w-full">
-              <button className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-3 sm:py-4 lg:py-4 xl:py-5 bg-[#050544] hover:bg-[#445DFE] text-white font-semibold text-base sm:text-lg lg:text-lg xl:text-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center rounded-none">
-                Wholesale order — receive a quote
-              </button>
-            </Link>
           </div>
         </div>
       </div>
