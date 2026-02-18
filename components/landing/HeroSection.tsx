@@ -59,7 +59,7 @@ export const HeroSection: React.FC = () => {
   };
 
   return (
-    <section className="relative min-h-[100vh] md:min-h-[90vh] lg:min-h-[85vh] flex items-center lg:items-end justify-center overflow-hidden mt-16 md:mt-20 pb-0 lg:pb-0">
+    <section className="relative min-h-[100vh] md:min-h-[90vh] lg:min-h-[85vh] flex items-center lg:items-end justify-center overflow-hidden mt-16 md:mt-20 lg:mt-0 lg:pt-20 pb-0 lg:pb-0">
       {/* Background Image - modern production facility */}
       <div className="absolute inset-0">
         {/* Mobile background */}

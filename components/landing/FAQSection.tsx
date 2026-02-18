@@ -57,7 +57,7 @@ export const FAQSection: React.FC = () => {
               </button>
               {openIndex === index && (
                 <div className="px-4 sm:px-6 py-3 sm:py-4 bg-black border-t border-gray-800">
-                  {index === 0 ? (
+                  {index === faqs.length - 1 ? (
                     <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
                       Can&apos;t find the answer you need? Contact us directly:{' '}
                       <Link href="/contact" className="text-white underline hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-white/50 rounded">

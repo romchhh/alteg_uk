@@ -46,12 +46,12 @@ export const Header: React.FC = () => {
   }, [mobileMenuOpen]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo - Responsive size: larger and more to the right on mobile */}
+          {/* Logo - fits in header height on all breakpoints so nothing overlaps hero (no semicircle) */}
           <Link href="/" className="flex items-center ml-2 sm:-ml-5 md:-ml-6">
-            <div className="relative w-32 h-32 sm:w-28 sm:h-28 md:w-36 md:h-36 flex-shrink-0 -my-4 sm:-my-4 md:-my-5">
+            <div className="relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 flex-shrink-0">
               <Image
                 src="/alteg-logo.png"
                 alt="ALTEG Logo"

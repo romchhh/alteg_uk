@@ -139,7 +139,7 @@ export const CatalogSection: React.FC = () => {
               <div className="text-xs sm:text-sm text-black leading-tight">Free UK Delivery (ex. VAT)</div>
             </div>
             <div className="bg-transparent border border-black rounded-lg p-3 sm:p-4">
-              <div className="text-lg sm:text-xl md:text-2xl font-bold text-[#445DFE] mb-1 sm:mb-2 break-words">Competitive</div>
+              <div className="font-bold text-[#445DFE] mb-1 sm:mb-2 break-words text-[clamp(0.75rem,4vw,1.5rem)] sm:text-xl md:text-2xl">Competitive</div>
               <div className="text-xs sm:text-sm text-black leading-tight">Pricing</div>
             </div>
             <div className="bg-transparent border border-black rounded-lg p-3 sm:p-4">
